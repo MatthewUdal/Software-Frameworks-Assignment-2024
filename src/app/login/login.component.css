@@ -78,3 +78,33 @@ input {
 input::placeholder {
     color: #9d9d9d;
 }
+
+
+input:focus {
+    border-color: #6C5FCB; 
+    outline: none; 
+    box-shadow: 0 0 5px rgba(108, 95, 203, 0.5); 
+}
+
+/* WebKit-based browsers (Chrome, Safari) */
+input:-webkit-autofill {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #ffffff;
+    color: white;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px #1f1f1f;
+}
+
+/* Firefox */
+input:-moz-autofill {
+    background-color: #1f1f1f !important;
+    color: white !important;
+    box-shadow: inset 0 0 20px 20px #1f1f1f !important;
+}
+
+/* Microsoft Edge */
+input:-ms-autofill {
+    background-color: #1f1f1f !important;
+    color: white !important;
+    box-shadow: inset 0 0 20px 20px #1f1f1f !important;
+}
