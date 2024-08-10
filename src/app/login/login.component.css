@@ -1,0 +1,80 @@
+body {
+    background-color: #050505;
+}
+
+.h-65 {
+    height: 65%;
+}
+
+.h-20 {
+    height: 20%;
+}
+
+.w-65{
+    width: 65%;
+}
+
+.rounded-10{
+    border-radius: 10px;
+}
+
+
+.cFont{
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+}
+
+
+.cPrimary{
+    background-color: #131313;
+}
+
+.cSecondary{
+    background-color: #1f1f1f;
+}
+
+.cHighlight{
+    background-color: #6C5FCB;
+} 
+
+.cTertiary{
+    background-color: #03DAC6;
+} 
+
+.text-tertiary{
+    color: #03DAC6;
+} 
+
+.cDarkFont{
+    color: #595959;
+}
+
+#login-card{
+    border-color: #8B82CA;
+    border-radius: 25px;
+    box-shadow: 0 0 45px 6px #6C5FCB;
+}
+
+#logo{
+    max-width: 270px;
+    border-radius: 50px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.form-container {
+    flex-grow: 1;
+}
+
+input {
+    background-color: #1f1f1f;
+    border-color: #3d3d3d;
+    color: white;
+}
+
+input::placeholder {
+    color: #9d9d9d;
+}
