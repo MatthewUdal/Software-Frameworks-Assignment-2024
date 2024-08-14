@@ -22,7 +22,7 @@ export class LoginComponent {
   constructor(private router: Router, private httpClient: HttpClient) { }
   
 
-  onSubmit() {
+  onLogin() {
     const userList = localStorage.getItem('user');
     this.httpClient.post('http://localhost:3000/login', { email: this.email, password: this.password, userList: userList }, httpOptions)
       .subscribe((response: any) => {

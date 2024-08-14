@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { warn } from 'console';
 
 @Component({
   selector: 'app-root',
@@ -15,12 +14,30 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       // Define a sample user
-      const user = [
-          { userID: 1, username: 'user1', email: 'user1@example.com', password: 'password1', role: 'superAdmin', groups: [] }
-        ];
+      const defaultUser = { userID: 1, username: 'user1', email: 'user1@example.com', password: 'password1', role: 'superAdmin', groups: [] };
 
-      // Convert the user object to a JSON string and save it to localStorage
-      localStorage.setItem('user', JSON.stringify(user));
+      // Retrieve existing users from localStorage
+      let existingUsers: any[] = [];
+      const storedUsers = localStorage.getItem('user');
+
+      if (storedUsers) {
+        try {
+          existingUsers = JSON.parse(storedUsers);
+        } catch (error) {
+          console.error('Error parsing existing users:', error);
+        }
+      }
+
+      // Check if the default user already exists
+      const userExists = existingUsers.some(user => user.email === defaultUser.email || user.username === defaultUser.username);
+
+      if (!userExists) {
+        // Add the default user to the list
+        existingUsers.push(defaultUser);
+
+        // Save the updated user list to localStorage
+        localStorage.setItem('user', JSON.stringify(existingUsers));
+      }
     } else {
       console.log('Multisend error, ignore this for now, user is uploaded');
     }

@@ -15,6 +15,10 @@ app.use(express.static(__dirname + './dist/software-frameworks-assignment-2024')
 const loginRoute = require('./routes/login');
 app.use('/login', loginRoute);
 
+const signupRoute = require('./routes/signup');
+app.use('/signup', signupRoute);
+
+
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
 });

@@ -9,7 +9,10 @@
         </div>
         
         <!--login form-->
-        <form class="d-flex flex-column align-items-center" (ngSubmit)="onLogin()">
+        <form class="d-flex flex-column align-items-center" (ngSubmit)="onSignup()">
+            <div class="mb-3 w-100 d-flex justify-content-center">
+                <input type="username" class="form-control w-65 mb-3" id="username" name="username" [(ngModel)]="username" placeholder="Username" required>
+            </div>
             <div class="mb-3 w-100 d-flex justify-content-center">
                 <input type="email" class="form-control w-65 mb-3" id="email" name="email" [(ngModel)]="email" placeholder="Email" required>
             </div>
