@@ -17,13 +17,17 @@ const httpOptions = {
 export class LoginComponent {
   email: string = '';
   password: string = '';
+  // userList = localStorage.getItem('user');
 
   constructor(private router: Router, private httpClient: HttpClient) { }
+  
 
   onSubmit() {
-    this.httpClient.post('http://localhost:3000/login', { email: this.email, password: this.password }, httpOptions)
+    const userList = localStorage.getItem('user');
+    this.httpClient.post('http://localhost:3000/login', { email: this.email, password: this.password, userList: userList }, httpOptions)
       .subscribe((response: any) => {
         if (response.success) {
+          sessionStorage.setItem('user', JSON.stringify(response.user));
           this.router.navigate(['/homepage']);
         } else {
           console.log("Invalid Email or Password.");

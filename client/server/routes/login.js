@@ -1,22 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const UserStore = require('../models/UserStore');
+const User = require('../models/User');
+
+const userStore = new UserStore();
 
 // Define the login route
 router.post('/', (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, userList } = req.body;
   
-  // Sample users database
-  const users = [
-    { email: 'user1@example.com', password: 'password1' },
-    { email: 'user2@example.com', password: 'password2' },
-    { email: 'user3@example.com', password: 'password3' }
-  ];
+  storedList = JSON.parse(userList).map(u => new User(u.userID, u.username, u.email, u.password, u.role, u.groups));
+  console.log(storedList);
 
-  // Find user with matching credentials
-  const user = users.find(u => u.email === email && u.password === password);
+  const user = storedList.find(u => u.email === email && u.password === password);
+  console.log(user)
   
   if (user) {
-    res.json({ success: true });
+    // Exclude password from response (create new const 'userWithoutPassword with user details minus the password)
+    const { password, ...userWithoutPassword } = user;
+    res.json({ success: true, user: userWithoutPassword });
   } else {
     res.json({ success: false });
   }
