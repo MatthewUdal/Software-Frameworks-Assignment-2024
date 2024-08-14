@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
       // Convert the user object to a JSON string and save it to localStorage
       localStorage.setItem('user', JSON.stringify(user));
     } else {
-      warn('Multisend error, ignore this for now, user is uploaded');
+      console.log('Multisend error, ignore this for now, user is uploaded');
     }
   }
 }
