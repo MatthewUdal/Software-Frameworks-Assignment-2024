@@ -17,8 +17,7 @@ const httpOptions = {
 export class LoginComponent {
   email: string = '';
   password: string = '';
-  // userList = localStorage.getItem('user');
-
+  
   constructor(private router: Router, private httpClient: HttpClient) { }
   
 

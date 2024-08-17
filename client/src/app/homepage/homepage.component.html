@@ -1,1 +1,13 @@
-<h1>homepage</h1>
+<div class="vh-100 d-flex flex-column" id="bg-container">
+    <!-- Navbar Component -->
+    <app-navbar></app-navbar>
+
+    <!-- Homepage Content -->
+    <div class="d-flex flex-grow-1">
+        <!-- Group Container Component -->
+        <app-group-container class="flex-shrink-0" style="flex-basis: 20%;"></app-group-container>
+
+        <!-- Message Container Component -->
+        <app-message-container class="flex-grow-1" style="flex-basis: 80%;"></app-message-container>
+    </div>
+</div>
