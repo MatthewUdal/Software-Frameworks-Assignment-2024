@@ -1,3 +1,42 @@
-<div id="right-column" class="flex-grow-1">
+<div id="right-column">
     <!-- Content for the right column -->
+    <div *ngIf="selectedChannel" class="h-100 message-parent">
+        <!-- <h3>{{ selectedChannel.name }}</h3>
+        <p>Channel ID: {{ selectedChannel.channelID }}</p>
+        <p>Group ID: {{ selectedChannel.groupID }}</p> -->
+
+        <!-- Header -->
+        <div class="header-bg d-flex justify-content-end align-items-center">
+            <!-- Call -->
+            <div class="header-icon-1 d-flex align-items-center">
+                <img src="../assets/Icons/ChannelSettings.png" width="26px">
+            </div>
+            <!-- Channel Settings -->
+            <div class="header-icon-2 d-flex align-items-center">
+                <img src="../assets/Icons/VideoCall.png" width="30px"> 
+            </div>
+        </div>
+        
+
+        <!-- Message box -->
+         <div class="message-box">
+            
+         </div>
+
+         <!-- Message Input -->
+        <div class="message-input-container">
+            <input type="text" placeholder="Type..." class="message-input">
+            <div class="attach-button">
+                <img src="../assets/Icons/AttachFile.png" alt="Attach" width="24px">
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="!selectedChannel" class="d-flex align-items-center justify-content-center h-100">
+        <div class="text-center noSelection rounded-5">
+            Please Select a Group &gt; Channel First
+        </div>
+    </div>
 </div>
+

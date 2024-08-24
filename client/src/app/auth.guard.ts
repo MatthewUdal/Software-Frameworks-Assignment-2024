@@ -7,9 +7,9 @@ export const authGuard: CanActivateFn = (route, state) => {
   const user = typeof window !== 'undefined' ? sessionStorage.getItem('user') : null;
 
   if (user) {
-    return true; // User is logged in, allow access
+    return true;
   } else {
-    router.navigate(['/login']); // User is not logged in, redirect to login page
+    router.navigate(['/login']);
     return false;
   }
 };
