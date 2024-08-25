@@ -29,3 +29,68 @@
 .icon-hover{
     cursor: pointer;
 }
+
+
+.side-panel {
+    position: fixed;
+    top: 0;
+    left: -326px;
+    width: 326px;
+    height: 100%;
+    background-color: #050505;
+    overflow-x: hidden;
+    transition: left 0.3s ease;
+    z-index: 1000;
+    border-right: 1px solid #6C5FCB;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.side-panel.open {
+    left: 0;
+}
+
+.close-icon {
+    align-self: flex-end;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    cursor: pointer;
+    background-color: #333;
+    border-radius: 15px;
+}
+
+.menu-items {
+    margin-top: 50px;
+    flex-grow: 1;
+}
+
+.menu-item {
+    background-color: #1F1F1F;
+    color: white;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+.menu-item:hover {
+    background-color: #333;
+}
+
+.logout-btn {
+    background-color: #6a5acd;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    align-self: center;
+}
