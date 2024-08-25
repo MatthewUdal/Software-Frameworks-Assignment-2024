@@ -1,0 +1,24 @@
+<div class="vh-100 min-h-1 d-flex flex-column" id="bg-container">
+    <!-- Navbar -->
+    <app-navbar></app-navbar>
+
+    <!-- Header -->
+    <div class="banner d-flex justify-content-center text-center">
+        <div class="banner-header mt-5">Discover New Groups</div>
+    </div>
+
+    <!-- Grid layout of all groups received from the get request -->
+    <div class="container-fluid mt-5 group-container">
+        <div class="row justify-content-between">
+            <div class="col-md-4 col-sm-4 mb-4" *ngFor="let group of joinableGroups">
+                <div class="group-card position-relative p-3 text-center">
+                    <h3>{{ group.name }}</h3>
+                    <div class="card-right" (click)="requestGroup(group.groupID)">
+                        <img src="../assets/Icons/RequestGroup.png" alt="Icon" class="icon">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

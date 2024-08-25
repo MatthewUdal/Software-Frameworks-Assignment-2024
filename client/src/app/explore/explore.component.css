@@ -1,0 +1,62 @@
+#bg-container{
+    background-color: #050505;
+}
+
+.banner-header{
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-left: 100px;
+    padding-right: 100px;
+    background-color: aliceblue;
+    background-color: #131313;
+    color: white;
+    border: 3px solid #8B82CA;
+    border-radius: 25px;
+    font-size: 2rem;
+}
+
+.group-container{
+    background-color: #131313;
+    border: 1px solid #03DAC6;
+    border-radius: 25px;
+    padding: 50px;
+    max-width: 90%;
+    min-height: 600px;
+    margin: 0 auto;
+}
+
+.group-card{
+    background-color: #1f1f1f;
+    border-radius: 20px;
+    color: white;
+    border: 1px solid #03DAC6;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 75px;
+    height: 100%;
+    background-color: #03DAC6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.icon {
+    width: 32px;
+    height: auto;
+}
+
+.group-container .col-md-4 {
+    max-width: 30%; 
+}
+
+.row {
+    gap: 20px; 
+}

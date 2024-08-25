@@ -24,6 +24,9 @@ app.use('/groups', groupRoute);
 const channelRoute = require('./routes/channel');
 app.use('/channels', channelRoute);
 
+const exploreRoute = require('./routes/explore');
+app.use('/explore', exploreRoute);
+
 
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
