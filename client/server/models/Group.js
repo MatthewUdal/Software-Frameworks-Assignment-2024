@@ -1,7 +1,7 @@
 class Group {
-    constructor(groupID, memberID, name) {
+    constructor(groupID, memberIDs, name) {
       this.groupID = groupID;
-      this.memberID = memberID;
+      this.memberIDs = memberIDs;
       this.name = name;
     }
   }
