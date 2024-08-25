@@ -12,12 +12,5 @@
     "email": "cat@com.au",
     "password": "321",
     "role": "user"
-  },
-  {
-    "userID": 3,
-    "username": "Mum",
-    "email": "mum@gmail.com",
-    "password": "cat",
-    "role": "user"
   }
 ]
