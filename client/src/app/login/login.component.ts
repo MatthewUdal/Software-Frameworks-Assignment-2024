@@ -29,7 +29,7 @@ export class LoginComponent {
     this.httpClient.post('http://localhost:3000/login', { email: this.email, password: this.password}, httpOptions).subscribe((response: any) => {
       if (response.success) {
         sessionStorage.setItem('user', JSON.stringify(response.user));
-        this.router.navigate(['/homepage']);
+        this.router.navigate(['/dashboard']);
       } else {
         alert(response.message);
       }

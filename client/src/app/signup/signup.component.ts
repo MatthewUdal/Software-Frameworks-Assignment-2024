@@ -31,7 +31,7 @@ export class SignupComponent {
       .subscribe((response: any) => {
         if (response.success) {
           sessionStorage.setItem('user', JSON.stringify(response.user));
-          this.router.navigate(['/homepage']);
+          this.router.navigate(['/dashboard']);
         } else {
           alert(response.message);
         }
