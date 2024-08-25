@@ -1,17 +1,16 @@
-
 <!--Container-->
 <div class="d-flex justify-content-center align-items-center vh-100" id="bg-container">
-    <!--login card-->
+    <!--Signup card-->
     <div class="card text-center mb-5 w-25 h-65 cPrimary border-3" id="login-card">      
         <!--Header-->
         <div class="w-100 cSecondary h-20 mt-4 d-flex align-items-center justify-content-center" id="card-header">
             <img src="./assets/logo.png" alt="Chatsphere Logo" id="logo">
         </div>
         
-        <!--login form-->
-        <form class="d-flex flex-column align-items-center" (ngSubmit)="onSignup()">
+        <!--Signup form-->
+        <form #signupForm="ngForm" class="d-flex flex-column align-items-center" (ngSubmit)="onSignup(signupForm)">
             <div class="mb-3 w-100 d-flex justify-content-center">
-                <input type="username" class="form-control w-65 mb-3" id="username" name="username" [(ngModel)]="username" placeholder="Username" required>
+                <input type="text" class="form-control w-65 mb-3" id="username" name="username" [(ngModel)]="username" placeholder="Username" required>
             </div>
             <div class="mb-3 w-100 d-flex justify-content-center">
                 <input type="email" class="form-control w-65 mb-3" id="email" name="email" [(ngModel)]="email" placeholder="Email" required>

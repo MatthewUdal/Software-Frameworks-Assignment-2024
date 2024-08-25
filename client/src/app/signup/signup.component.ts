@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
 
@@ -22,46 +22,17 @@ export class SignupComponent {
 
   constructor(private router: Router, private httpClient: HttpClient) { }
 
-  onSignup() {
-    const userList = localStorage.getItem('user');
-    this.httpClient.post('http://localhost:3000/signup', { username: this.username, email: this.email, userList: userList }, httpOptions)
+  onSignup(form: NgForm) {
+    if (form.invalid) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+    this.httpClient.post('http://localhost:3000/signup', { username: this.username, email: this.email, password: this.password }, httpOptions)
       .subscribe((response: any) => {
         if (response.success) {
-          // Create the new user object
-          const newUser = {
-            userID: response.newID,
-            username: this.username,
-            email: this.email,
-            password: this.password, 
-            role: 'user', 
-            groups: [] 
-          };
-
-          // Get the current user list from localStorage
-          let users = [];
-          if (userList) {
-            users = JSON.parse(userList);
-          }
-
-          // Add the new user to the list
-          users.push(newUser);
-
-          console.log(newUser);
-          console.log(users);
-
-          // Save the updated user list to localStorage
-          localStorage.setItem('user', JSON.stringify(users));
-
-          sessionStorage.setItem('user', JSON.stringify(newUser));
+          sessionStorage.setItem('user', JSON.stringify(response.user));
           this.router.navigate(['/homepage']);
-        } else if (response.message === "Account already exist.") {
-          console.log("User Already Exists");
-          alert("User Already Exists");
-        } else if (response.message === "Email already exists.") {
-          console.log(response.message);
-          alert(response.message);
-        } else if (response.message === "Username already exists.") {
-          console.log(response.message);
+        } else {
           alert(response.message);
         }
       }, (error) => {

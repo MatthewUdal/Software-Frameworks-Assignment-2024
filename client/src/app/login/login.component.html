@@ -1,4 +1,3 @@
-
 <!--Container-->
 <div class="d-flex justify-content-center align-items-center vh-100" id="bg-container">
     <!--login card-->
@@ -9,7 +8,7 @@
         </div>
         
         <!--login form-->
-        <form class="d-flex flex-column align-items-center" (ngSubmit)="onLogin()">
+        <form #loginForm="ngForm" class="d-flex flex-column align-items-center" (ngSubmit)="onLogin(loginForm)">
             <div class="mb-3 w-100 d-flex justify-content-center">
                 <input type="email" class="form-control w-65 mb-3" id="email" name="email" [(ngModel)]="email" placeholder="Email" required>
             </div>
