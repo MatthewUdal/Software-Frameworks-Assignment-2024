@@ -52,10 +52,25 @@ export class ExploreComponent implements OnInit{
     });
   }
 
-
   requestGroup(groupID: number): void {
-    console.log('Requested to join group with ID:', groupID);
-    alert(`Requested to join group with ID: ${groupID}`);
+    const userID = this.getUserID();
+    if (!userID) {
+      console.error('No user ID found');
+      return;
+    }
+  
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+  
+    this.http.post('http://localhost:3000/explore/join', { userID, groupID }, httpOptions).subscribe(response => {
+      alert(`Successfully requested to join group ${groupID}`);
+    }, error => {
+      console.error('Error joining group:', error);
+      alert('Error joining group. Please try again later.');
+    });
   }
 
 }
