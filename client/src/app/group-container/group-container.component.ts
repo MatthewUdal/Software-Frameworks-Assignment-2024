@@ -66,6 +66,8 @@ export class GroupContainerComponent implements OnInit {
 
   onGroupClick(groupID: number): void {
     this.selectedGroup = this.groups.find(group => group.groupID === groupID) || null;
+    // save current groupID
+    sessionStorage.setItem('cg', JSON.stringify(this.selectedGroup?.groupID));
   
     if (this.selectedGroup) {
       this.allGroupChannels = this.channels.filter(channel => channel.groupID === this.selectedGroup!.groupID);

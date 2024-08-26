@@ -19,7 +19,7 @@ router.post('/', (req, res) => {
   
       let groupData  = JSON.parse(data);
 
-      let groups = groupData.map(group => new Group(group.groupID, group.memberIDs, group.name));
+      let groups = groupData.map(group => new Group(group.groupID, group.memberIDs, group.name, group.adminIDs));
       groups = groups.filter(group => !group.memberIDs.includes(userID));
   
       res.json(groups);

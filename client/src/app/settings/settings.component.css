@@ -72,3 +72,16 @@
 .bottom-button:hover {
     background-color: #AC2929;
 }
+
+.reqList-element{
+    padding: 10px;
+    width: 70%;
+    color: white;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    background-color: #6C5FCB;
+}
+
+.req-btn{
+    cursor: pointer;
+}

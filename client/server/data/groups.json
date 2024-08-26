@@ -1,10 +1,10 @@
 [
-    { "groupID": 1, "memberIDs": [1, 3, 4, 5], "name": "Group 1" },
-    { "groupID": 2, "memberIDs": [1, 2, 3, 4, 5], "name": "Group 2" },
-    { "groupID": 3, "memberIDs": [2, 5], "name": "Group 3" },
-    { "groupID": 4, "memberIDs": [1, 2, 3], "name": "Group 4" },
-    { "groupID": 5, "memberIDs": [1, 3], "name": "Group 5" },
-    { "groupID": 6, "memberIDs": [3, 4], "name": "Group 6" },
-    { "groupID": 7, "memberIDs": [1, 3], "name": "Group 7" }
-  ]
+    { "groupID": 1, "memberIDs": [1, 4, 5], "name": "Group 1", "adminIDs": [3] },
+    { "groupID": 2, "memberIDs": [1, 2, 3, 4, 5], "name": "Group 2", "adminIDs": [2] },
+    { "groupID": 3, "memberIDs": [2, 5], "name": "Group 3", "adminIDs": [2] },
+    { "groupID": 4, "memberIDs": [1, 2, 3], "name": "Group 4", "adminIDs": [3] },
+    { "groupID": 5, "memberIDs": [1, 3], "name": "Group 5", "adminIDs": [3] },
+    { "groupID": 6, "memberIDs": [3, 4], "name": "Group 6", "adminIDs": [3] },
+    { "groupID": 7, "memberIDs": [1, 3], "name": "Group 7", "adminIDs": [3] }
+]
   
