@@ -1,0 +1,74 @@
+.settings-pad {
+    width: 650px;
+    height: 750px;
+    background-color: #1C1C1C;
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgba(18, 18, 18, 0.5);
+    position: relative; 
+}
+
+.header-text{
+    color: white;
+    font-size: 2.5rem;
+    margin-top: 20px;
+    margin-bottom: 70px;
+}
+
+.settings-content {
+    padding: 15px;
+    position: relative; 
+    height: 100%;
+}
+
+.setting-header{
+    width: 100%;
+}
+
+.close-icon {
+    position: absolute;
+    top: 25px; 
+    right: 25px; 
+    cursor: pointer;
+    background-color: #333;
+    border-radius: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    z-index: 10; 
+}
+
+.setting-body {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    gap: 15px; 
+  }
+
+.groupSettings-element{
+    padding: 10px;
+    width: 70%;
+    background-color: #121212;
+    border: 1px solid #434343;
+    color: white;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.groupSettings-element:hover{
+    background-color: #434343;
+}
+
+.bottom-button {
+    position: absolute;
+    bottom: 25px; 
+    width: 30%;
+    font-size: 1.2rem;
+    border: 2px solid #AC2929;
+}
+
+.bottom-button:hover {
+    background-color: #AC2929;
+}

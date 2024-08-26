@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Group } from '../interfaces/group.interface';
 import { Channel } from '../interfaces/channel.interface';
 import { ChannelService } from '../channel.service';
+import { SettingsService } from '../settings.service';
 
 @Component({
   selector: 'app-group-container',
@@ -22,7 +23,7 @@ export class GroupContainerComponent implements OnInit {
   allGroupChannels: Channel[] = [];
   selectedChannelID: number | null = null;
 
-  constructor(private http: HttpClient, private channelService: ChannelService) {}
+  constructor(private http: HttpClient, private channelService: ChannelService, private settingsService: SettingsService) {}
 
   ngOnInit(): void {
     const userID = this.getUserID();
@@ -51,7 +52,7 @@ export class GroupContainerComponent implements OnInit {
 
     this.http.post<Group[]>('http://localhost:3000/groups', { userID }, httpOptions).subscribe(groups => {
       this.groups = groups;
-      this.viewableGroups = [...this.groups]; // Initialize viewableGroups
+      this.viewableGroups = [...this.groups]; 
     }, error => {
       console.error('Error loading groups:', error);
     });
@@ -83,6 +84,10 @@ export class GroupContainerComponent implements OnInit {
   onBackClick(): void {
     this.selectedGroup = null;
     this.allGroupChannels = [];
+  }
+
+  settingsClick(): void {
+    this.settingsService.toggleSettings();
   }
   
 }

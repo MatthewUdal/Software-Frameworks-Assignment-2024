@@ -38,5 +38,11 @@
             Please Select a Group &gt; Channel First
         </div>
     </div>
+
+
+    <div *ngIf="settingsVisible" class="settings-overlay">
+        <!-- <button class="close-settings-button" (click)="settingsService.hideSettings()">Close Settings</button> -->
+        <app-settings></app-settings>
+      </div>
 </div>
 
