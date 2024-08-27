@@ -7,7 +7,7 @@
     ],
     "name": "Group 1",
     "adminIDs": [
-      3
+      4
     ]
   },
   {
@@ -39,8 +39,8 @@
     "groupID": 4,
     "memberIDs": [
       1,
-      2,
-      3
+      3,
+      2
     ],
     "name": "Group 4",
     "adminIDs": [
@@ -78,6 +78,17 @@
     "name": "Group 7",
     "adminIDs": [
       3
+    ]
+  },
+  {
+    "groupID": 8,
+    "memberIDs": [
+      2,
+      3
+    ],
+    "name": "Group 8",
+    "adminIDs": [
+      2
     ]
   }
 ]

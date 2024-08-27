@@ -1,0 +1,28 @@
+<div class="vh-100 min-h-1 d-flex flex-column bg-container">
+    <!-- Navbar -->
+    <app-navbar></app-navbar>
+
+    <div class="d-flex justify-content-center align-items-center vh-100">
+    <!--Group card-->
+    <div class="card text-center mb-5 w-25 h-65 border-3" id="group-card">      
+        <!--Header-->
+        <div class="w-100 mt-4 d-flex align-items-center justify-content-center text-white fw-bold" id="card-header">
+            Create a New Group
+        </div>
+        
+        <div class="h-100 mt-5 position-relative">
+            <div class="text-white group-name mt-3">Group Name:</div>
+            <input placeholder="Enter the Group Name" class="groupNameInput text-center mt-2" [(ngModel)]="groupName" required>
+            <div class="d-flex justify-content-center">
+                <div (click)="createGroup()" class="addGroup text-white">Create</div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+</div>

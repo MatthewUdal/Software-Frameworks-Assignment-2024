@@ -11,6 +11,13 @@
     "username": "MatthewUdal",
     "email": "cat@com.au",
     "password": "321",
+    "role": "groupAdmin"
+  },
+  {
+    "userID": 3,
+    "username": "JohnBabbage",
+    "email": "john@gmail.com",
+    "password": "cat",
     "role": "user"
   }
 ]

@@ -1,9 +1,37 @@
 [
-    { "channelID": 1, "groupID": 1, "name": "Channel 1" },
-    { "channelID": 2, "groupID": 1, "name": "Channel 2" },
-    { "channelID": 3, "groupID": 1, "name": "Channel 3" },
-    { "channelID": 4, "groupID": 2, "name": "Channel 4" },
-    { "channelID": 5, "groupID": 3, "name": "Channel 5" },
-    { "channelID": 6, "groupID": 2, "name": "Channel 6" }
-  ]
-  
+  {
+    "channelID": 1,
+    "groupID": 1,
+    "name": "Channel 1"
+  },
+  {
+    "channelID": 2,
+    "groupID": 1,
+    "name": "Channel 2"
+  },
+  {
+    "channelID": 3,
+    "groupID": 1,
+    "name": "Channel 3"
+  },
+  {
+    "channelID": 4,
+    "groupID": 2,
+    "name": "Channel 4"
+  },
+  {
+    "channelID": 5,
+    "groupID": 3,
+    "name": "Channel 5"
+  },
+  {
+    "channelID": 6,
+    "groupID": 2,
+    "name": "Channel 6"
+  },
+  {
+    "channelID": 7,
+    "groupID": 8,
+    "name": "Channel 1"
+  }
+]

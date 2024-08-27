@@ -6,6 +6,8 @@ import { Group } from '../interfaces/group.interface';
 import { Channel } from '../interfaces/channel.interface';
 import { ChannelService } from '../channel.service';
 import { SettingsService } from '../settings.service';
+import { RoleService } from '../role.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-group-container',
@@ -22,16 +24,32 @@ export class GroupContainerComponent implements OnInit {
   selectedGroup: Group | null = null;
   allGroupChannels: Channel[] = [];
   selectedChannelID: number | null = null;
+  groupID!: number;
+  userID!: string | null;
+  isAdmin: boolean = false;
 
-  constructor(private http: HttpClient, private channelService: ChannelService, private settingsService: SettingsService) {}
+  constructor(private http: HttpClient, private channelService: ChannelService, private settingsService: SettingsService, private roleService: RoleService, private router: Router) {}
 
   ngOnInit(): void {
-    const userID = this.getUserID();
-    if (userID) {
-      this.loadGroups(userID);
+    this.userID = this.getUserID();
+    this.checkAdmin();
+
+    if (this.userID) {
+      this.loadGroups(this.userID);
     }
     this.loadChannels();
   }
+
+
+  checkAdmin(): void {
+    this.groupID = Number(sessionStorage.getItem('cg'));
+
+    const role = this.roleService.getUserRole();
+    if (role === 'superAdmin' || role === 'groupAdmin'){
+      this.isAdmin = true;
+    } 
+  }
+
 
   getUserID(): string | null {
     const userData = sessionStorage.getItem('user');
@@ -90,6 +108,10 @@ export class GroupContainerComponent implements OnInit {
 
   settingsClick(): void {
     this.settingsService.toggleSettings();
+  }
+
+  createGroup(){
+    this.router.navigate(['/group-creation']);
   }
   
 }

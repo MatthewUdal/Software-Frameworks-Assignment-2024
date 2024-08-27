@@ -46,30 +46,37 @@ router.post('/', (req, res) => {
     });
 });
 
-// router.post('/', (req, res) => {
-//   fs.readFile(filePath, 'utf8', (err, data) => {
-//     if (err) {
-//       console.error('Error reading group data:', err);
-//       return res.sendStatus(500);
-//     }
+router.post('/createGroup', (req, res) => {
+  fs.readFile(groupFilePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading group data:', err);
+      return res.sendStatus(500);
+    }
 
-//     const groups = JSON.parse(data).map(group => new Group(group.groupID, group.memberIDs, group.name));
+    const groups = JSON.parse(data).map(group => new Group(group.groupID, group.memberIDs, group.name, group.adminIDs));
 
-//     const newGroupID = groups.length ? Math.max(...groups.map(group => group.groupID)) + 1 : 1;
-//     const newGroup = new Group(newGroupID, req.body.memberIDs, req.body.name);
+    const newGroupID = groups.length ? Math.max(...groups.map(group => group.groupID)) + 1 : 1;
 
-//     groups.push(newGroup);
+    const { userID, groupName } = req.body;
 
-//     fs.writeFile(filePath, JSON.stringify(groups, null, 2), (err) => {
-//       if (err) {
-//         console.error('Error writing group data:', err);
-//         return res.sendStatus(500);
-//       }
+    if (!userID || !groupName) {
+        return res.status(400).json({ error: 'UserID and groupName are required.' });
+    }
 
-//       res.status(201).json(newGroup);
-//     });
-//   });
-// });
+    const newGroup = new Group(newGroupID, [userID], groupName, [userID]);
+
+    groups.push(newGroup);
+
+    fs.writeFile(groupFilePath, JSON.stringify(groups, null, 2), (err) => {
+      if (err) {
+        console.error('Error writing group data:', err);
+        return res.sendStatus(500);
+      }
+
+      res.status(201).json(newGroup);
+    });
+  });
+});
 
 
 router.post('/leaveGroup', (req, res) => {
@@ -123,7 +130,6 @@ router.post('/leaveGroup', (req, res) => {
             });
         }});
     })
-
 
 
 module.exports = router;
