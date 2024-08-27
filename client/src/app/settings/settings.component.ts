@@ -3,22 +3,30 @@ import { CommonModule } from '@angular/common';
 import { SettingsService } from '../settings.service';
 import { RoleService } from '../role.service';
 import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms'
+import { Channel } from '../interfaces/channel.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css'
 })
 export class SettingsComponent implements OnInit {
+  channels: Channel[] = [];
+  allGroupChannels: Channel[] = [];
   currentView: string = '';
   isAdmin: boolean = false;
   groupID!: number;
   userID!: string | null;
   userRequests: { requestID: number; userID: number; username: string }[] = [];
+  channelName: string = '';
+  selectedChannelID: number | null = null;
+  
 
-  constructor(private settingsService: SettingsService, private http: HttpClient, private roleService: RoleService) {}
+  constructor(private settingsService: SettingsService, private http: HttpClient, private roleService: RoleService, private router: Router) {}
 
   ngOnInit(): void {
     this.currentView = 'group-settings';
@@ -68,8 +76,15 @@ export class SettingsComponent implements OnInit {
     this.currentView = view;
   }
 
-  leaveGroup(){
-    console.log('leave group');
+  leaveGroup(): void{
+    this.http.post('http://localhost:3000/groups/leaveGroup', { groupID: this.groupID, userID: this.userID })
+      .subscribe(response => {
+        console.log('Left the group successfully', response);
+        this.router.navigate(['/dashboard']);
+        this.toggleSettings();
+      }, error => {
+        console.error('Error leaving the group', error);
+      });
   }
 
   toggleSettings(): void {
@@ -125,5 +140,38 @@ export class SettingsComponent implements OnInit {
       );
   }
 
+  addChannel(): void {
+    const channelData = {
+      groupID: this.groupID,
+      name: this.channelName
+    };
 
+    this.http.post('http://localhost:3000/channels/addChannel', channelData)
+      .subscribe(response => {
+        console.log('Channel added successfully:', response);
+      }, error => {
+        console.error('Error adding channel:', error);
+      });
+  }
+
+  loadChannels(): void {
+    this.http.get<Channel[]>('http://localhost:3000/channels').subscribe(channels => {
+      this.channels = channels;
+      this.allGroupChannels = this.channels.filter(channel => channel.groupID === this.groupID);
+    });
+  }
+  
+  onChannelClick(channelID: number): void {
+    this.selectedChannelID = channelID;
+  }
+
+  deleteChannel(): void {
+    this.http.post('http://localhost:3000/channels/deleteChannel', {channelID: this.selectedChannelID})
+      .subscribe(response => {
+        console.log('Channel deleted', response);
+      }, error => {
+        console.error('Error deleting channel', error);
+      });
+  }
+  
 }

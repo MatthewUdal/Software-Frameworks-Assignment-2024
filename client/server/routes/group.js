@@ -71,4 +71,59 @@ router.post('/', (req, res) => {
 //   });
 // });
 
+
+router.post('/leaveGroup', (req, res) => {
+    const { groupID, userID } = req.body;
+
+    fs.readFile(userFilePath, 'utf8', (err, userData) => {
+        if (err) {
+            console.error('Error reading user data:', err);
+            return res.sendStatus(500);
+        }
+
+        let users = JSON.parse(userData).map(user => new User(user.userID, user.username, user.email, user.password, user.role));
+        const foundUser = users.find(user => user.userID === userID);
+
+        if (!foundUser) {
+            return res.sendStatus(404);
+        }
+
+        if (foundUser.role === 'superAdmin') {
+            return res.status(400).json({ message: 'super admin cannot leave a group' });
+        } else {
+            fs.readFile(groupFilePath, 'utf8', (err, data) => {
+                if (err) {
+                    console.error('Error reading group data:', err);
+                    return res.sendStatus(500);
+                }
+        
+                let groups = JSON.parse(data);
+                const groupIndex = groups.findIndex(group => group.groupID === groupID);
+        
+                if (groupIndex === -1) {
+                    return res.status(404).json({ message: 'Group not found' });
+                }
+        
+                // Remove userID from memberIDs
+                const memberIndex = groups[groupIndex].memberIDs.indexOf(userID);
+                if (memberIndex > -1) {
+                    groups[groupIndex].memberIDs.splice(memberIndex, 1);
+        
+                    fs.writeFile(groupFilePath, JSON.stringify(groups, null, 2), (err) => {
+                        if (err) {
+                            console.error('Error writing group data:', err);
+                            return res.sendStatus(500);
+                        }
+        
+                    res.status(200).json({ message: 'User removed from group' });
+                });
+                } else {
+                    res.status(400).json({ message: 'User is not a member of the group' });
+                }
+            });
+        }});
+    })
+
+
+
 module.exports = router;

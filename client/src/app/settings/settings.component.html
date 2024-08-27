@@ -1,6 +1,11 @@
 <div class="settings-pad">
     <div class="settings-content d-flex justify-content-center text-center">
         <i class="fas fa-times text-white fa-2x close-icon" (click)="toggleSettings()"></i>
+        <i *ngIf="currentView !== 'group-settings'" class="back-icon" (click)="setView('group-settings')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24">
+                <path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </i>
         <ng-container [ngSwitch]="currentView">
             <div *ngSwitchCase="'group-settings'" class="w-100">
                 <!-- Header -->
@@ -10,7 +15,7 @@
                     <div (click)="setView('group-members')" class="groupSettings-element">Group Members</div>
                     <div *ngIf="isAdmin" (click)="setView('join-requests'); loadRequests()" class="groupSettings-element">Join Requests</div>
                     <div *ngIf="isAdmin" (click)="setView('create-channels')" class="groupSettings-element">Create Channels</div>
-                    <div *ngIf="isAdmin" (click)="setView('remove-channels')" class="groupSettings-element">Remove Channels</div>
+                    <div *ngIf="isAdmin" (click)="setView('remove-channels'); loadChannels()" class="groupSettings-element">Remove Channels</div>
                     <div (click)="leaveGroup()" class="groupSettings-element bottom-button">Leave Group</div>
                 </div>
             </div>
@@ -43,13 +48,27 @@
             </div>
 
             <!-- Create Channels -->
-            <div *ngSwitchCase="'create-channels'">
+            <div *ngSwitchCase="'create-channels'" class="w-100">
                 <div class="setting-header header-text">Create Channels</div>
+                <div class="setting-body">
+                    <input placeholder="Channel Name" class="channelNameInput text-center" [(ngModel)]="channelName" required>
+                    <div (click)="addChannel(); toggleSettings()" class="addChannel text-white">Add Channel</div>
+                </div>  
             </div>
 
             <!-- Remove Channels -->
-            <div *ngSwitchCase="'remove-channels'">
+            <div *ngSwitchCase="'remove-channels'" class="w-100">
                 <div class="setting-header header-text">Remove Channels</div>
+                <div class="setting-body list-unstyled">
+                    <li 
+                        class="channel-element" 
+                        *ngFor="let channel of allGroupChannels" 
+                        (click)="onChannelClick(channel.channelID)"
+                        [ngClass]="{'selected': selectedChannelID === channel.channelID}">
+                        {{ channel.name }}
+                    </li>
+                    <div (click)="deleteChannel()" class="groupSettings-element bottom-button">Delete Channel</div>
+                </div>
             </div>
 
             <div *ngSwitchDefault>
