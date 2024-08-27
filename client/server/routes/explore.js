@@ -45,6 +45,7 @@ router.post('/', (req, res) => {
       // check if member isn't in group already
       console.log(groupData[groupIndex]);
       if (!groupData[groupIndex].memberIDs.includes(userID)) {
+        const groupName = groupData[groupIndex].name;
   
         // read and write to requests
         fs.readFile(requestFilePath, 'utf8', (err, requestData) => {
@@ -70,7 +71,7 @@ router.post('/', (req, res) => {
               console.error('Error writing to request data file:', err);
               return res.sendStatus(500);
             }
-            res.json({ message: 'Request Sent', groupID, requestID: newRequestID });
+            res.json({ message: 'Request Sent', groupID, requestID: newRequestID, groupName });
           });
         });
       } else {

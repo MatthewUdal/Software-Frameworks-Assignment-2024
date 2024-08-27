@@ -79,16 +79,5 @@
     "adminIDs": [
       3
     ]
-  },
-  {
-    "groupID": 8,
-    "memberIDs": [
-      2,
-      3
-    ],
-    "name": "Group 8",
-    "adminIDs": [
-      2
-    ]
   }
 ]

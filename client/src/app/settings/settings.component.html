@@ -16,7 +16,15 @@
                     <div *ngIf="isAdmin" (click)="setView('join-requests'); loadRequests()" class="groupSettings-element">Join Requests</div>
                     <div *ngIf="isAdmin" (click)="setView('create-channels')" class="groupSettings-element">Create Channels</div>
                     <div *ngIf="isAdmin" (click)="setView('remove-channels'); loadChannels()" class="groupSettings-element">Remove Channels</div>
-                    <div (click)="leaveGroup()" class="groupSettings-element bottom-button">Leave Group</div>
+                    <!-- Non-admin view -->
+                    <div *ngIf="!isAdmin" (click)="leaveGroup()" class="groupSettings-element bottom-button">Leave Group</div>
+
+                    <!-- Admin view: Leave Group and Delete Group buttons side by side -->
+                    <div *ngIf="isAdmin" class="admin-buttons-container">
+                        <div (click)="leaveGroup()" class="groupSettings-element admin-button">Leave Group</div>
+                        <div (click)="deleteGroup()" class="groupSettings-element admin-button">Delete Group</div>
+                    </div>
+                    
                 </div>
             </div>
 

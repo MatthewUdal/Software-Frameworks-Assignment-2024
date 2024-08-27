@@ -9,8 +9,8 @@
 
     <!-- Grid layout of all groups received from the get request -->
     <div class="container-fluid mt-5 group-container">
-        <div class="row justify-content-between">
-            <div class="col-md-4 col-sm-4 mb-4" *ngFor="let group of joinableGroups">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4" *ngFor="let group of joinableGroups">
                 <div class="group-card position-relative p-3 text-center">
                     <h3>{{ group.name }}</h3>
                     <div class="card-right" (click)="requestGroup(group.groupID)">
@@ -20,5 +20,4 @@
             </div>
         </div>
     </div>
-
 </div>

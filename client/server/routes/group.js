@@ -7,6 +7,8 @@ const User = require('../models/User');
 
 const groupFilePath = path.join(__dirname, '..', 'data', 'groups.json');
 const userFilePath = path.join(__dirname, '..', 'data', 'users.json');
+const requestFilePath = path.join(__dirname, '..', 'data', 'requests.json');
+const channelFilePath = path.join(__dirname, '..', 'data', 'channels.json');
 
 router.post('/', (req, res) => {
     const { userID } = req.body;
@@ -130,6 +132,27 @@ router.post('/leaveGroup', (req, res) => {
             });
         }});
     })
+
+router.post('/deleteGroup', (req, res) => {
+    const { groupID } = req.body;
+
+    // Read them all together isntead of a ton of read and writes
+    const groups = JSON.parse(fs.readFileSync(groupFilePath));
+    const channels = JSON.parse(fs.readFileSync(channelFilePath));
+    const requests = JSON.parse(fs.readFileSync(requestFilePath));
+
+    // Use the cool method of removing data from above
+    const updatedGroups = groups.filter(group => group.groupID !== groupID);
+    const updatedChannels = channels.filter(channel => channel.groupID !== groupID);
+    const updatedRequests = requests.filter(request => request.groupID !== groupID);
+
+    // Write the updated data back to the files
+    fs.writeFileSync(groupFilePath, JSON.stringify(updatedGroups, null, 2));
+    fs.writeFileSync(channelFilePath, JSON.stringify(updatedChannels, null, 2));
+    fs.writeFileSync(requestFilePath, JSON.stringify(updatedRequests, null, 2));
+
+    res.status(200).json({ message: 'Deleted all data related to the groupID' });
+});
 
 
 module.exports = router;

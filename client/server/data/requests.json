@@ -13,5 +13,10 @@
     "requestID": 3,
     "groupID": 5,
     "userID": 2
+  },
+  {
+    "requestID": 4,
+    "groupID": 7,
+    "userID": 2
   }
 ]

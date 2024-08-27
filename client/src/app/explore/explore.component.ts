@@ -65,12 +65,19 @@ export class ExploreComponent implements OnInit{
       })
     };
   
-    this.http.post('http://localhost:3000/explore/join', { userID, groupID }, httpOptions).subscribe(response => {
-      alert(`Successfully requested to join group ${groupID}`);
-    }, error => {
-      console.error('Error joining group:', error);
-      alert('Error joining group. Please try again later.');
-    });
+    this.http.post('http://localhost:3000/explore/join', { userID, groupID }, httpOptions).subscribe(
+      (response: any) => { 
+        if (response && response.groupName) {
+          alert(`Successfully requested to join ${response.groupName}`);
+        } else {
+          alert('Group name not found in response.');
+        }
+      },
+      error => {
+        console.error('Error joining group:', error);
+        alert('Error joining group. Please try again later.');
+      }
+    );
   }
 
 }

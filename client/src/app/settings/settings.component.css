@@ -155,3 +155,29 @@
     background-color: #1F1F1F;
     border: 1px solid #6C5FCB;
 }
+
+.admin-buttons-container {
+    display: flex;
+    justify-content: center; 
+    gap: 30px; 
+    position: absolute;
+    bottom: 25px;
+    left: 0;
+    right: 0;
+}
+
+.admin-button {
+    width: 30%; 
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 10px;
+    border: 2px solid #AC2929;
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.admin-button:hover {
+    background-color: #AC2929;
+}

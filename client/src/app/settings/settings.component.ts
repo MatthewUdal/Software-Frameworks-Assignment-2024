@@ -155,6 +155,7 @@ export class SettingsComponent implements OnInit {
   }
 
   loadChannels(): void {
+    console.log('loading channels')
     this.http.get<Channel[]>('http://localhost:3000/channels').subscribe(channels => {
       this.channels = channels;
       this.allGroupChannels = this.channels.filter(channel => channel.groupID === this.groupID);
@@ -169,8 +170,20 @@ export class SettingsComponent implements OnInit {
     this.http.post('http://localhost:3000/channels/deleteChannel', {channelID: this.selectedChannelID})
       .subscribe(response => {
         console.log('Channel deleted', response);
+        this.router.navigate(['/dashboard']);
       }, error => {
         console.error('Error deleting channel', error);
+      });
+  }
+
+  deleteGroup(): void {
+    this.http.post('http://localhost:3000/groups/deleteGroup', { groupID: this.groupID })
+      .subscribe(response => {
+        console.log('group deleted', response);
+        this.toggleSettings();
+        this.router.navigate(['/dashboard']);
+      }, error => {
+        console.error('Error deleting group', error);
       });
   }
   
