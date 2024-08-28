@@ -49,8 +49,8 @@
                     >
                         <li class="dropdown-item" (click)="kickUser(member.userID)" >Remove User from Group</li>
                         <li class="dropdown-item" >Ban & Report User</li>
-                        <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" >Promote to <span class="GA-color">Group Admin</span></li>
-                        <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" >Promote to <span class="SA-color">Super Admin</span></li>
+                        <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" (click)="promoteUser(member.userID, 'groupAdmin')">Promote to <span class="GA-color">Group Admin</span></li>
+                        <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" (click)="promoteUser(member.userID, 'superAdmin')">Promote to <span class="SA-color">Super Admin</span></li>
                     </ul>
                     </li>
                 </ul>

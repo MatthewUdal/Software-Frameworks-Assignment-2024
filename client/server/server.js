@@ -39,6 +39,9 @@ app.use('/approveRequest', approveRequest);
 const declineRequest = require('./routes/declineRequest');
 app.use('/declineRequest', declineRequest);
 
+const promoteUser = require('./routes/promoteUser');
+app.use('/promoteUser', promoteUser);
+
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
 });

@@ -8,7 +8,8 @@
     ],
     "name": "Group 1",
     "adminIDs": [
-      2
+      2,
+      3
     ]
   },
   {
@@ -19,7 +20,8 @@
     ],
     "name": "Group 2",
     "adminIDs": [
-      2
+      2,
+      3
     ]
   },
   {

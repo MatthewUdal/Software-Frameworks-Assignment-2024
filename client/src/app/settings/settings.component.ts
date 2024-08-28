@@ -252,5 +252,23 @@ export class SettingsComponent implements OnInit {
         }
       );
   }
+
+  promoteUser(userID: number, newRole: string): void {
+    this.http.post<{ success: boolean, message: string }>('http://localhost:3000/promoteUser', { userID, newRole, groupID: this.groupID })
+      .subscribe(
+        response => {
+          if (response.success) {
+            console.log('User role updated successfully:', response.message);
+            this.loadMembers();
+          } else {
+            console.error('Error updating user role:', response.message);
+          }
+        },
+        error => {
+          console.error('Error updating user role:', error);
+        }
+      );
+  }
   
+    
 }
