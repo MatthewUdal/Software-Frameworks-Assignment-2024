@@ -154,5 +154,101 @@ router.post('/deleteGroup', (req, res) => {
     res.status(200).json({ message: 'Deleted all data related to the groupID' });
 });
 
+router.post('/getMembers', (req, res) => {
+  const { groupID } = req.body;
+
+  if (!groupID) {
+    return res.status(400).json({ error: 'groupID is required' });
+  }
+
+  fs.readFile(groupFilePath, 'utf8', (err, groupsData) => {
+    if (err) {
+      console.error('Error reading groups data:', err);
+      return res.sendStatus(500);
+    }
+
+    const groups = JSON.parse(groupsData);
+    const group = groups.find(group => group.groupID === groupID);
+
+    if (!group) {
+      return res.status(404).json({ error: 'Group not found' });
+    }
+
+    fs.readFile(userFilePath, 'utf8', (err, usersData) => {
+      if (err) {
+        console.error('Error reading users data:', err);
+        return res.sendStatus(500);
+      }
+
+      const users = JSON.parse(usersData);
+      const members = group.memberIDs.map(memberID => {
+        const user = users.find(user => user.userID === memberID);
+        return {
+          userID: user.userID,
+          username: user.username,
+          role: user.role
+        };
+      });
+  
+        res.status(200).json(members);
+      });
+    });
+  });
+
+  router.post('/kickUser', (req, res) => {
+    const { groupID, userID } = req.body;
+  
+    fs.readFile(userFilePath, 'utf8', (err, userData) => {
+      if (err) {
+        console.error('Error reading user data:', err);
+        return res.sendStatus(500);
+      }
+  
+      let users = JSON.parse(userData);
+      const user = users.find(u => u.userID === userID);
+  
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+  
+      if (user.role === 'superAdmin' || user.role === 'groupAdmin') {
+        return res.status(403).json({ success: false, message: 'Cannot kick a superAdmin' });
+      }
+  
+      fs.readFile(groupFilePath, 'utf8', (err, groupData) => {
+        if (err) {
+          console.error('Error reading group data:', err);
+          return res.sendStatus(500);
+        }
+  
+        let groups = JSON.parse(groupData);
+        const group = groups.find(g => g.groupID === groupID);
+  
+        if (!group) {
+          return res.status(404).json({ success: false, message: 'Group not found' });
+        }
+  
+        const memberIndex = group.memberIDs.indexOf(userID);
+        const adminIndex = group.adminIDs.indexOf(userID);
+  
+        if (memberIndex !== -1) {
+          group.memberIDs.splice(memberIndex, 1);
+        }
+  
+        if (adminIndex !== -1) {
+          group.adminIDs.splice(adminIndex, 1);
+        }
+  
+        fs.writeFile(groupFilePath, JSON.stringify(groups, null, 2), 'utf8', (err) => {
+          if (err) {
+            console.error('Error writing group data:', err);
+            return res.sendStatus(500);
+          }
+  
+          res.json({ success: true, message: 'User kicked from the group successfully' });
+        });
+      });
+    });
+  });
 
 module.exports = router;

@@ -181,3 +181,94 @@
 .admin-button:hover {
     background-color: #AC2929;
 }
+
+.member-list{
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+.groupMember-element{
+    padding: 5px 5px;
+    width: 70%;
+    background-color: #554b9e;
+    color: white;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.username{
+    margin-right: 10px;
+}
+
+.role-superAdmin{
+    color: #d33232;
+}
+
+.role-groupAdmin{
+    color: #03DAC6;
+}
+
+.role-user{
+    color: rgb(37, 37, 37);
+}
+
+ul {
+    padding: 0;
+}
+
+.role-font{
+    font-size: 1.35rem;
+}
+
+
+.memberSettings-button {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #585858;
+    border-radius: 15px;
+    margin-left: 10px;
+}
+
+.setting-img{
+    width: 28px;
+    height: auto;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 0; 
+    top: 100%; 
+    display: none;
+    background-color: #121212;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 5px; 
+    z-index: 1000;
+    transform: translateX(-28%); 
+    border: 1px solid #434343;
+}
+  
+  .dropdown-menu.show {
+    display: block;
+  }
+  
+  .dropdown-item {
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .GA-color{
+    color: #03DAC6;
+  }
+
+  .SA-color{
+    color: #AC2929;
+  }

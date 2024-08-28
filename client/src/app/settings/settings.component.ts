@@ -19,11 +19,14 @@ export class SettingsComponent implements OnInit {
   allGroupChannels: Channel[] = [];
   currentView: string = '';
   isAdmin: boolean = false;
+  userRole!: string | null;
   groupID!: number;
   userID!: string | null;
   userRequests: { requestID: number; userID: number; username: string }[] = [];
+  groupMembers: { userID: number, username: string, role: string }[] = [];
   channelName: string = '';
   selectedChannelID: number | null = null;
+  activeMember: any = null;
   
 
   constructor(private settingsService: SettingsService, private http: HttpClient, private roleService: RoleService, private router: Router) {}
@@ -34,8 +37,8 @@ export class SettingsComponent implements OnInit {
     this.groupID = Number(sessionStorage.getItem('cg'));
     this.userID = this.getUserID();
 
-    const role = this.roleService.getUserRole();
-    if (role === 'superAdmin'){
+    this.userRole = this.roleService.getUserRole();
+    if (this.userRole === 'superAdmin'){
       this.isAdmin = true;
     } else {
       this.getPerms();
@@ -185,6 +188,69 @@ export class SettingsComponent implements OnInit {
       }, error => {
         console.error('Error deleting group', error);
       });
+  }
+
+  loadMembers(): void {
+    this.http.post<{ userID: number, username: string, role: string }[]>('http://localhost:3000/groups/getMembers', { groupID: this.groupID })
+      .subscribe(
+        (response) => {
+          this.groupMembers = response;
+        },
+        (error) => {
+          console.error('Error loading members:', error);
+        }
+    );
+  }
+
+  getRoleClass(role: string): string {
+    switch (role) {
+      case 'superAdmin':
+        return 'role-superAdmin';
+      case 'groupAdmin':
+        return 'role-groupAdmin';
+      default:
+        return 'role-user';
+    }
+  }
+
+  getRoleDisplayText(role: string): string {
+    switch (role) {
+      case 'superAdmin':
+        return 'Super Admin';
+      case 'groupAdmin':
+        return 'Group Admin';
+      case 'user':
+        return 'User';
+      default:
+        return 'Unknown Role';
+    }
+  }
+
+  
+
+  toggleDropdown(member: any) {
+    if (this.activeMember === member) {
+      this.activeMember = null;
+    } else {
+      this.activeMember = member;
+    }
+  }
+
+  kickUser(userID: number): void {
+    this.http.post<{ success: boolean, message: string }>('http://localhost:3000/groups/kickUser', { groupID: this.groupID, userID })
+      .subscribe(
+        response => {
+          if (response.success) {
+            console.log(response.message);
+            this.loadMembers();
+          } else {
+            console.error(response.message);
+          }
+        },
+        error => {
+          console.error('Error kicking user:', error);
+        }
+      );
   }
   
 }

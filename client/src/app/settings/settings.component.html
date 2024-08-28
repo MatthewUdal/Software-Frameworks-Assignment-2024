@@ -12,7 +12,7 @@
                 <div class="setting-header header-text">Group Settings</div>
 
                 <div class="setting-body">
-                    <div (click)="setView('group-members')" class="groupSettings-element">Group Members</div>
+                    <div (click)="setView('group-members'); loadMembers();" class="groupSettings-element">Group Members</div>
                     <div *ngIf="isAdmin" (click)="setView('join-requests'); loadRequests()" class="groupSettings-element">Join Requests</div>
                     <div *ngIf="isAdmin" (click)="setView('create-channels')" class="groupSettings-element">Create Channels</div>
                     <div *ngIf="isAdmin" (click)="setView('remove-channels'); loadChannels()" class="groupSettings-element">Remove Channels</div>
@@ -29,9 +29,33 @@
             </div>
 
             <!-- Group Members -->
-            <div *ngSwitchCase="'group-members'">
+            <div *ngSwitchCase="'group-members'" class="w-100">
                 <div class="setting-header header-text">Group Members</div>
+                <ul class="list-unstyled">
+                  <li class="position-relative mb-3 member-list" *ngFor="let member of groupMembers">
+                    <div class="groupMember-element">
+                      <span class="username">{{ member.username }} </span>
+                      <span class="role fw-bold role-font" [ngClass]="getRoleClass(member.role)">
+                        ({{ getRoleDisplayText(member.role) }})
+                      </span>
+                    </div>
+                    <div *ngIf="isAdmin" class="memberSettings-button" (click)="toggleDropdown(member)">
+                      <img src="../assets/Icons/ChannelSettings.png" class="setting-img">
+                    </div>
+                    <ul
+                        class="dropdown-menu"
+                        [ngClass]="{'show': activeMember === member}"
+                        (click)="$event.stopPropagation()"
+                    >
+                        <li class="dropdown-item" (click)="kickUser(member.userID)" >Remove User from Group</li>
+                        <li class="dropdown-item" >Ban & Report User</li>
+                        <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" >Promote to <span class="GA-color">Group Admin</span></li>
+                        <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" >Promote to <span class="SA-color">Super Admin</span></li>
+                    </ul>
+                    </li>
+                </ul>
             </div>
+s
 
             <!-- Join Requests -->
             <div *ngSwitchCase="'join-requests'" class="w-100">

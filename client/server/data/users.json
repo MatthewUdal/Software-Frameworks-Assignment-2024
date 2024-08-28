@@ -19,5 +19,12 @@
     "email": "john@gmail.com",
     "password": "cat",
     "role": "user"
+  },
+  {
+    "userID": 4,
+    "username": "Andrew",
+    "email": "andrew@gmail.com",
+    "password": "123",
+    "role": "user"
   }
 ]

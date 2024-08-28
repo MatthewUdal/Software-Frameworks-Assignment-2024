@@ -17,16 +17,6 @@
   {
     "channelID": 4,
     "groupID": 2,
-    "name": "Channel 4"
-  },
-  {
-    "channelID": 5,
-    "groupID": 3,
-    "name": "Channel 5"
-  },
-  {
-    "channelID": 6,
-    "groupID": 2,
-    "name": "Channel 6"
+    "name": "Channel 1"
   }
 ]
