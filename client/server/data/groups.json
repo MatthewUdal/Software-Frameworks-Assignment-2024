@@ -4,7 +4,8 @@
     "memberIDs": [
       2,
       3,
-      1
+      1,
+      6
     ],
     "name": "Group 1",
     "adminIDs": [
@@ -27,9 +28,21 @@
   {
     "groupID": 3,
     "memberIDs": [
-      2
+      2,
+      6
     ],
     "name": "Group 3",
+    "adminIDs": [
+      2
+    ]
+  },
+  {
+    "groupID": 4,
+    "memberIDs": [
+      2,
+      3
+    ],
+    "name": "Group 4",
     "adminIDs": [
       2
     ]

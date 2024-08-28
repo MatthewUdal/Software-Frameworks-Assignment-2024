@@ -30,17 +30,11 @@ app.use('/explore', exploreRoute);
 const permsRoute = require('./routes/perms');
 app.use('/perms', permsRoute);
 
-const getReqRoute = require('./routes/getRequests');
-app.use('/getRequests', getReqRoute);
+const requestsRoute = require('./routes/requests');
+app.use('/requests', requestsRoute);
 
-const approveRequest = require('./routes/approveRequest');
-app.use('/approveRequest', approveRequest);
-
-const declineRequest = require('./routes/declineRequest');
-app.use('/declineRequest', declineRequest);
-
-const promoteUser = require('./routes/promoteUser');
-app.use('/promoteUser', promoteUser);
+const promoteRoute = require('./routes/promoteUser');
+app.use('/promoteUser', promoteRoute);
 
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);

@@ -10,13 +10,8 @@
     "name": "Channel 2"
   },
   {
-    "channelID": 3,
+    "channelID": 5,
     "groupID": 1,
     "name": "Channel 3"
-  },
-  {
-    "channelID": 4,
-    "groupID": 2,
-    "name": "Channel 1"
   }
 ]

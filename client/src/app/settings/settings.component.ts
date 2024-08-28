@@ -97,7 +97,7 @@ export class SettingsComponent implements OnInit {
 
   loadRequests(): void {
     console.log('Loading requests for group:', this.groupID);
-    this.http.post<{ requestID: number, userID: number, username: string }[]>('http://localhost:3000/getRequests', { groupID: this.groupID })
+    this.http.post<{ requestID: number, userID: number, username: string }[]>('http://localhost:3000/requests/getRequests', { groupID: this.groupID })
       .subscribe(
         (response) => {
           this.userRequests = response;
@@ -110,7 +110,7 @@ export class SettingsComponent implements OnInit {
   }
 
   approveRequest(userID: number, requestID: number): void {
-    this.http.post<{ success: boolean }>('http://localhost:3000/approveRequest', { userID, requestID, groupID: this.groupID })
+    this.http.post<{ success: boolean }>('http://localhost:3000/requests/approveRequest', { userID, requestID, groupID: this.groupID })
       .subscribe(
         (response) => {
           if (response.success) {
@@ -127,7 +127,7 @@ export class SettingsComponent implements OnInit {
   }
 
   removeRequest(requestID: number): void {
-    this.http.post<{ success: boolean, message: string }>('http://localhost:3000/declineRequest', { requestID })
+    this.http.post<{ success: boolean, message: string }>('http://localhost:3000/requests/declineRequest', { requestID })
       .subscribe(
         response => {
           if (response.success) {
@@ -235,6 +235,7 @@ export class SettingsComponent implements OnInit {
       this.activeMember = member;
     }
   }
+
 
   kickUser(userID: number): void {
     this.http.post<{ success: boolean, message: string }>('http://localhost:3000/groups/kickUser', { groupID: this.groupID, userID })

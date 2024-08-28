@@ -26,5 +26,19 @@
     "email": "andrew@gmail.com",
     "password": "123",
     "role": "user"
+  },
+  {
+    "userID": 5,
+    "username": "Dad",
+    "email": "dad@gmail.com",
+    "password": "kfc",
+    "role": "user"
+  },
+  {
+    "userID": 6,
+    "username": "Mum",
+    "email": "mum@gmail.com",
+    "password": "dog",
+    "role": "user"
   }
 ]

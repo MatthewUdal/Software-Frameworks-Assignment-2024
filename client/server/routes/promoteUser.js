@@ -1,22 +1,13 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
 const router = express.Router();
+const UserService = require('../models/UserService');
+const GroupService = require('../models/GroupService');
 
-const userFilePath = path.join(__dirname, '..', 'data', 'users.json');
-const groupFilePath = path.join(__dirname, '..', 'data', 'groups.json');
-
-
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { userID, newRole } = req.body;
 
-    fs.readFile(userFilePath, 'utf8', (err, userData) => {
-        if (err) {
-            console.error('Error reading user data:', err);
-            return res.sendStatus(500);
-        }
-
-        let users = JSON.parse(userData);
+    try {
+        let users = await UserService.readUsers();
         const user = users.find(u => u.userID === userID);
 
         if (!user) {
@@ -24,38 +15,24 @@ router.post('/', (req, res) => {
         }
 
         user.role = newRole;
-        fs.readFile(groupFilePath, 'utf8', (err, groupData) => {
-            if (err) {
-                console.error('Error reading group data:', err);
-                return res.sendStatus(500);
+
+        let groups = await GroupService.readGroups();
+        const userGroups = groups.filter(g => g.memberIDs.includes(userID));
+
+        userGroups.forEach(group => {
+            if (!group.adminIDs.includes(userID)) {
+                group.adminIDs.push(userID);
             }
-
-            let groups = JSON.parse(groupData);
-            const userGroups = groups.filter(g => g.memberIDs.includes(userID));
-
-            userGroups.forEach(group => {
-                if (!group.adminIDs.includes(userID)) {
-                    group.adminIDs.push(userID);
-                }
-            });
-
-            fs.writeFile(groupFilePath, JSON.stringify(groups, null, 2), 'utf8', (err) => {
-                if (err) {
-                    console.error('Error writing group data:', err);
-                    return res.sendStatus(500);
-                }
-
-                fs.writeFile(userFilePath, JSON.stringify(users, null, 2), 'utf8', (err) => {
-                    if (err) {
-                        console.error('Error writing user data:', err);
-                        return res.sendStatus(500);
-                    }
-
-                    res.json({ success: true, message: 'User role updated and added to admin list successfully' });
-                });
-            });
         });
-    });
+
+        await GroupService.writeGroups(groups);
+        await UserService.writeUsers(users);
+
+        res.json({ success: true, message: 'User role updated and added to admin list successfully' });
+    } catch (err) {
+        console.error('Error processing request:', err);
+        res.sendStatus(500);
+    }
 });
 
 module.exports = router;

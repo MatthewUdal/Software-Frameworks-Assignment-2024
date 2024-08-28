@@ -1,83 +1,56 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
 const router = express.Router();
-const Group = require('../models/Group');
+const GroupService = require('../models/GroupService');
+const RequestService = require('../models/RequestService');
 const Request = require('../models/Request');
 
-const groupFilePath = path.join(__dirname, '..', 'data', 'groups.json');
-const requestFilePath = path.join(__dirname, '..', 'data', 'requests.json');
-
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { userID } = req.body;
-  
-    fs.readFile(groupFilePath, 'utf8', (err, data) => {
-      if (err) {
+
+    try {
+        let groups = await GroupService.readGroups();
+        groups = groups.filter(group => !group.memberIDs.includes(userID));
+        res.json(groups);
+    } catch (err) {
         console.error('Error reading group data:', err);
-        return res.sendStatus(500);
-      }
-  
-      let groupData  = JSON.parse(data);
+        res.sendStatus(500);
+    }
+});
 
-      let groups = groupData.map(group => new Group(group.groupID, group.memberIDs, group.name, group.adminIDs));
-      groups = groups.filter(group => !group.memberIDs.includes(userID));
-  
-      res.json(groups);
-    });
-  });
-
-  router.post('/join', (req, res) => {
+router.post('/join', async (req, res) => {
     const { userID, groupID } = req.body;
-  
-    fs.readFile(groupFilePath, 'utf8', (err, data) => {
-      if (err) {
-        console.error('Error reading group data:', err);
-        return res.sendStatus(500);
-      }
-  
-      let groupData = JSON.parse(data);
-      const groupIndex = groupData.findIndex(group => group.groupID === groupID);
-  
-      if (groupIndex === -1) {
-        return res.status(404).json({ message: 'Group not found' });
-      }
-      
-      // check if member isn't in group already
-      console.log(groupData[groupIndex]);
-      if (!groupData[groupIndex].memberIDs.includes(userID)) {
-        const groupName = groupData[groupIndex].name;
-  
-        // read and write to requests
-        fs.readFile(requestFilePath, 'utf8', (err, requestData) => {
-          if (err) {
-            console.error('Error reading request data:', err);
-            return res.sendStatus(500);
-          }
 
-          let requests = JSON.parse(requestData);
+    try {
+        let groups = await GroupService.readGroups();
+        const groupIndex = groups.findIndex(group => group.groupID === groupID);
 
-          const existingRequest = requests.find(request => request.userID === userID && request.groupID === groupID);
-          if (existingRequest) {
+        if (groupIndex === -1) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+
+        const group = groups[groupIndex];
+        if (group.memberIDs.includes(userID)) {
+            return res.status(400).json({ message: 'User already in the group' });
+        }
+
+        let requests = await RequestService.readRequests();
+        const existingRequest = requests.find(request => request.userID === userID && request.groupID === groupID);
+
+        if (existingRequest) {
             return res.status(400).json({ message: 'Request already exists' });
-          }
+        }
 
-          const newRequestID = requests.length ? requests[requests.length - 1].requestID + 1 : 1;
-          const newRequest = new Request(newRequestID, groupID, userID);
+        const newRequestID = requests.length ? requests[requests.length - 1].requestID + 1 : 1;
+        const newRequest = new Request(newRequestID, groupID, userID);
 
-          requests.push(newRequest);
+        requests.push(newRequest);
+        await RequestService.writeRequests(requests);
 
-          fs.writeFile(requestFilePath, JSON.stringify(requests, null, 2), err => {
-            if (err) {
-              console.error('Error writing to request data file:', err);
-              return res.sendStatus(500);
-            }
-            res.json({ message: 'Request Sent', groupID, requestID: newRequestID, groupName });
-          });
-        });
-      } else {
-        res.status(400).json({ message: 'User already in the group' });
-      }
-    });
-  });
+        res.json({ message: 'Request Sent', groupID, requestID: newRequestID, groupName: group.name });
+    } catch (err) {
+        console.error('Error processing request:', err);
+        res.sendStatus(500);
+    }
+});
 
 module.exports = router;
