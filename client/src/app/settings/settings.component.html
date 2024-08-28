@@ -19,7 +19,7 @@
                     <!-- Non-admin view -->
                     <div *ngIf="!isAdmin" (click)="leaveGroup()" class="groupSettings-element bottom-button">Leave Group</div>
 
-                    <!-- Admin view: Leave Group and Delete Group buttons side by side -->
+                    <!-- Admin view -->
                     <div *ngIf="isAdmin" class="admin-buttons-container">
                         <div (click)="leaveGroup()" class="groupSettings-element admin-button">Leave Group</div>
                         <div (click)="deleteGroup()" class="groupSettings-element admin-button">Delete Group</div>
@@ -48,7 +48,7 @@
                         (click)="$event.stopPropagation()"
                     >
                         <li class="dropdown-item" (click)="kickUser(member.userID)" >Remove User from Group</li>
-                        <li class="dropdown-item" >Ban & Report User</li>
+                        <li class="dropdown-item" (click)="banUser(member.userID)" >Ban & Report User</li>
                         <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" (click)="promoteUser(member.userID, 'groupAdmin')">Promote to <span class="GA-color">Group Admin</span></li>
                         <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" (click)="promoteUser(member.userID, 'superAdmin')">Promote to <span class="SA-color">Super Admin</span></li>
                     </ul>

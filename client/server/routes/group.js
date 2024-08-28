@@ -42,7 +42,7 @@ router.post('/createGroup', async (req, res) => {
             return res.status(400).json({ error: 'UserID and groupName are required.' });
         }
 
-        const newGroup = new Group(newGroupID, [userID], groupName, [userID]);
+        const newGroup = new Group(newGroupID, [userID], groupName, [userID], []);
         groups.push(newGroup);
 
         await GroupService.writeGroups(groups);

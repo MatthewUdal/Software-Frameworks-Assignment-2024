@@ -1,1 +1,7 @@
-[]
+[
+  {
+    "requestID": 1,
+    "groupID": 1,
+    "userID": 5
+  }
+]

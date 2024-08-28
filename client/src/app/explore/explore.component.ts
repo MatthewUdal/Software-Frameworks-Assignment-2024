@@ -69,6 +69,7 @@ export class ExploreComponent implements OnInit{
       (response: any) => { 
         if (response && response.groupName) {
           alert(`Successfully requested to join ${response.groupName}`);
+          this.getJoinableGroups(userID);
         } else {
           alert('Group name not found in response.');
         }

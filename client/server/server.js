@@ -36,6 +36,9 @@ app.use('/requests', requestsRoute);
 const promoteRoute = require('./routes/promoteUser');
 app.use('/promoteUser', promoteRoute);
 
+const banRoute = require('./routes/banUser');
+app.use('/banUser', banRoute);
+
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
 });

@@ -9,7 +9,7 @@ class GroupService {
         return new Promise((resolve, reject) => {
             fs.readFile(groupFilePath, 'utf8', (err, data) => {
                 if (err) return reject(err);
-                const groups = JSON.parse(data).map(group => new Group(group.groupID, group.memberIDs, group.name, group.adminIDs));
+                const groups = JSON.parse(data).map(group => new Group(group.groupID, group.memberIDs, group.name, group.adminIDs, group.blacklistedIDs));
                 resolve(groups);
             });
         });

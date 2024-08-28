@@ -9,7 +9,11 @@ router.post('/', async (req, res) => {
 
     try {
         let groups = await GroupService.readGroups();
-        groups = groups.filter(group => !group.memberIDs.includes(userID));
+        let requests = await RequestService.readRequests();
+
+        const requestedGroupIDs = requests.filter(request => request.userID === userID).map(request => request.groupID);
+
+        groups = groups.filter(group => !group.memberIDs.includes(userID) && !group.blacklistedIDs.includes(userID) && !requestedGroupIDs.includes(group.groupID));
         res.json(groups);
     } catch (err) {
         console.error('Error reading group data:', err);

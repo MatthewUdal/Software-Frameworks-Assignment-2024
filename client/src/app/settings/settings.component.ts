@@ -82,7 +82,7 @@ export class SettingsComponent implements OnInit {
   leaveGroup(): void{
     this.http.post('http://localhost:3000/groups/leaveGroup', { groupID: this.groupID, userID: this.userID })
       .subscribe(response => {
-        console.log('Left the group successfully', response);
+        console.log('Left the group successfully');
         this.router.navigate(['/dashboard']);
         this.toggleSettings();
       }, error => {
@@ -256,8 +256,7 @@ export class SettingsComponent implements OnInit {
 
   promoteUser(userID: number, newRole: string): void {
     this.http.post<{ success: boolean, message: string }>('http://localhost:3000/promoteUser', { userID, newRole, groupID: this.groupID })
-      .subscribe(
-        response => {
+      .subscribe(response => {
           if (response.success) {
             console.log('User role updated successfully:', response.message);
             this.loadMembers();
@@ -272,4 +271,20 @@ export class SettingsComponent implements OnInit {
   }
   
     
+  banUser(userID: number){
+    this.http.post<{ success: boolean, message: string }>('http://localhost:3000/banUser', { userID, groupID: this.groupID })
+    .subscribe(response => {
+        if (response.success) {
+          console.log(response.message);
+          this.loadMembers();
+        } else {
+          console.error(response.message);
+        }
+      },
+      error => {
+        console.error('Error banning user:', error);
+      }
+    );
+  }
+
 }
