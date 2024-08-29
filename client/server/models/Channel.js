@@ -1,9 +1,10 @@
 class Channel {
-    constructor(channelID, groupID, name, blacklistedIDs) {
+  constructor(channelID, groupID, name, members = []) {
       this.channelID = channelID;
       this.groupID = groupID;
       this.name = name;
-      this.blacklistedIDs = blacklistedIDs;
-    }
+      this.members = members;
   }
-  module.exports = Channel;
+}
+
+module.exports = Channel;

@@ -27,11 +27,17 @@ app.use('/channels', channelRoute);
 const exploreRoute = require('./routes/explore');
 app.use('/explore', exploreRoute);
 
+const channelExploreRoute = require('./routes/channel-explore');
+app.use('/channelExplore', channelExploreRoute);
+
 const permsRoute = require('./routes/perms');
 app.use('/perms', permsRoute);
 
 const requestsRoute = require('./routes/requests');
 app.use('/requests', requestsRoute);
+
+const channelRequestsRoute = require('./routes/channelRequests');
+app.use('/channelRequests', channelRequestsRoute);
 
 const promoteRoute = require('./routes/promoteUser');
 app.use('/promoteUser', promoteRoute);

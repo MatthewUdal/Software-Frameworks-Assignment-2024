@@ -23,6 +23,7 @@ export class SettingsComponent implements OnInit {
   groupID!: number;
   userID!: string | null;
   userRequests: { requestID: number; userID: number; username: string }[] = [];
+  channelRequests: { channelRequestID: number, channelID: number, channelName: string, userID: number, username: string }[] = [];
   groupMembers: { userID: number, username: string, role: string }[] = [];
   channelName: string = '';
   selectedChannelID: number | null = null;
@@ -143,10 +144,60 @@ export class SettingsComponent implements OnInit {
       );
   }
 
+  loadChannelRequests(): void {
+    console.log('Loading channels requests for group:', this.groupID);
+    this.http.post<{ channelRequestID: number, channelID: number, channelName: string, userID: number, username: string }[]>('http://localhost:3000/channelRequests/getRequests', { groupID: this.groupID })
+      .subscribe(
+        (response) => {
+          this.channelRequests = response;
+          console.log('Channel Requests:', this.channelRequests);
+        },
+        (error) => {
+          console.error('Error loading user requests:', error);
+        }
+      );
+  }
+
+  approveChannelRequest(userID: number, channelRequestID: number, channelID: number): void {
+    this.http.post<{ success: boolean }>('http://localhost:3000/channelRequests/approveRequest', { userID, channelRequestID, channelID })
+      .subscribe(
+        (response) => {
+          if (response.success) {
+            console.log('Request approved successfully');
+            this.loadChannelRequests();
+          } else {
+            console.error('Error approving request');
+          }
+        },
+        (error) => {
+          console.error('Error approving request:', error);
+        }
+      );
+  }
+
+  removeChannelRequest(channelRequestID: number): void {
+    this.http.post<{ success: boolean, message: string }>('http://localhost:3000/channelRequests/declineRequest', { channelRequestID })
+      .subscribe(
+        response => {
+          if (response.success) {
+            console.log(response.message);
+            this.loadChannelRequests();
+          } else {
+            console.error(response.message);
+          }
+        },
+        error => {
+          console.error('Error removing request:', error);
+        }
+      );
+  }
+
+
   addChannel(): void {
     const channelData = {
       groupID: this.groupID,
-      name: this.channelName
+      name: this.channelName,
+      userID: this.userID
     };
 
     this.http.post('http://localhost:3000/channels/addChannel', channelData)

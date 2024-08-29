@@ -53,7 +53,10 @@
             </li>
         </ul>
     </div>
-    <div *ngIf="isAdmin" class="new-group-container d-flex justify-content-center">
+    <div *ngIf="isAdmin && selectedGroup === null" class="new-group-container d-flex justify-content-center">
         <div (click)="createGroup()" class="new-group fw-bold">+ Create Group</div>
+    </div>
+    <div *ngIf="!isAdmin && selectedGroup != null" class="new-group-container d-flex justify-content-center">
+        <div (click)="browseChannels()" class="new-group fw-bold">Join Channels</div>
     </div>
 </div>

@@ -4,12 +4,14 @@ const Channel = require('../models/Channel');
 
 const channelFilePath = path.join(__dirname, '..', 'data', 'channels.json');
 
+
 class ChannelService {
     static readChannels() {
         return new Promise((resolve, reject) => {
             fs.readFile(channelFilePath, 'utf8', (err, data) => {
                 if (err) return reject(err);
-                const channels = JSON.parse(data).map(channel => new Channel(channel.channelID, channel.groupID, channel.name));
+                const channels = JSON.parse(data).map(channel => 
+                    new Channel(channel.channelID, channel.groupID, channel.name, channel.members || []));
                 resolve(channels);
             });
         });
@@ -23,6 +25,7 @@ class ChannelService {
             });
         });
     }
+
 }
 
 module.exports = ChannelService;

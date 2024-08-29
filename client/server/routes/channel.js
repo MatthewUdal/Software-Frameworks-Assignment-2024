@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const ChannelService = require('../models/ChannelService');
 const Channel = require('../models/Channel');
+const UserService = require('../models/UserService');
 
 router.get('/', async (req, res) => {
     try {
@@ -13,12 +14,43 @@ router.get('/', async (req, res) => {
     }
 });
 
+
+router.post('/myChannels', async (req, res) => {
+    const { userID } = req.body;
+
+    if (!userID) {
+        return res.status(400).json({ success: false, message: 'UserID is required' });
+    }
+
+    try {        
+        const channels = await ChannelService.readChannels();
+        const users = await UserService.readUsers();
+
+        const foundUser = users.find(user => user.userID === userID);
+
+        if (!foundUser) {
+            return res.sendStatus(404);
+        }
+
+        if (foundUser.role === 'superAdmin' || foundUser.role === 'groupAdmin') {
+            return res.json(channels);
+        }
+
+
+        const filteredChannels = channels.filter(channel => channel.members.includes(userID));
+        res.json(filteredChannels);
+    } catch (err) {
+        console.error('Error reading channel data:', err);
+        res.sendStatus(500);
+    }
+});
+
 router.post('/addChannel', async (req, res) => {
     try {
         const channels = await ChannelService.readChannels();
         
         const newChannelID = channels.length ? Math.max(...channels.map(channel => channel.channelID)) + 1 : 1;
-        const newChannel = new Channel(newChannelID, req.body.groupID, req.body.name);
+        const newChannel = new Channel(newChannelID, req.body.groupID, req.body.name, [req.body.userID]);
 
         channels.push(newChannel);
 

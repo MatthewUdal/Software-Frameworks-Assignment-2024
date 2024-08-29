@@ -36,8 +36,8 @@ export class GroupContainerComponent implements OnInit {
 
     if (this.userID) {
       this.loadGroups(this.userID);
+      this.loadChannels(this.userID);
     }
-    this.loadChannels();
   }
 
 
@@ -76,8 +76,8 @@ export class GroupContainerComponent implements OnInit {
     });
   }
 
-  loadChannels(): void {
-    this.http.get<Channel[]>('http://localhost:3000/channels').subscribe(channels => {
+  loadChannels(userID: string): void {    
+    this.http.post<Channel[]>('http://localhost:3000/channels/myChannels', { userID } ).subscribe(channels => {
       this.channels = channels;
     });
   }
@@ -112,6 +112,10 @@ export class GroupContainerComponent implements OnInit {
 
   createGroup(){
     this.router.navigate(['/group-creation']);
+  }
+
+  browseChannels(){
+    this.router.navigate(['/channel-explore']);
   }
   
 }

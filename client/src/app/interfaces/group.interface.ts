@@ -3,5 +3,6 @@ export interface Group {
     memberIDs: number[];
     name: string;
     adminIDs: number[];
+    blacklistedIDs: number[];
   }
   

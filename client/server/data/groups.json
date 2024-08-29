@@ -2,14 +2,26 @@
   {
     "groupID": 1,
     "memberIDs": [
-      2
+      2,
+      5,
+      4
     ],
     "name": "Group 1",
     "adminIDs": [
       2
     ],
-    "blacklistedIDs": [
-      
-    ]
+    "blacklistedIDs": []
+  },
+  {
+    "groupID": 2,
+    "memberIDs": [
+      2,
+      5
+    ],
+    "name": "Group 2",
+    "adminIDs": [
+      2
+    ],
+    "blacklistedIDs": []
   }
 ]

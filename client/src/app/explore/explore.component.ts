@@ -71,12 +71,12 @@ export class ExploreComponent implements OnInit{
           alert(`Successfully requested to join ${response.groupName}`);
           this.getJoinableGroups(userID);
         } else {
-          alert('Group name not found in response.');
+          alert('Group name not found');
         }
       },
       error => {
         console.error('Error joining group:', error);
-        alert('Error joining group. Please try again later.');
+        alert('Error joining group, please try again later');
       }
     );
   }
