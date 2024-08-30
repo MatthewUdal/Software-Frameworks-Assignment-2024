@@ -94,3 +94,29 @@
     margin-bottom: 15px;
     align-self: center;
 }
+
+.warningHolder{
+    padding: 0;
+    margin: 0;
+    right: 10px
+}
+
+.warningSwitch{
+    margin-top: 2px;
+    cursor: pointer;
+    width: 40px;
+    height: auto;
+    line-height: 0;
+}
+
+.delete-btn{
+    background-color: #AC2222;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    align-self: center;
+}

@@ -33,12 +33,5 @@
     "email": "mum@gmail.com",
     "password": "dog",
     "role": "user"
-  },
-  {
-    "userID": 7,
-    "username": "Andrew",
-    "email": "andrew@gmail.com",
-    "password": "dog",
-    "role": "user"
   }
 ]
