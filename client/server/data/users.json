@@ -21,13 +21,6 @@
     "role": "groupAdmin"
   },
   {
-    "userID": 4,
-    "username": "Andrew",
-    "email": "andrew@gmail.com",
-    "password": "123",
-    "role": "user"
-  },
-  {
     "userID": 5,
     "username": "Dad",
     "email": "dad@gmail.com",

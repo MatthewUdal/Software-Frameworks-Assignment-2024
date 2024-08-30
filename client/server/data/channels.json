@@ -4,8 +4,15 @@
     "groupID": 1,
     "name": "Channel 1",
     "members": [
-      2,
-      4
+      2
+    ]
+  },
+  {
+    "channelID": 2,
+    "groupID": 2,
+    "name": "Channel 1",
+    "members": [
+      2
     ]
   }
 ]

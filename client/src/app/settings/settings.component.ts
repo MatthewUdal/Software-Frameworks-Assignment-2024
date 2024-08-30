@@ -83,7 +83,7 @@ export class SettingsComponent implements OnInit {
   leaveGroup(): void{
     this.http.post('http://localhost:3000/groups/leaveGroup', { groupID: this.groupID, userID: this.userID })
       .subscribe(response => {
-        console.log('Left the group successfully');
+        console.log('Left the group successfully', response);
         this.router.navigate(['/dashboard']);
         this.toggleSettings();
       }, error => {

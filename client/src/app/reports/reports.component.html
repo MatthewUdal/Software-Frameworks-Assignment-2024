@@ -1,0 +1,27 @@
+<div class="vh-100 min-h-1 d-flex flex-column" id="background">
+    <app-navbar></app-navbar>
+
+    <div class="banner d-flex justify-content-center text-center">
+        <div class="banner-header mt-5">Reported Users</div>
+    </div>
+
+    <div class="container-fluid mt-5 user-container px-5 pt-5">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4" *ngFor="let user of reportedUsers">
+                <div class="user-card position-relative p-3 text-center">
+                    <h3 class="mb-0 me-5">{{ user.name }}</h3>
+                    <div class="position-absolute end-0 top-50 translate-middle-y d-flex me-3">
+                        <span class="check-container me-2" (click)="ignore(user.reportID)">
+                            <img src="../assets/Icons/check.png" class="check-icon"/>
+                        </span>
+                        <span class="trash-container" (click)="deleteUser(user.userID)">
+                            <img src="../assets/Icons/trashCan.png" class="trash-icon"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>       
+
+</div>
+

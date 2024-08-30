@@ -45,6 +45,15 @@ app.use('/promoteUser', promoteRoute);
 const banRoute = require('./routes/banUser');
 app.use('/banUser', banRoute);
 
+const reportsRoute = require('./routes/reports');
+app.use('/reports', reportsRoute);
+
+const deleteUserRoute = require('./routes/deleteUser');
+app.use('/deleteUser', deleteUserRoute);
+
+const authCheckRoute = require('./routes/authCheck');
+app.use('/authCheck', authCheckRoute);
+
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
 });
