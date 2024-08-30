@@ -4,7 +4,7 @@ const ChannelService = require('../models/ChannelService');
 const ChannelRequestService = require('../models/ChannelRequestsService');
 
 router.post('/', async (req, res) => {
-    const { userID } = req.body;
+    const { userID, groupID } = req.body;
 
     if (!userID) {
         return res.status(400).json({ success: false, message: 'UserID is required' });
@@ -13,10 +13,12 @@ router.post('/', async (req, res) => {
     try {
         const channels = await ChannelService.readChannels();
         const channelRequests = await ChannelRequestService.readRequests();
+
+        const groupChannels = channels.filter(channel => channel.groupID === groupID);
         
         const requestedChannelIDs = channelRequests.filter(request => request.userID === userID).map(request => request.channelID);
 
-        const joinableChannels = channels.filter(channel => 
+        const joinableChannels = groupChannels.filter(channel => 
             !channel.members.includes(userID) && !requestedChannelIDs.includes(channel.channelID)
         );
 

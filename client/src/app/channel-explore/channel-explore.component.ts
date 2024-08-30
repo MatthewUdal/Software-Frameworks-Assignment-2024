@@ -38,7 +38,7 @@ export class ChannelExploreComponent implements OnInit {
   }
 
   getJoinableChannels(userID: string): void {
-    this.http.post<Channel[]>('http://localhost:3000/channelExplore', { userID }).subscribe(channels => {
+    this.http.post<Channel[]>('http://localhost:3000/channelExplore', { userID, groupID: this.groupID }).subscribe(channels => {
       this.joinableChannels = channels
 
 
