@@ -1,25 +1,5 @@
 **Software Frameworks Assignment Phase 1 - ChatSphere**
 
-**Table of Contents**
-
-- [Git Repository Organization](#git-repository-organization)
-- [Data Structures](#data-structures)
-  - [Client-Side Models](#client-side) 
-  - [Server-Side Models](#server-side) 
-- [Angular Architecture](#angular-architecture)
-  - [Components](#components)
-  - [Services](#services)
-  - [Routes](#routes)
-- [Node Server Architecture](#node-server-architecture)
-  - [Modules](#modules)
-  - [Functions](#functions)
-  - [Files](#files)
-  - [Global Variables](#global-variables)
-- [Server-Side Routes](#server-side-routes)
-- [Client-Server Interaction](#client-server-interaction)
-  - [Data Changes](#data-changes)
-  - [Component Updates](#component-updates)
-
 **Git Repository Organisation**
 
 **Branching Strategy**
