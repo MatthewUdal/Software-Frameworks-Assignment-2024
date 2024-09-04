@@ -5,6 +5,7 @@ const User = require('../models/User');
 const userFilePath = path.join(__dirname, '..', 'data', 'users.json');
 
 class UserService {
+    // method used to read all users and return an array of user instances
     static readUsers() {
         return new Promise((resolve, reject) => {
             fs.readFile(userFilePath, 'utf8', (err, data) => {
@@ -15,6 +16,7 @@ class UserService {
         });
     }
 
+    // method used to write an instance of user
     static writeUsers(users) {
         return new Promise((resolve, reject) => {
             fs.writeFile(userFilePath, JSON.stringify(users, null, 2), 'utf8', (err) => {
@@ -24,11 +26,13 @@ class UserService {
         });
     }
 
+    // method used to check if a userID matches any exisitng user
     static async userExists(username, email) {
         const users = await this.readUsers();
         return users.find(user => user.email === email || user.username === username);
     }
 
+    // method used to create a new user
     static async createUser(username, email, password) {
         const users = await this.readUsers();
         

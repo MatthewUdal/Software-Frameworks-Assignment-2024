@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserService = require('../models/UserService');
 
+// route to create a new user is the details are unqiue
 router.post('/', async (req, res) => {
     const { username, email, password } = req.body;
 

@@ -32,7 +32,7 @@ export class SignupComponent {
         if (response.success) {
           sessionStorage.setItem('user', JSON.stringify(response.user));
           this.router.navigate(['/dashboard']);
-        } else {
+        } else if (response.failure) {
           alert(response.message);
         }
       }, (error) => {

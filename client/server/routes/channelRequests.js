@@ -4,6 +4,7 @@ const ChannelRequestService = require('../models/ChannelRequestsService');
 const ChannelService = require('../models/ChannelService');
 const UserService = require('../models/UserService');
 
+// route to get every join request for a group
 router.post('/getRequests', async (req, res) => {
     const { groupID } = req.body;
 
@@ -38,7 +39,7 @@ router.post('/getRequests', async (req, res) => {
     }
 });
 
-
+// route to approve and add a user to a group
 router.post('/approveRequest', async (req, res) => {
     const { userID, channelRequestID, channelID } = req.body;
   
@@ -64,6 +65,7 @@ router.post('/approveRequest', async (req, res) => {
     }
 });
 
+// route to get reject and delete a request
 router.post('/declineRequest', async (req, res) => {
     const { channelRequestID } = req.body;
   

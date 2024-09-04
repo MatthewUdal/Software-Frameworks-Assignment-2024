@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserService = require('../models/UserService');
 
+// route to check user credientials 
 router.post('/', async (req, res) => {
     const { email, password } = req.body;
 

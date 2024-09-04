@@ -3,6 +3,7 @@ const router = express.Router();
 const ChannelService = require('../models/ChannelService');
 const ChannelRequestService = require('../models/ChannelRequestsService');
 
+// route to get every joinable channel in the current group for a user
 router.post('/', async (req, res) => {
     const { userID, groupID } = req.body;
 
@@ -29,7 +30,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-
+// route to add a userID to a channel's member array
 router.post('/join', async (req, res) => {
     const { userID, channelID, groupID } = req.body;
 

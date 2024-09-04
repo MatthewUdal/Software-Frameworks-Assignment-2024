@@ -7,6 +7,7 @@ const RequestService = require('../models/RequestService');
 const ChannelRequestService = require('../models/ChannelRequestsService');
 const UserService = require('../models/UserService');
 
+// route to delete a userID from every possible source of data
 router.post('/', async (req, res) => {
     const { userID } = req.body;
 
@@ -15,7 +16,6 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        // Remove user from channels' members
         let channels = await ChannelService.readChannels();
         channels = channels.map(channel => {
             channel.members = channel.members.filter(memberID => memberID !== userID);
@@ -23,7 +23,6 @@ router.post('/', async (req, res) => {
         });
         await ChannelService.writeChannels(channels);
 
-        // Remove user from groups' members and admins
         let groups = await GroupService.readGroups();
         groups = groups.map(group => {
             group.memberIDs = group.memberIDs.filter(memberID => memberID !== userID);
@@ -33,22 +32,18 @@ router.post('/', async (req, res) => {
         });
         await GroupService.writeGroups(groups);
 
-        // Remove user's reports
         let reports = await ReportService.readReports();
         reports = reports.filter(report => report.userID !== userID);
         await ReportService.writeReports(reports);
 
-        // Remove user's requests
         let requests = await RequestService.readRequests();
         requests = requests.filter(request => request.userID !== userID);
         await RequestService.writeRequests(requests);
 
-        // Remove user's channel requests
         let channelRequests = await ChannelRequestService.readRequests();
         channelRequests = channelRequests.filter(request => request.userID !== userID);
         await ChannelRequestService.writeRequests(channelRequests);
 
-        // Optional: Delete the user itself from users.json if such a file exists
         let users = await UserService.readUsers();
         users = users.filter(user => user.userID !== userID);
         await UserService.writeUsers(users);

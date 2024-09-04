@@ -4,6 +4,7 @@ const GroupService = require('../models/GroupService');
 const ReportService = require('../models/ReportService');
 const UserService = require('../models/UserService');
 
+// route to remove a user from a group and add their userID to the blacklist
 router.post('/', async (req, res) => {
     const { userID, groupID } = req.body;
 

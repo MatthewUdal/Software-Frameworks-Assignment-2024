@@ -4,6 +4,7 @@ const GroupService = require('../models/GroupService');
 const RequestService = require('../models/RequestService');
 const Request = require('../models/Request');
 
+// route to get every joinable group for a specific user
 router.post('/', async (req, res) => {
     const { userID } = req.body;
 
@@ -21,6 +22,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// route to create a join request to a group
 router.post('/join', async (req, res) => {
     const { userID, groupID } = req.body;
 

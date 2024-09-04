@@ -51,7 +51,7 @@ export class ReportsComponent implements OnInit {
       console.log(response);
       this.getReportedUsers()
     }, error => {
-      console.error('Error deleting report:', error);
+      console.error('Error deleting user:', error);
     });
   }
 

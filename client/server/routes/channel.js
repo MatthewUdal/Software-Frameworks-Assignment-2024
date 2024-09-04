@@ -4,6 +4,7 @@ const ChannelService = require('../models/ChannelService');
 const Channel = require('../models/Channel');
 const UserService = require('../models/UserService');
 
+// route to get eall channels
 router.get('/', async (req, res) => {
     try {
         const channels = await ChannelService.readChannels();
@@ -14,7 +15,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-
+// route to get all channels a specific user is in
 router.post('/myChannels', async (req, res) => {
     const { userID } = req.body;
 
@@ -45,6 +46,7 @@ router.post('/myChannels', async (req, res) => {
     }
 });
 
+// route to add a new channel to a group
 router.post('/addChannel', async (req, res) => {
     try {
         const channels = await ChannelService.readChannels();
@@ -62,6 +64,7 @@ router.post('/addChannel', async (req, res) => {
     }
 });
 
+// route to delete a channel from a group
 router.post('/deleteChannel', async (req, res) => {
     try {
         const { channelID } = req.body;

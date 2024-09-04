@@ -6,6 +6,7 @@ const UserService = require('../models/UserService');
 const RequestService = require('../models/RequestService');
 const ChannelService = require('../models/ChannelService');
 
+// route to get all groups a user is in
 router.post('/', async (req, res) => {
     const { userID } = req.body;
 
@@ -31,6 +32,7 @@ router.post('/', async (req, res) => {
     }
 });
 
+// route to create a new group
 router.post('/createGroup', async (req, res) => {
     try {
         const groups = await GroupService.readGroups();
@@ -53,6 +55,7 @@ router.post('/createGroup', async (req, res) => {
     }
 });
 
+// route to leave a group
 router.post('/leaveGroup', async (req, res) => {
     const { groupID, userID } = req.body;
 
@@ -89,6 +92,7 @@ router.post('/leaveGroup', async (req, res) => {
     }
 });
 
+// route to delete a group and all channels
 router.post('/deleteGroup', async (req, res) => {
     const { groupID } = req.body;
 
@@ -112,6 +116,7 @@ router.post('/deleteGroup', async (req, res) => {
     }
 });
 
+// route to return all members in a group
 router.post('/getMembers', async (req, res) => {
     const { groupID } = req.body;
 
@@ -144,7 +149,7 @@ router.post('/getMembers', async (req, res) => {
     }
 });
 
-
+// route to kick a user from a group
 router.post('/kickUser', async (req, res) => {
   const { groupID, userID } = req.body;
 

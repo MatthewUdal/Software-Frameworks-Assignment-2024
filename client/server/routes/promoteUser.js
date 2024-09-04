@@ -3,6 +3,7 @@ const router = express.Router();
 const UserService = require('../models/UserService');
 const GroupService = require('../models/GroupService');
 
+// route to change a users role
 router.post('/', async (req, res) => {
     const { userID, newRole } = req.body;
 

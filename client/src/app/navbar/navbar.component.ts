@@ -72,7 +72,7 @@ export class NavbarComponent implements OnInit {
       this.router.navigate(['/login']);
       console.log(response);
     }, error => {
-      console.error('Error deleting report:', error);
+      console.error('Error deleting user:', error);
     });
   }
 

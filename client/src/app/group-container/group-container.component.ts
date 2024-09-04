@@ -54,7 +54,7 @@ export class GroupContainerComponent implements OnInit {
   getUserID(): string | null {
     const userData = sessionStorage.getItem('user');
     if (!userData) {
-      return null; // if no data, return null
+      return null;
     }
 
     const currentUser = JSON.parse(userData);
@@ -84,7 +84,6 @@ export class GroupContainerComponent implements OnInit {
 
   onGroupClick(groupID: number): void {
     this.selectedGroup = this.groups.find(group => group.groupID === groupID) || null;
-    // save current groupID
     sessionStorage.setItem('cg', JSON.stringify(this.selectedGroup?.groupID));
   
     if (this.selectedGroup) {

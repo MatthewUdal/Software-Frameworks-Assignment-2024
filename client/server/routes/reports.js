@@ -3,6 +3,7 @@ const router = express.Router();
 const ReportService = require('../models/ReportService');
 const UserService = require('../models/UserService');
 
+// route to get all reports
 router.get('/', async (req, res) => {
   try {
     const reports = await ReportService.readReports();
@@ -24,6 +25,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+// route to delete a report
 router.post('/ignore', async (req, res) => {
   try {
     const { reportID } = req.body;

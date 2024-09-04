@@ -5,33 +5,5 @@
     "email": "user1@example.com",
     "password": "password1",
     "role": "superAdmin"
-  },
-  {
-    "userID": 2,
-    "username": "MatthewUdal",
-    "email": "cat@com.au",
-    "password": "321",
-    "role": "groupAdmin"
-  },
-  {
-    "userID": 3,
-    "username": "JohnBabbage",
-    "email": "john@gmail.com",
-    "password": "cat",
-    "role": "groupAdmin"
-  },
-  {
-    "userID": 5,
-    "username": "Dad",
-    "email": "dad@gmail.com",
-    "password": "kfc",
-    "role": "user"
-  },
-  {
-    "userID": 6,
-    "username": "Mum",
-    "email": "mum@gmail.com",
-    "password": "dog",
-    "role": "user"
   }
 ]

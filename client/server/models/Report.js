@@ -4,3 +4,5 @@ class Report {
         this.userID = userID;
     }
 }
+
+module.exports = Report;

@@ -1,8 +1,8 @@
-
 const express = require('express');
 const router = express.Router();
 const GroupService = require('../models/GroupService');
 
+// route to check a user is an admin of the group
 router.post('/', async (req, res) => {
   const { groupID, userID } = req.body;
 

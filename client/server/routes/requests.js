@@ -4,6 +4,7 @@ const RequestService = require('../models/RequestService');
 const UserService = require('../models/UserService');
 const GroupService = require('../models/GroupService');
 
+// route to get all group join requests
 router.post('/getRequests', async (req, res) => {
   const { groupID } = req.body;
 
@@ -25,7 +26,7 @@ router.post('/getRequests', async (req, res) => {
   }
 });
 
-
+// route to accept a user into the group
 router.post('/approveRequest', async (req, res) => {
   const { userID, requestID, groupID } = req.body;
 
@@ -53,6 +54,7 @@ router.post('/approveRequest', async (req, res) => {
 });
 
 
+// route to reject a user from the group and delete the join request
 router.post('/declineRequest', async (req, res) => {
   const { requestID } = req.body;
 

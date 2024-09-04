@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserService = require('../models/UserService');
 
+// route to verify userID is linked to a user account
 router.post('/verifyUser', async (req, res) => {
     const { userID } = req.body;
 

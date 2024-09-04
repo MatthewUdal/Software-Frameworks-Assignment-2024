@@ -5,6 +5,7 @@ const ChannelRequest = require('../models/ChannelRequest');
 const channelRequestFilePath = path.join(__dirname, '..', 'data', 'channelRequests.json');
 
 class ChannelRequestService {
+    // method used to read all channel requests and return a channelRequest instance
     static readRequests() {
         return new Promise((resolve, reject) => {
             fs.readFile(channelRequestFilePath, 'utf8', (err, data) => {
@@ -21,6 +22,7 @@ class ChannelRequestService {
         });
     }
 
+    // method used to write a channelRequest instance
     static writeRequests(requests) {
         return new Promise((resolve, reject) => {
             fs.writeFile(channelRequestFilePath, JSON.stringify(requests, null, 2), 'utf8', (err) => {
@@ -30,6 +32,7 @@ class ChannelRequestService {
         });
     }
 
+    // method used to create a channel request 
     static createRequest(userID, channelID, groupID) {
         return new Promise((resolve, reject) => {
             fs.readFile(channelRequestFilePath, 'utf8', (err, data) => {
@@ -55,6 +58,7 @@ class ChannelRequestService {
         });
     }
 
+    // method used to delete a channel request 
     static deleteRequest(channelRequestID) {
         return new Promise((resolve, reject) => {
             fs.readFile(channelRequestFilePath, 'utf8', (err, data) => {
