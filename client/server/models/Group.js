@@ -1,11 +1,26 @@
-class Group {
-    constructor(groupID, memberIDs, name, adminIDs, blacklistedIDs) {
-      this.groupID = groupID;
-      this.memberIDs = memberIDs;
-      this.name = name;
-      this.adminIDs = adminIDs;
-      this.blacklistedIDs = blacklistedIDs;
-    }
-  }
-  
-  module.exports = Group;
+const mongoose = require('mongoose');
+
+// Define the group schema
+const groupSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  memberIDs: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Referencing the User model
+  }],
+  adminIDs: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Referencing the User model
+  }],
+  blacklistedIDs: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Referencing the User model
+  }]
+});
+
+// Create the group model
+const Group = mongoose.model('Group', groupSchema);
+
+module.exports = Group;

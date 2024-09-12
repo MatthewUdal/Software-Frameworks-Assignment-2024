@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserService = require('../models/UserService');
 
-// route to check user credientials 
+// Route to check user credentials
 router.post('/', async (req, res) => {
     const { email, password } = req.body;
 
@@ -11,17 +11,16 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const users = await UserService.readUsers();
+        const foundUser = await UserService.findUser(email, password);
 
-        const foundUser = users.find(user => user.email === email && user.password === password);
         if (foundUser) {
-            const { password, ...userWithoutPassword } = foundUser;
+            const { password: userPassword, ...userWithoutPassword } = foundUser.toObject();
             res.json({ success: true, user: userWithoutPassword });
         } else {
             res.status(401).json({ success: false, message: 'Invalid email or password' });
         }
     } catch (err) {
-        console.error('Error reading user data:', err);
+        console.error('Error finding user:', err);
         res.sendStatus(500);
     }
 });

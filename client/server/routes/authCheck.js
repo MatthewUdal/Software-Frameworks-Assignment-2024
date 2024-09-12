@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserService = require('../models/UserService');
 
-// route to verify userID is linked to a user account
+// Route to verify userID is linked to a user account
 router.post('/verifyUser', async (req, res) => {
     const { userID } = req.body;
 
@@ -11,10 +11,9 @@ router.post('/verifyUser', async (req, res) => {
     }
 
     try {
-        const users = await UserService.readUsers();
-        const userExists = users.some(user => user.userID === userID);
+        const user = await UserService.findUserByID(userID);
 
-        if (userExists) {
+        if (user) {
             return res.json({ success: true, message: 'User is valid' });
         } else {
             return res.status(404).json({ success: false, message: 'User not found' });

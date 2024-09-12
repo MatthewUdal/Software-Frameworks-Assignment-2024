@@ -25,11 +25,12 @@ router.post('/', async (req, res) => {
         }
 
         const newUser = await UserService.createUser(username, email, password);
-        const { password: userPassword, ...userWithoutPassword } = newUser;
+        const { password: userPassword, ...userWithoutPassword } = newUser.toObject();
+        
         res.status(201).json({ success: true, user: userWithoutPassword });
     } catch (err) {
         console.error('Error handling user data:', err);
-        res.sendStatus(500);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 });
 

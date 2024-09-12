@@ -1,10 +1,23 @@
-class Channel {
-  constructor(channelID, groupID, name, members = []) {
-      this.channelID = channelID;
-      this.groupID = groupID;
-      this.name = name;
-      this.members = members;
-  }
-}
+const mongoose = require('mongoose');
+
+// Define the channel schema
+const channelSchema = new mongoose.Schema({
+  groupID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Group', // Referencing the Group model
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  members: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Referencing the User model
+  }]
+});
+
+// Create the channel model
+const Channel = mongoose.model('Channel', channelSchema);
 
 module.exports = Channel;

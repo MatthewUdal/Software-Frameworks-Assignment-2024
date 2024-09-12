@@ -11,7 +11,8 @@ export const authGuard: CanActivateFn = (route, state) => {
   const user = typeof window !== 'undefined' ? sessionStorage.getItem('user') : null;
 
   if (user) {
-    const userID = JSON.parse(user).userID;
+    const userID = JSON.parse(user)._id;
+    console.log(userID)
     
     return http.post<{ success: boolean, message: string }>('http://localhost:3000/authCheck/verifyUser', { userID }).pipe(
       map(response => {
