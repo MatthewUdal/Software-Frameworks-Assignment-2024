@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "groupID": 1,
+    "memberIDs": [
+      1
+    ],
+    "name": "Group 1",
+    "adminIDs": [
+      1
+    ],
+    "blacklistedIDs": []
+  }
+]

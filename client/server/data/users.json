@@ -5,5 +5,12 @@
     "email": "user1@example.com",
     "password": "password1",
     "role": "superAdmin"
+  },
+  {
+    "userID": 2,
+    "username": "MatthewUdal",
+    "email": "matthew@gmail.com",
+    "password": "123",
+    "role": "user"
   }
 ]

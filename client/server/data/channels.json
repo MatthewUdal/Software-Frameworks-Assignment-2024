@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "channelID": 1,
+    "groupID": 1,
+    "name": "Channel 1",
+    "members": [
+      1
+    ]
+  }
+]
