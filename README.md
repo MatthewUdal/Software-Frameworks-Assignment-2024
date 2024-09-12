@@ -2,6 +2,29 @@
 
 **Git Repository Organisation**
 
+- The file structure of the repository is as follows:
+
+client/
+
+  └── server/
+
+    ├── Data/
+
+    ├── Models/
+
+    ├── routes/
+
+  └── src/
+
+    ├── app/
+
+    │ └── { Angular components }
+
+    │ └── { Interfaces }
+
+    └── assets/
+
+      └── Icons/
 **Branching Strategy**
 
 - **Main Branch:** My main branch was always kept as a running and fully functional version of the site, as such all features were tested before being merged into this branch.
