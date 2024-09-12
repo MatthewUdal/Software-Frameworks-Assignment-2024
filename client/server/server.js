@@ -1,4 +1,5 @@
 const express = require("express");
+const connectDB = require('./db');
 const app = express();
 const port = 3000;
 
@@ -11,6 +12,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname + './dist/software-frameworks-assignment-2024'));
 
+connectDB();
 
 const loginRoute = require('./routes/login');
 app.use('/login', loginRoute);
@@ -57,3 +59,6 @@ app.use('/authCheck', authCheckRoute);
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
 });
+
+
+// mongodb+srv://matthewudal:mqUV9DKJ9B9BTtvq@softwareframeworksdb.6ifhi.mongodb.net/?retryWrites=true&w=majority&appName=SoftwareFrameworksDB
