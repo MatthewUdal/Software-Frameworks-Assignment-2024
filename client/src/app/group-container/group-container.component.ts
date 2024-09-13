@@ -7,6 +7,7 @@ import { Channel } from '../interfaces/channel.interface';
 import { ChannelService } from '../channel.service';
 import { SettingsService } from '../settings.service';
 import { RoleService } from '../role.service';
+import { GetUserService } from '../get-user.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -28,15 +29,15 @@ export class GroupContainerComponent implements OnInit {
   userID!: string | null;
   isAdmin: boolean = false;
 
-  constructor(private http: HttpClient, private channelService: ChannelService, private settingsService: SettingsService, private roleService: RoleService, private router: Router) {}
+  constructor(private http: HttpClient, private channelService: ChannelService, private settingsService: SettingsService, private roleService: RoleService, private userService: GetUserService, private router: Router) {}
 
   ngOnInit(): void {
-    this.userID = this.getUserID();
+    this.userID = this.userService.getUserID();
     this.checkAdmin();
 
     if (this.userID) {
       this.loadGroups(this.userID);
-      this.loadChannels(this.userID);
+      //this.loadChannels(this.userID);
     }
   }
 
@@ -51,15 +52,15 @@ export class GroupContainerComponent implements OnInit {
   }
 
 
-  getUserID(): string | null {
-    const userData = sessionStorage.getItem('user');
-    if (!userData) {
-      return null;
-    }
+  // getUserID(): string | null {
+  //   const userData = sessionStorage.getItem('user');
+  //   if (!userData) {
+  //     return null;
+  //   }
 
-    const currentUser = JSON.parse(userData);
-    return currentUser.userID || null;
-  }
+  //   const currentUser = JSON.parse(userData);
+  //   return currentUser.userID || null;
+  // }
 
   loadGroups(userID: string): void {
     const httpOptions = {

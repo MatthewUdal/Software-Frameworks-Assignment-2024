@@ -18,7 +18,7 @@ const groupSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Referencing the User model
   }]
-});
+}, { timestamps: true }); // Add timestamps to track creation and updates
 
 // Create the group model
 const Group = mongoose.model('Group', groupSchema);

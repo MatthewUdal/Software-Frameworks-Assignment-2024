@@ -1,122 +1,102 @@
 const express = require('express');
 const router = express.Router();
-const Group = require('../models/Group');
 const GroupService = require('../models/GroupService');
 const UserService = require('../models/UserService');
 const RequestService = require('../models/RequestService');
 const ChannelService = require('../models/ChannelService');
 
-// route to get all groups a user is in
+// Route to get all groups a user is in
 router.post('/', async (req, res) => {
     const { userID } = req.body;
 
     try {
-        const groups = await GroupService.readGroups();
-        const users = await UserService.readUsers();
-
-        const foundUser = users.find(user => user.userID === userID);
+        const foundUser = await UserService.findUserByID(userID);
 
         if (!foundUser) {
-            return res.sendStatus(404);
+            return res.status(404).json({ error: 'User not found' });
         }
 
+        let groups;
         if (foundUser.role === 'superAdmin') {
-            return res.json(groups);
+            groups = await GroupService.getAllGroups();
+        } else {
+            groups = await GroupService.getGroupsByUserID(userID);
         }
 
-        const filteredGroups = groups.filter(group => group.memberIDs.includes(userID));
-        res.json(filteredGroups);
+        res.json(groups);
     } catch (err) {
-        console.error('Error:', err);
+        console.error('Error fetching groups:', err);
         res.sendStatus(500);
     }
 });
 
-// route to create a new group
+// Route to create a new group
 router.post('/createGroup', async (req, res) => {
+    const { userID, groupName } = req.body;
+
     try {
-        const groups = await GroupService.readGroups();
-
-        const newGroupID = groups.length ? Math.max(...groups.map(group => group.groupID)) + 1 : 1;
-        const { userID, groupName } = req.body;
-
         if (!userID || !groupName) {
             return res.status(400).json({ error: 'UserID and groupName are required.' });
         }
 
-        const newGroup = new Group(newGroupID, [userID], groupName, [userID], []);
-        groups.push(newGroup);
-
-        await GroupService.writeGroups(groups);
+        const newGroup = await GroupService.createGroup(groupName, userID);
         res.status(201).json(newGroup);
     } catch (err) {
-        console.error('Error:', err);
+        console.error('Error creating group:', err);
         res.sendStatus(500);
     }
 });
 
-// route to leave a group
+// Route to leave a group
 router.post('/leaveGroup', async (req, res) => {
     const { groupID, userID } = req.body;
 
     try {
-        const users = await UserService.readUsers();
-        const foundUser = users.find(user => user.userID === userID);
+        const foundUser = await UserService.findUserByID(userID);
 
         if (!foundUser) {
             return res.sendStatus(404);
         }
 
         if (foundUser.role === 'superAdmin') {
-            return res.status(400).json({ message: 'super admin cannot leave a group' });
+            return res.status(400).json({ message: 'Super admin cannot leave a group' });
         }
 
-        const groups = await GroupService.readGroups();
-        const groupIndex = groups.findIndex(group => group.groupID === groupID);
+        const group = await GroupService.getGroupByID(groupID);
 
-        if (groupIndex === -1) {
+        if (!group) {
             return res.status(404).json({ message: 'Group not found' });
         }
 
-        const memberIndex = groups[groupIndex].memberIDs.indexOf(userID);
-        if (memberIndex > -1) {
-            groups[groupIndex].memberIDs.splice(memberIndex, 1);
-            await GroupService.writeGroups(groups);
-            res.status(200).json({ message: 'User removed from group' });
-        } else {
-            res.status(400).json({ message: 'User is not a member of the group' });
+        if (!group.memberIDs.includes(userID)) {
+            return res.status(400).json({ message: 'User is not a member of the group' });
         }
+
+        await GroupService.removeUserFromGroup(groupID, userID);
+        res.status(200).json({ message: 'User removed from group' });
     } catch (err) {
-        console.error('Error:', err);
+        console.error('Error leaving group:', err);
         res.sendStatus(500);
     }
 });
 
-// route to delete a group and all channels
-router.post('/deleteGroup', async (req, res) => {
-    const { groupID } = req.body;
+// // Route to delete a group and all associated channels
+// router.post('/deleteGroup', async (req, res) => {
+//     const { groupID } = req.body;
 
-    try {
-        const groups = await GroupService.readGroups();
-        const channels = await ChannelService.readChannels();
-        const requests = await RequestService.readRequests();
+//     try {
+//         await GroupService.deleteGroup(groupID);
+//         await ChannelService.deleteChannelsByGroupID(groupID);
+//         await RequestService.deleteRequestsByGroupID(groupID);
 
-        const updatedGroups = groups.filter(group => group.groupID !== groupID);
-        const updatedChannels = channels.filter(channel => channel.groupID !== groupID);
-        const updatedRequests = requests.filter(request => request.groupID !== groupID);
+//         res.status(200).json({ message: 'Deleted group and all related data' });
+//     } catch (err) {
+//         console.error('Error deleting group:', err);
+//         res.sendStatus(500);
+//     }
+// });
 
-        await GroupService.writeGroups(updatedGroups);
-        await ChannelService.writeChannels(updatedChannels);
-        await RequestService.writeRequests(updatedRequests);
-
-        res.status(200).json({ message: 'Deleted all data related to the groupID' });
-    } catch (err) {
-        console.error('Error:', err);
-        res.sendStatus(500);
-    }
-});
-
-// route to return all members in a group
+// Route to return all members in a group
 router.post('/getMembers', async (req, res) => {
     const { groupID } = req.body;
 
@@ -125,8 +105,7 @@ router.post('/getMembers', async (req, res) => {
     }
 
     try {
-        const groups = await GroupService.readGroups();
-        const group = groups.find(group => group.groupID === groupID);
+        const group = await GroupService.getGroupByID(groupID);
 
         if (!group) {
             return res.status(404).json({ error: 'Group not found' });
@@ -135,63 +114,43 @@ router.post('/getMembers', async (req, res) => {
         const users = await UserService.readUsers();
         const members = group.memberIDs.map(memberID => {
             const user = users.find(user => user.userID === memberID);
-            return {
-                userID: user.userID,
-                username: user.username,
-                role: user.role
-            };
-        });
+            return user ? { userID: user.userID, username: user.username, role: user.role } : null;
+        }).filter(Boolean);
 
         res.status(200).json(members);
     } catch (err) {
-        console.error('Error:', err);
+        console.error('Error fetching members:', err);
         res.sendStatus(500);
     }
 });
 
-// route to kick a user from a group
+// Route to kick a user from a group
 router.post('/kickUser', async (req, res) => {
-  const { groupID, userID } = req.body;
+    const { groupID, userID } = req.body;
 
-  try {
-      const users = await UserService.readUsers();
-      const user = users.find(u => u.userID === userID);
+    try {
+        const foundUser = await UserService.findUserByID(userID);
 
-      if (!user) {
-          return res.status(404).json({ success: false, message: 'User not found' });
-      }
+        if (!foundUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
-      if (user.role === 'superAdmin' || user.role === 'groupAdmin') {
-          return res.status(403).json({ success: false, message: 'Cannot kick a superAdmin or groupAdmin' });
-      }
+        if (['superAdmin', 'groupAdmin'].includes(foundUser.role)) {
+            return res.status(403).json({ message: 'Cannot kick a superAdmin or groupAdmin' });
+        }
 
-      const groups = await GroupService.readGroups();
-      const group = groups.find(g => g.groupID === groupID);
+        const group = await GroupService.getGroupByID(groupID);
 
-      if (!group) {
-          return res.status(404).json({ success: false, message: 'Group not found' });
-      }
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
 
-      const memberIndex = group.memberIDs.indexOf(userID);
-      const adminIndex = group.adminIDs.indexOf(userID);
-
-      if (memberIndex !== -1) {
-          group.memberIDs.splice(memberIndex, 1);
-      }
-
-      if (adminIndex !== -1) {
-          group.adminIDs.splice(adminIndex, 1);
-      }
-
-      await GroupService.writeGroups(groups);
-
-      res.json({ success: true, message: 'User kicked from the group successfully' });
-  } catch (err) {
-      console.error('Error:', err);
-      res.sendStatus(500);
-  }
+        await GroupService.kickUserFromGroup(groupID, userID);
+        res.json({ message: 'User kicked from the group successfully' });
+    } catch (err) {
+        console.error('Error kicking user:', err);
+        res.sendStatus(500);
+    }
 });
-
-module.exports = router;
 
 module.exports = router;

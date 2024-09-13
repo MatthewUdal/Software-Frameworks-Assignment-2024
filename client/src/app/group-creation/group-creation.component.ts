@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'
 import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { GetUserService } from '../get-user.service';
 
 @Component({
   selector: 'app-group-creation',
@@ -16,20 +17,10 @@ export class GroupCreationComponent implements OnInit {
   groupName: string = '';
   userID!: string | null;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private userService: GetUserService) {}
 
   ngOnInit(): void {
-    this.userID = this.getUserID();
-  }
-
-  getUserID(): string | null {
-    const userData = sessionStorage.getItem('user');
-    if (!userData) {
-      return null; 
-    }
-
-    const currentUser = JSON.parse(userData);
-    return currentUser.userID || null;
+    this.userID = this.userService.getUserID();
   }
 
   createGroup(): void{
