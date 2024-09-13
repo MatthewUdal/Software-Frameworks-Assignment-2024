@@ -52,7 +52,7 @@ export class ExploreComponent implements OnInit{
     });
   }
 
-  requestGroup(groupID: number): void {
+  requestGroup(groupID: string): void {
     const userID = this.getUserID();
     if (!userID) {
       console.error('No user ID found');

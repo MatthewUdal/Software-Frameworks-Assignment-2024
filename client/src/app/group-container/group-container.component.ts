@@ -24,7 +24,7 @@ export class GroupContainerComponent implements OnInit {
   viewableGroups: Group[] = [];
   selectedGroup: Group | null = null;
   allGroupChannels: Channel[] = [];
-  selectedChannelID: number | null = null;
+  selectedChannelID: string | null = null;
   groupID!: number;
   userID!: string | null;
   isAdmin: boolean = false;
@@ -37,7 +37,11 @@ export class GroupContainerComponent implements OnInit {
 
     if (this.userID) {
       this.loadGroups(this.userID);
-      //this.loadChannels(this.userID);
+      if (this.isAdmin !== true){
+        this.loadChannels(this.userID);
+      } else {
+        this.loadAllChannels();
+      }
     }
   }
 
@@ -52,15 +56,6 @@ export class GroupContainerComponent implements OnInit {
   }
 
 
-  // getUserID(): string | null {
-  //   const userData = sessionStorage.getItem('user');
-  //   if (!userData) {
-  //     return null;
-  //   }
-
-  //   const currentUser = JSON.parse(userData);
-  //   return currentUser.userID || null;
-  // }
 
   loadGroups(userID: string): void {
     const httpOptions = {
@@ -83,17 +78,23 @@ export class GroupContainerComponent implements OnInit {
     });
   }
 
-  onGroupClick(groupID: number): void {
-    this.selectedGroup = this.groups.find(group => group.groupID === groupID) || null;
-    sessionStorage.setItem('cg', JSON.stringify(this.selectedGroup?.groupID));
+  loadAllChannels(): void {    
+    this.http.get<Channel[]>('http://localhost:3000/channels/').subscribe(channels => {
+      this.channels = channels;
+    });
+  }
+
+  onGroupClick(groupID: string): void {
+    this.selectedGroup = this.groups.find(group => group._id === groupID) || null;
+    sessionStorage.setItem('cg', groupID);
   
     if (this.selectedGroup) {
-      this.allGroupChannels = this.channels.filter(channel => channel.groupID === this.selectedGroup!.groupID);
+      this.allGroupChannels = this.channels.filter(channel => channel.groupID === this.selectedGroup!._id);
     }
   }
 
-  onChannelClick(channelID: number): void {
-    const channel = this.allGroupChannels.find(ch => ch.channelID === channelID);
+  onChannelClick(channelID: string): void {
+    const channel = this.allGroupChannels.find(ch => ch._id === channelID);
     this.selectedChannelID = channelID;
 
     if (channel) {

@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'
 import { Channel } from '../interfaces/channel.interface';
 import { Router } from '@angular/router';
+import { GetUserService } from '../get-user.service';
 
 @Component({
   selector: 'app-settings',
@@ -20,23 +21,23 @@ export class SettingsComponent implements OnInit {
   currentView: string = '';
   isAdmin: boolean = false;
   userRole!: string | null;
-  groupID!: number;
+  groupID!: string | null;
   userID!: string | null;
   userRequests: { requestID: number; userID: number; username: string }[] = [];
   channelRequests: { channelRequestID: number, channelID: number, channelName: string, userID: number, username: string }[] = [];
   groupMembers: { userID: number, username: string, role: string }[] = [];
   channelName: string = '';
-  selectedChannelID: number | null = null;
+  selectedChannelID: string | null = null;
   activeMember: any = null;
   
 
-  constructor(private settingsService: SettingsService, private http: HttpClient, private roleService: RoleService, private router: Router) {}
+  constructor(private settingsService: SettingsService, private http: HttpClient, private roleService: RoleService, private userService: GetUserService, private router: Router) {}
 
   ngOnInit(): void {
     this.currentView = 'group-settings';
 
-    this.groupID = Number(sessionStorage.getItem('cg'));
-    this.userID = this.getUserID();
+    this.groupID = sessionStorage.getItem('cg');
+    this.userID = this.userService.getUserID();
 
     this.userRole = this.roleService.getUserRole();
     if (this.userRole === 'superAdmin'){
@@ -64,16 +65,6 @@ export class SettingsComponent implements OnInit {
           console.error('Error fetching permissions:', error);
         }
       );
-  }
-
-  getUserID(): string | null {
-    const userData = sessionStorage.getItem('user');
-    if (!userData) {
-      return null; 
-    }
-
-    const currentUser = JSON.parse(userData);
-    return currentUser.userID || null;
   }
 
   setView(view: string): void {
@@ -216,7 +207,7 @@ export class SettingsComponent implements OnInit {
     });
   }
   
-  onChannelClick(channelID: number): void {
+  onChannelClick(channelID: string): void {
     this.selectedChannelID = channelID;
   }
 

@@ -118,8 +118,8 @@ s
                     <li 
                         class="channel-element" 
                         *ngFor="let channel of allGroupChannels" 
-                        (click)="onChannelClick(channel.channelID)"
-                        [ngClass]="{'selected': selectedChannelID === channel.channelID}">
+                        (click)="onChannelClick(channel._id)"
+                        [ngClass]="{'selected': selectedChannelID === channel._id}">
                         {{ channel.name }}
                     </li>
                     <div (click)="deleteChannel()" class="groupSettings-element bottom-button">Delete Channel</div>

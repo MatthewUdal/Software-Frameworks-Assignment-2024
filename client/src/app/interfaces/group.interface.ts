@@ -1,8 +1,8 @@
 export interface Group {
-    groupID: number;
-    memberIDs: number[];
+    _id: string;
+    memberIDs: string[];
     name: string;
-    adminIDs: number[];
-    blacklistedIDs: number[];
+    adminIDs: string[];
+    blacklistedIDs: string[];
   }
   

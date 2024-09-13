@@ -11,10 +11,10 @@
                 <div class="user-card position-relative p-3 text-center">
                     <h3 class="mb-0 me-5">{{ user.name }}</h3>
                     <div class="position-absolute end-0 top-50 translate-middle-y d-flex me-3">
-                        <span class="check-container me-2" (click)="ignore(user.reportID)">
+                        <span class="check-container me-2" (click)="ignore(user._id)">
                             <img src="../assets/Icons/check.png" class="check-icon"/>
                         </span>
-                        <span class="trash-container" (click)="deleteUser(user.userID)">
+                        <span class="trash-container" (click)="deleteUser(user._id)">
                             <img src="../assets/Icons/trashCan.png" class="trash-icon"/>
                         </span>
                     </div>

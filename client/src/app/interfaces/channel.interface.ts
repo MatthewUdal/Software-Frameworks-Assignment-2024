@@ -1,6 +1,6 @@
 export interface Channel{
-    channelID: number;
-    groupID: number;
+    _id: string;
+    groupID: string;
     name: string;
-    members: number[];
+    members: string[];
 }

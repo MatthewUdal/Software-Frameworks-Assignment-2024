@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const ChannelService = require('../models/ChannelService');
-const Channel = require('../models/Channel');
 const UserService = require('../models/UserService');
 
-// route to get eall channels
+// Route to get all channels
 router.get('/', async (req, res) => {
     try {
-        const channels = await ChannelService.readChannels();
+        const channels = await ChannelService.getAllChannels();
         res.json(channels);
     } catch (err) {
         console.error('Error reading channel data:', err);
@@ -15,7 +14,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// route to get all channels a specific user is in
+// Route to get all channels a specific user is in
 router.post('/myChannels', async (req, res) => {
     const { userID } = req.body;
 
@@ -23,40 +22,38 @@ router.post('/myChannels', async (req, res) => {
         return res.status(400).json({ success: false, message: 'UserID is required' });
     }
 
-    try {        
-        const channels = await ChannelService.readChannels();
-        const users = await UserService.readUsers();
+    try {
+        const user = await UserService.findUserByID(userID);
 
-        const foundUser = users.find(user => user.userID === userID);
-
-        if (!foundUser) {
-            return res.sendStatus(404);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        if (foundUser.role === 'superAdmin' || foundUser.role === 'groupAdmin') {
-            return res.json(channels);
+        // Admins can access all channels
+        if (user.role === 'superAdmin' || user.role === 'groupAdmin') {
+            const allChannels = await ChannelService.getAllChannels();
+            return res.json(allChannels);
         }
 
-
-        const filteredChannels = channels.filter(channel => channel.members.includes(userID));
-        res.json(filteredChannels);
+        // Regular users can access only their channels
+        const userChannels = await ChannelService.getUserChannels(userID);
+        res.json(userChannels);
     } catch (err) {
         console.error('Error reading channel data:', err);
         res.sendStatus(500);
     }
 });
 
-// route to add a new channel to a group
+// Route to add a new channel to a group
 router.post('/addChannel', async (req, res) => {
+    const { groupID, name, userID } = req.body;
+    
+    if (!groupID || !name || !userID) {
+        return res.status(400).json({ success: false, message: 'GroupID, name, and userID are required' });
+    }
+
     try {
-        const channels = await ChannelService.readChannels();
-        
-        const newChannelID = channels.length ? Math.max(...channels.map(channel => channel.channelID)) + 1 : 1;
-        const newChannel = new Channel(newChannelID, req.body.groupID, req.body.name, [req.body.userID]);
-
-        channels.push(newChannel);
-
-        await ChannelService.writeChannels(channels);
+        const newChannel = await ChannelService.addChannel(groupID, name, userID);
         res.status(201).json(newChannel);
     } catch (err) {
         console.error('Error adding channel:', err);
@@ -64,16 +61,17 @@ router.post('/addChannel', async (req, res) => {
     }
 });
 
-// route to delete a channel from a group
+// Route to delete a channel from a group
 router.post('/deleteChannel', async (req, res) => {
-    try {
-        const { channelID } = req.body;
-        let channels = await ChannelService.readChannels();
-        
-        const updatedChannels = channels.filter(channel => channel.channelID !== channelID);
+    const { channelID } = req.body;
 
-        await ChannelService.writeChannels(updatedChannels);
-        res.status(200).json({ message: 'Channel deleted successfully' });
+    if (!channelID) {
+        return res.status(400).json({ success: false, message: 'ChannelID is required' });
+    }
+
+    try {
+        const result = await ChannelService.deleteChannel(channelID);
+        res.status(200).json(result);
     } catch (err) {
         console.error('Error deleting channel:', err);
         res.sendStatus(500);

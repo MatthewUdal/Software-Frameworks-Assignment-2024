@@ -13,7 +13,7 @@
             <div class="col-lg-4 col-md-6 col-sm-12 mb-4" *ngFor="let channel of joinableChannels">
                 <div class="group-card position-relative p-3 text-center">
                     <h3>{{ channel.name }}</h3>
-                    <div class="card-right" (click)="requestChannel(channel.channelID)">
+                    <div class="card-right" (click)="requestChannel(channel._id)">
                         <img src="../assets/Icons/RequestGroup.png" alt="Icon" class="icon">
                     </div>
                 </div>

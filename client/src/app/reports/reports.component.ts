@@ -35,7 +35,7 @@ export class ReportsComponent implements OnInit {
     );
   }
 
-  ignore(reportID: number): void{
+  ignore(reportID: string): void{
     this.http.post('http://localhost:3000/reports/ignore', { reportID })
       .subscribe(response => {
         console.log('User report ' + response + 'ID deleted successfully');
@@ -45,7 +45,7 @@ export class ReportsComponent implements OnInit {
       });
   }
 
-  deleteUser(userID: number): void{
+  deleteUser(userID: string): void{
     this.http.post('http://localhost:3000/deleteUser', { userID })
     .subscribe(response => {
       console.log(response);

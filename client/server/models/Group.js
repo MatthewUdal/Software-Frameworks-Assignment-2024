@@ -8,7 +8,8 @@ const groupSchema = new mongoose.Schema({
   },
   memberIDs: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Referencing the User model
+    ref: 'User', // Reference to the User model
+    required: true
   }],
   adminIDs: [{
     type: mongoose.Schema.Types.ObjectId,

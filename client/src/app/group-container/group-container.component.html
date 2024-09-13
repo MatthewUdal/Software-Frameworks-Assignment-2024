@@ -7,7 +7,7 @@
 
     <!-- Group List -->
     <ul class="list-unstyled" *ngIf="!selectedGroup">
-        <li class="group-item" *ngFor="let group of viewableGroups" (click)="onGroupClick(group.groupID)">
+        <li class="group-item" *ngFor="let group of viewableGroups" (click)="onGroupClick(group._id)">
             {{ group.name }}
         </li>
     </ul>
@@ -47,8 +47,8 @@
             <li 
                 class="channel" 
                 *ngFor="let channel of allGroupChannels" 
-                (click)="onChannelClick(channel.channelID)"
-                [ngClass]="{'selected': selectedChannelID === channel.channelID}">
+                (click)="onChannelClick(channel._id)"
+                [ngClass]="{'selected': selectedChannelID === channel._id}">
                 {{ channel.name }}
             </li>
         </ul>

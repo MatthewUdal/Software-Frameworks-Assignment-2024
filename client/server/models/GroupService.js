@@ -11,6 +11,16 @@ class GroupService {
         }
     }
 
+    // Fetch all groups a user is in
+    static async getGroupsByUserID(userID) {
+        try {
+            const groups = await Group.find({ memberIDs: userID }).exec();
+            return groups;
+        } catch (err) {
+            throw new Error(`Error reading groups: ${err.message}`);
+        }
+    }
+
     // Create a new group
     static async createGroup(userID, groupName) {
         try {

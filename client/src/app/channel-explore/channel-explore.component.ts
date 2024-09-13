@@ -48,7 +48,7 @@ export class ChannelExploreComponent implements OnInit {
     });
   }
 
-  requestChannel(channelID: number): void {
+  requestChannel(channelID: string): void {
     const userID = this.getUserID();
     if (!userID) {
       console.error('No user ID found');

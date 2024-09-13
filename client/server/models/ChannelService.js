@@ -1,33 +1,55 @@
-const fs = require('fs');
-const path = require('path');
+const mongoose = require('mongoose');
 const Channel = require('../models/Channel');
-
-const channelFilePath = path.join(__dirname, '..', 'data', 'channels.json');
-
+const { ObjectId } = mongoose.Types;
 
 class ChannelService {
-    // method used to read all channels and return an array of channel instances
-    static readChannels() {
-        return new Promise((resolve, reject) => {
-            fs.readFile(channelFilePath, 'utf8', (err, data) => {
-                if (err) return reject(err);
-                const channels = JSON.parse(data).map(channel => 
-                    new Channel(channel.channelID, channel.groupID, channel.name, channel.members || []));
-                resolve(channels);
-            });
-        });
+    // Get all channels
+    static async getAllChannels() {
+        try {
+            const channels = await Channel.find().exec();
+            return channels;
+        } catch (err) {
+            throw new Error(`Error reading channels: ${err.message}`);
+        }
     }
 
-    // method used to write an instance of channel
-    static writeChannels(channels) {
-        return new Promise((resolve, reject) => {
-            fs.writeFile(channelFilePath, JSON.stringify(channels, null, 2), 'utf8', (err) => {
-                if (err) return reject(err);
-                resolve();
-            });
-        });
+    // Get channels a user is a member of
+    static async getUserChannels(userID) {
+        try {
+            const channels = await Channel.find({ members: userID }).exec();
+            return channels;
+        } catch (err) {
+            throw new Error(`Error finding channels for user: ${err.message}`);
+        }
     }
 
+    // Add a new channel
+    static async addChannel(groupID, name, userID) {
+        try {
+            const newChannel = new Channel({
+                groupID: new mongoose.Types.ObjectId(groupID), 
+                name,
+                members: [new mongoose.Types.ObjectId(userID)]
+            });
+    
+            const savedChannel = await newChannel.save();
+            return savedChannel;
+        } catch (err) {
+            throw new Error(`Error adding channel: ${err.message}`);
+        }
+    }
+
+    
+
+    // Delete a channel
+    static async deleteChannel(channelID) {
+        try {
+            await Channel.findByIdAndDelete(channelID).exec();
+            return { message: 'Channel deleted successfully' };
+        } catch (err) {
+            throw new Error(`Error deleting channel: ${err.message}`);
+        }
+    }
 }
 
 module.exports = ChannelService;

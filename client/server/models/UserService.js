@@ -58,10 +58,13 @@ class UserService {
                 username,
                 email,
                 password,
-                role: 'superAdmin'
+                role: 'user'
             });
-
-            return await newUser.save();
+    
+            const savedUser = await newUser.save();
+            
+            // Use savedUser._id as the unique user ID
+            return savedUser; // You can reference savedUser._id as the userID
         } catch (err) {
             throw new Error(`Error creating user: ${err.message}`);
         }

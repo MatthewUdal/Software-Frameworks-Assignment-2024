@@ -1,5 +1,5 @@
 export interface Report {
-    reportID: number;
-    userID: number;
+    _id: string;
+    userID: string;
     name: string;
 }
