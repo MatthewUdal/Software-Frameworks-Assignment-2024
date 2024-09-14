@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { Group } from '../interfaces/group.interface';
 import { CommonModule } from '@angular/common';
+import { GetUserService } from '../get-user.service';
 
 @Component({
   selector: 'app-explore',
@@ -16,24 +17,15 @@ export class ExploreComponent implements OnInit{
 
   joinableGroups: Group[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: GetUserService) {}
 
   ngOnInit(): void {
-    const userID = this.getUserID();
+    const userID = this.userService.getUserID();
     if (userID) {
       this.getJoinableGroups(userID);
     }
   }
 
-  getUserID(): string | null {
-    const userData = sessionStorage.getItem('user');
-    if (!userData) {
-      return null; 
-    }
-
-    const currentUser = JSON.parse(userData);
-    return currentUser.userID || null;
-  }
 
   getJoinableGroups(userID: string): void {
     const httpOptions = {
@@ -53,7 +45,7 @@ export class ExploreComponent implements OnInit{
   }
 
   requestGroup(groupID: string): void {
-    const userID = this.getUserID();
+    const userID = this.userService.getUserID();
     if (!userID) {
       console.error('No user ID found');
       return;
