@@ -62,7 +62,7 @@ router.post('/leaveGroup', async (req, res) => {
             return res.status(400).json({ message: 'Super admin cannot leave a group' });
         }
 
-        const group = await GroupService.getGroupByID(groupID);
+        const group = await GroupService.findGroupByID(groupID);
 
         if (!group) {
             return res.status(404).json({ message: 'Group not found' });
@@ -72,7 +72,7 @@ router.post('/leaveGroup', async (req, res) => {
             return res.status(400).json({ message: 'User is not a member of the group' });
         }
 
-        await GroupService.removeUserFromGroup(groupID, userID);
+        await GroupService.removeMember(groupID, userID);
         res.status(200).json({ message: 'User removed from group' });
     } catch (err) {
         console.error('Error leaving group:', err);
@@ -105,19 +105,10 @@ router.post('/getMembers', async (req, res) => {
     }
 
     try {
-        const group = await GroupService.getGroupByID(groupID);
+        const members = await GroupService.getMembers(groupID);
+        console.log(members);
 
-        if (!group) {
-            return res.status(404).json({ error: 'Group not found' });
-        }
-
-        const users = await UserService.readUsers();
-        const members = group.memberIDs.map(memberID => {
-            const user = users.find(user => user.userID === memberID);
-            return user ? { userID: user.userID, username: user.username, role: user.role } : null;
-        }).filter(Boolean);
-
-        res.status(200).json(members);
+        res.status(200).json(members); 
     } catch (err) {
         console.error('Error fetching members:', err);
         res.sendStatus(500);
@@ -127,29 +118,29 @@ router.post('/getMembers', async (req, res) => {
 // Route to kick a user from a group
 router.post('/kickUser', async (req, res) => {
     const { groupID, userID } = req.body;
-
+    
     try {
         const foundUser = await UserService.findUserByID(userID);
 
         if (!foundUser) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
 
         if (['superAdmin', 'groupAdmin'].includes(foundUser.role)) {
-            return res.status(403).json({ message: 'Cannot kick a superAdmin or groupAdmin' });
+            return res.status(403).json({ success: false, message: 'Cannot kick a superAdmin or groupAdmin' });
         }
 
-        const group = await GroupService.getGroupByID(groupID);
+        const group = await GroupService.findGroupByID(groupID);
 
         if (!group) {
-            return res.status(404).json({ message: 'Group not found' });
+            return res.status(404).json({ success: false, message: 'Group not found' });
         }
 
-        await GroupService.kickUserFromGroup(groupID, userID);
-        res.json({ message: 'User kicked from the group successfully' });
+        await GroupService.removeMember(groupID, userID);
+        res.json({ success: true, message: 'User kicked from the group successfully' });
     } catch (err) {
         console.error('Error kicking user:', err);
-        res.sendStatus(500);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
 

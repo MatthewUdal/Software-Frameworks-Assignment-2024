@@ -48,10 +48,10 @@
                         [ngClass]="{'show': activeMember === member}"
                         (click)="$event.stopPropagation()"
                     >
-                        <li class="dropdown-item" (click)="kickUser(member.userID)" >Remove User from Group</li>
-                        <li class="dropdown-item" (click)="banUser(member.userID)" >Ban & Report User</li>
-                        <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" (click)="promoteUser(member.userID, 'groupAdmin')">Promote to <span class="GA-color">Group Admin</span></li>
-                        <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" (click)="promoteUser(member.userID, 'superAdmin')">Promote to <span class="SA-color">Super Admin</span></li>
+                        <li class="dropdown-item" (click)="kickUser(member._id)" >Remove User from Group</li>
+                        <li class="dropdown-item" (click)="banUser(member._id)" >Ban & Report User</li>
+                        <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" (click)="promoteUser(member._id, 'groupAdmin')">Promote to <span class="GA-color">Group Admin</span></li>
+                        <li *ngIf="userRole === 'superAdmin'" class="dropdown-item text-white" (click)="promoteUser(member._id, 'superAdmin')">Promote to <span class="SA-color">Super Admin</span></li>
                     </ul>
                     </li>
                 </ul>

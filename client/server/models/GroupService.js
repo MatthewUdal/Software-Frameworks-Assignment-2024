@@ -107,7 +107,7 @@ class GroupService {
         try {
             const group = await Group.findById(groupID).populate('memberIDs', 'username role').exec();
             if (!group) throw new Error('Group not found');
-            return group.memberIDs; // This will return the populated members
+            return group.memberIDs; 
         } catch (err) {
             throw new Error(`Error getting group members: ${err.message}`);
         }

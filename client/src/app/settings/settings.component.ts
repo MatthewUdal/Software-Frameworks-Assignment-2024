@@ -23,9 +23,9 @@ export class SettingsComponent implements OnInit {
   userRole!: string | null;
   groupID!: string | null;
   userID!: string | null;
-  userRequests: { requestID: number; userID: number; username: string }[] = [];
-  channelRequests: { channelRequestID: number, channelID: number, channelName: string, userID: number, username: string }[] = [];
-  groupMembers: { userID: number, username: string, role: string }[] = [];
+  userRequests: { requestID: string; userID: string; username: string }[] = [];
+  channelRequests: { channelRequestID: string, channelID: string, channelName: string, userID: string, username: string }[] = [];
+  groupMembers: { _id: string, username: string, role: string }[] = [];
   channelName: string = '';
   selectedChannelID: string | null = null;
   activeMember: any = null;
@@ -89,7 +89,7 @@ export class SettingsComponent implements OnInit {
 
   loadRequests(): void {
     console.log('Loading requests for group:', this.groupID);
-    this.http.post<{ requestID: number, userID: number, username: string }[]>('http://localhost:3000/requests/getRequests', { groupID: this.groupID })
+    this.http.post<{ requestID: string, userID: string, username: string }[]>('http://localhost:3000/requests/getRequests', { groupID: this.groupID })
       .subscribe(
         (response) => {
           this.userRequests = response;
@@ -101,7 +101,7 @@ export class SettingsComponent implements OnInit {
       );
   }
 
-  approveRequest(userID: number, requestID: number): void {
+  approveRequest(userID: string, requestID: string): void {
     this.http.post<{ success: boolean }>('http://localhost:3000/requests/approveRequest', { userID, requestID, groupID: this.groupID })
       .subscribe(
         (response) => {
@@ -118,7 +118,7 @@ export class SettingsComponent implements OnInit {
       );
   }
 
-  removeRequest(requestID: number): void {
+  removeRequest(requestID: string): void {
     this.http.post<{ success: boolean, message: string }>('http://localhost:3000/requests/declineRequest', { requestID })
       .subscribe(
         response => {
@@ -137,7 +137,7 @@ export class SettingsComponent implements OnInit {
 
   loadChannelRequests(): void {
     console.log('Loading channels requests for group:', this.groupID);
-    this.http.post<{ channelRequestID: number, channelID: number, channelName: string, userID: number, username: string }[]>('http://localhost:3000/channelRequests/getRequests', { groupID: this.groupID })
+    this.http.post<{ channelRequestID: string, channelID: string, channelName: string, userID: string, username: string }[]>('http://localhost:3000/channelRequests/getRequests', { groupID: this.groupID })
       .subscribe(
         (response) => {
           this.channelRequests = response;
@@ -149,7 +149,7 @@ export class SettingsComponent implements OnInit {
       );
   }
 
-  approveChannelRequest(userID: number, channelRequestID: number, channelID: number): void {
+  approveChannelRequest(userID: string, channelRequestID: string, channelID: string): void {
     this.http.post<{ success: boolean }>('http://localhost:3000/channelRequests/approveRequest', { userID, channelRequestID, channelID })
       .subscribe(
         (response) => {
@@ -166,7 +166,7 @@ export class SettingsComponent implements OnInit {
       );
   }
 
-  removeChannelRequest(channelRequestID: number): void {
+  removeChannelRequest(channelRequestID: string): void {
     this.http.post<{ success: boolean, message: string }>('http://localhost:3000/channelRequests/declineRequest', { channelRequestID })
       .subscribe(
         response => {
@@ -233,10 +233,11 @@ export class SettingsComponent implements OnInit {
   }
 
   loadMembers(): void {
-    this.http.post<{ userID: number, username: string, role: string }[]>('http://localhost:3000/groups/getMembers', { groupID: this.groupID })
+    this.http.post<{ _id: string, username: string, role: string }[]>('http://localhost:3000/groups/getMembers', { groupID: this.groupID })
       .subscribe(
         (response) => {
           this.groupMembers = response;
+          console.log(this.groupMembers);
         },
         (error) => {
           console.error('Error loading members:', error);
@@ -279,7 +280,7 @@ export class SettingsComponent implements OnInit {
   }
 
 
-  kickUser(userID: number): void {
+  kickUser(userID: string): void {
     this.http.post<{ success: boolean, message: string }>('http://localhost:3000/groups/kickUser', { groupID: this.groupID, userID })
       .subscribe(
         response => {
@@ -296,7 +297,7 @@ export class SettingsComponent implements OnInit {
       );
   }
 
-  promoteUser(userID: number, newRole: string): void {
+  promoteUser(userID: string, newRole: string): void {
     this.http.post<{ success: boolean, message: string }>('http://localhost:3000/promoteUser', { userID, newRole, groupID: this.groupID })
       .subscribe(response => {
           if (response.success) {
@@ -313,7 +314,7 @@ export class SettingsComponent implements OnInit {
   }
   
     
-  banUser(userID: number){
+  banUser(userID: string){
     this.http.post<{ success: boolean, message: string }>('http://localhost:3000/banUser', { userID, groupID: this.groupID })
     .subscribe(response => {
         if (response.success) {
