@@ -9,14 +9,12 @@ router.post('/getRequests', async (req, res) => {
     const { groupID } = req.body;
 
     try {
-        // Find requests for the group
         const requests = await Request.find({ groupID });
 
-        // Fetch user details for each request
         const userRequests = await Promise.all(requests.map(async request => {
-            const user = await User.findById(request.userID, 'username'); // Fetch username from the User model
+            const user = await User.findById(request.userID, 'username'); 
             return {
-                requestID: request._id, // Use _id instead of requestID
+                requestID: request._id,
                 userID: request.userID,
                 username: user ? user.username : 'Unknown'
             };
@@ -34,17 +32,14 @@ router.post('/approveRequest', async (req, res) => {
     const { userID, requestID, groupID } = req.body;
 
     try {
-        // Delete the request after approval
         await Request.findByIdAndDelete(requestID);
 
-        // Fetch the group by ID
         const group = await Group.findById(groupID);
 
         if (!group) {
             return res.status(404).json({ success: false, message: 'Group not found' });
         }
 
-        // Add the user to the group if not already a member
         if (!group.memberIDs.includes(userID)) {
             group.memberIDs.push(userID);
             await group.save();
@@ -62,7 +57,6 @@ router.post('/declineRequest', async (req, res) => {
     const { requestID } = req.body;
 
     try {
-        // Delete the join request
         await Request.findByIdAndDelete(requestID);
 
         res.json({ success: true, message: 'Request removed successfully' });

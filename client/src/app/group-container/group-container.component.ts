@@ -75,6 +75,7 @@ export class GroupContainerComponent implements OnInit {
   loadChannels(userID: string): void {    
     this.http.post<Channel[]>('http://localhost:3000/channels/myChannels', { userID } ).subscribe(channels => {
       this.channels = channels;
+      console.log(channels);
     });
   }
 

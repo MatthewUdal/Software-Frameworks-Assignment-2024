@@ -23,13 +23,23 @@ class ChannelService {
         }
     }
 
+    // Get channel by ID
+    static async getChannelById(channelID) {
+        try {
+            const channel = await Channel.findById(channelID).exec();
+            return channel;
+        } catch (err) {
+            throw new Error(`Error finding channel by ID: ${err.message}`);
+        }
+    }
+
     // Add a new channel
     static async addChannel(groupID, name, userID) {
         try {
             const newChannel = new Channel({
-                groupID: new mongoose.Types.ObjectId(groupID), 
+                groupID: new ObjectId(groupID), 
                 name,
-                members: [new mongoose.Types.ObjectId(userID)]
+                members: [new ObjectId(userID)]
             });
     
             const savedChannel = await newChannel.save();
@@ -39,7 +49,15 @@ class ChannelService {
         }
     }
 
-    
+    // Save updates to an existing channel
+    static async saveChannel(channel) {
+        try {
+            const updatedChannel = await channel.save();
+            return updatedChannel;
+        } catch (err) {
+            throw new Error(`Error saving channel: ${err.message}`);
+        }
+    }
 
     // Delete a channel
     static async deleteChannel(channelID) {

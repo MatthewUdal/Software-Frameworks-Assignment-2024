@@ -1,85 +1,35 @@
-const fs = require('fs');
-const path = require('path');
 const ChannelRequest = require('../models/ChannelRequest');
 
-const channelRequestFilePath = path.join(__dirname, '..', 'data', 'channelRequests.json');
-
 class ChannelRequestService {
-    // method used to read all channel requests and return a channelRequest instance
-    static readRequests() {
-        return new Promise((resolve, reject) => {
-            fs.readFile(channelRequestFilePath, 'utf8', (err, data) => {
-                if (err) return reject(err);
-                try {
-                    const requests = data ? JSON.parse(data) : [];
-                    const requestObjects = requests.map(request =>
-                        new ChannelRequest(request.channelRequestID, request.groupID, request.channelID, request.userID));
-                    resolve(requestObjects);
-                } catch (parseErr) {
-                    reject(new Error('Failed to parse JSON data.'));
-                }
-            });
-        });
+    // Method to get all channel requests
+    static async readRequests() {
+        try {
+            return await ChannelRequest.find();
+        } catch (error) {
+            throw new Error('Error reading requests from database');
+        }
     }
 
-    // method used to write a channelRequest instance
-    static writeRequests(requests) {
-        return new Promise((resolve, reject) => {
-            fs.writeFile(channelRequestFilePath, JSON.stringify(requests, null, 2), 'utf8', (err) => {
-                if (err) return reject(err);
-                resolve();
-            });
-        });
+    // Method to create a new channel request
+    static async createRequest(userID, channelID, groupID) {
+        try {
+            const newRequest = new ChannelRequest({ userID, channelID, groupID });
+            await newRequest.save();
+            return newRequest._id;
+        } catch (error) {
+            throw new Error('Error creating new request');
+        }
     }
 
-    // method used to create a channel request 
-    static createRequest(userID, channelID, groupID) {
-        return new Promise((resolve, reject) => {
-            fs.readFile(channelRequestFilePath, 'utf8', (err, data) => {
-                if (err) return reject(err);
-
-                let requests;
-                try {
-                    requests = data ? JSON.parse(data) : [];
-                } catch (parseErr) {
-                    return reject(new Error('Failed to parse JSON data.'));
-                }
-
-                const newRequestID = requests.length ? Math.max(...requests.map(req => req.channelRequestID)) + 1 : 1;
-
-                const newRequest = new ChannelRequest(newRequestID, groupID, channelID, userID);
-                requests.push(newRequest);
-
-                fs.writeFile(channelRequestFilePath, JSON.stringify(requests, null, 2), 'utf8', (err) => {
-                    if (err) return reject(err);
-                    resolve(newRequestID);
-                });
-            });
-        });
+    // Method to delete a channel request
+    static async deleteRequest(requestID) {
+        try {
+            await ChannelRequest.findByIdAndDelete(requestID);
+        } catch (error) {
+            throw new Error('Error deleting request');
+        }
     }
 
-    // method used to delete a channel request 
-    static deleteRequest(channelRequestID) {
-        return new Promise((resolve, reject) => {
-            fs.readFile(channelRequestFilePath, 'utf8', (err, data) => {
-                if (err) return reject(err);
-
-                let requests;
-                try {
-                    requests = data ? JSON.parse(data) : [];
-                } catch (parseErr) {
-                    return reject(new Error('Failed to parse JSON data.'));
-                }
-
-                requests = requests.filter(request => request.channelRequestID !== channelRequestID);
-
-                fs.writeFile(channelRequestFilePath, JSON.stringify(requests, null, 2), 'utf8', (err) => {
-                    if (err) return reject(err);
-                    resolve();
-                });
-            });
-        });
-    }
 }
 
 module.exports = ChannelRequestService;

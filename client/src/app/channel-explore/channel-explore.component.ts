@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Channel } from '../interfaces/channel.interface';
+import { GetUserService } from '../get-user.service';
 
 @Component({
   selector: 'app-channel-explore',
@@ -15,26 +16,16 @@ import { Channel } from '../interfaces/channel.interface';
 export class ChannelExploreComponent implements OnInit {
 
   joinableChannels: Channel[] = [];
-  groupID!: number;
+  groupID!: string | null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: GetUserService ) {}
 
   ngOnInit(): void {
-    this.groupID = Number(sessionStorage.getItem('cg'));
-    const userID = this.getUserID();
+    this.groupID = sessionStorage.getItem('cg');
+    const userID = this.userService.getUserID();
     if (userID) {
       this.getJoinableChannels(userID);
     }
-  }
-
-  getUserID(): string | null {
-    const userData = sessionStorage.getItem('user');
-    if (!userData) {
-      return null; 
-    }
-
-    const currentUser = JSON.parse(userData);
-    return currentUser.userID || null;
   }
 
   getJoinableChannels(userID: string): void {
@@ -49,7 +40,7 @@ export class ChannelExploreComponent implements OnInit {
   }
 
   requestChannel(channelID: string): void {
-    const userID = this.getUserID();
+    const userID = this.userService.getUserID();
     if (!userID) {
       console.error('No user ID found');
       return;

@@ -29,14 +29,9 @@ router.post('/myChannels', async (req, res) => {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
 
-        // Admins can access all channels
-        if (user.role === 'superAdmin' || user.role === 'groupAdmin') {
-            const allChannels = await ChannelService.getAllChannels();
-            return res.json(allChannels);
-        }
-
         // Regular users can access only their channels
         const userChannels = await ChannelService.getUserChannels(userID);
+        console.log(userChannels);
         res.json(userChannels);
     } catch (err) {
         console.error('Error reading channel data:', err);
