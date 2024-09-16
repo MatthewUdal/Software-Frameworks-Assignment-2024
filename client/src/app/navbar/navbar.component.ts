@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit {
     if (user) {
       const parsedUser = JSON.parse(user);
       this.username = parsedUser.username;
-      this.userID = parsedUser.userID;
+      this.userID = parsedUser._id;
     }
   }
 

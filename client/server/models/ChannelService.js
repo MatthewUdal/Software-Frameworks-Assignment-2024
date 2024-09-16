@@ -33,6 +33,16 @@ class ChannelService {
         }
     }
 
+    // Get all channels for a specific group
+    static async getChannelsByGroupID(groupID) {
+        try {
+            const channels = await Channel.find({ groupID: new ObjectId(groupID) }).exec();
+            return channels;
+        } catch (err) {
+            throw new Error(`Error finding channels for group: ${err.message}`);
+        }
+    }
+
     // Add a new channel
     static async addChannel(groupID, name, userID) {
         try {

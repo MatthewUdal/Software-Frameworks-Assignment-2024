@@ -4,6 +4,7 @@ const GroupService = require('../models/GroupService');
 const UserService = require('../models/UserService');
 const RequestService = require('../models/RequestService');
 const ChannelService = require('../models/ChannelService');
+const channelRequestsService = require('../models/ChannelRequestsService');
 
 // Route to get all groups a user is in
 router.post('/', async (req, res) => {
@@ -80,21 +81,30 @@ router.post('/leaveGroup', async (req, res) => {
     }
 });
 
-// // Route to delete a group and all associated channels
-// router.post('/deleteGroup', async (req, res) => {
-//     const { groupID } = req.body;
+// Route to delete a group and all associated channels
+router.post('/deleteGroup', async (req, res) => {
+    const { groupID } = req.body;
 
-//     try {
-//         await GroupService.deleteGroup(groupID);
-//         await ChannelService.deleteChannelsByGroupID(groupID);
-//         await RequestService.deleteRequestsByGroupID(groupID);
+    try {
 
-//         res.status(200).json({ message: 'Deleted group and all related data' });
-//     } catch (err) {
-//         console.error('Error deleting group:', err);
-//         res.sendStatus(500);
-//     }
-// });
+        await GroupService.deleteGroup(groupID);
+
+        const channels = await ChannelService.getChannelsByGroupID(groupID);
+
+        for (const channel of channels) {
+            await ChannelService.deleteChannel(channel.channelID);
+            
+            await channelRequestsService.deleteChannelRequestsByChannelID(channel.channelID);
+        }
+
+        await RequestService.deleteRequestsByGroupID(groupID);
+
+        res.status(200).json({ message: 'Deleted group and all related data' });
+    } catch (err) {
+        console.error('Error deleting group:', err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 // Route to return all members in a group
 router.post('/getMembers', async (req, res) => {

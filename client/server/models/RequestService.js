@@ -41,6 +41,16 @@ class RequestService {
             throw new Error(`Error deleting request: ${err.message}`);
         }
     }
+
+    // Delete all requests by group ID
+    static async deleteRequestsByGroupID(groupID) {
+        try {
+            const result = await Request.deleteMany({ groupID }).exec();
+            return result;
+        } catch (err) {
+            throw new Error(`Error deleting requests by group ID: ${err.message}`);
+        }
+    }
 }
 
 module.exports = RequestService;

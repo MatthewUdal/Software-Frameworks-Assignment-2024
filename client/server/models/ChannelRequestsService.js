@@ -30,6 +30,16 @@ class ChannelRequestService {
         }
     }
 
+    // Delete channel requests by channel ID
+    static async deleteChannelRequestsByChannelID(channelID) {
+        try {
+            const result = await ChannelRequest.deleteMany({ channelID }).exec();
+            return result;
+        } catch (err) {
+            throw new Error(`Error deleting channel requests by channel ID: ${err.message}`);
+        }
+    }
+
 }
 
 module.exports = ChannelRequestService;

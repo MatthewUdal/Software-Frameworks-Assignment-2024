@@ -1,4 +1,6 @@
 const Group = require('../models/Group');
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
 
 class GroupService {
     // Fetch all groups from the database
@@ -22,12 +24,12 @@ class GroupService {
     }
 
     // Create a new group
-    static async createGroup(userID, groupName) {
+    static async createGroup(groupName, userID) {
         try {
             const newGroup = new Group({
                 name: groupName,
-                memberIDs: [userID],
-                adminIDs: [userID],
+                memberIDs: [new ObjectId(userID)],
+                adminIDs: [new ObjectId(userID)],
                 blacklistedIDs: []
             });
 
