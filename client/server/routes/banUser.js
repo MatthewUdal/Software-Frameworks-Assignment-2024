@@ -23,17 +23,17 @@ router.post('/', async (req, res) => {
             return res.status(403).json({ success: false, message: 'Cannot ban or report a superAdmin' });
         }
 
-        group.memberIDs = group.memberIDs.filter(id => id.toString() !== userID.toString());
+        await GroupService.removeMember(groupID, userID);
+
         if (!group.blacklistedIDs.includes(userID)) {
             group.blacklistedIDs.push(userID);
         }
 
-        await GroupService.updateGroup(group);
+        await GroupService.updateGroup(groupID, { blacklistedIDs: group.blacklistedIDs });
 
         const newReport = new Report({
             userID: userID
         });
-
         await newReport.save();
 
         res.json({ success: true, message: 'User banned and reported successfully' });

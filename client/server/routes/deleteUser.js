@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const ChannelService = require('../models/ChannelService');
-const GroupService = require('../models/GroupService');
-const ReportService = require('../models/ReportService');
-const RequestService = require('../models/RequestService');
-const ChannelRequestService = require('../models/ChannelRequestsService');
-const UserService = require('../models/UserService');
+const Channel = require('../models/Channel');
+const Group = require('../models/Group');
+const Report = require('../models/Report');
+const Request = require('../models/Request');
+const ChannelRequest = require('../models/ChannelRequest');
+const User = require('../models/User');
 
 // route to delete a userID from every possible source of data
 router.post('/', async (req, res) => {
@@ -16,42 +16,37 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        let channels = await ChannelService.readChannels();
-        channels = channels.map(channel => {
-            channel.members = channel.members.filter(memberID => memberID !== userID);
-            return channel;
-        });
-        await ChannelService.writeChannels(channels);
+        // Remove user from all channels' member lists
+        await Channel.updateMany(
+            { members: userID },
+            { $pull: { members: userID } }
+        );
 
-        let groups = await GroupService.readGroups();
-        groups = groups.map(group => {
-            group.memberIDs = group.memberIDs.filter(memberID => memberID !== userID);
-            group.adminIDs = group.adminIDs.filter(adminID => adminID !== userID);
-            group.blacklistedIDs = group.blacklistedIDs.filter(blackListedID => blackListedID !== userID);
-            return group;
-        });
-        await GroupService.writeGroups(groups);
+        // Remove user from all groups' member lists, admin lists, and blacklist
+        await Group.updateMany(
+            { $or: [{ memberIDs: userID }, { adminIDs: userID }, { blacklistedIDs: userID }] },
+            { $pull: { memberIDs: userID, adminIDs: userID, blacklistedIDs: userID } }
+        );
 
-        let reports = await ReportService.readReports();
-        reports = reports.filter(report => report.userID !== userID);
-        await ReportService.writeReports(reports);
+        // Delete all reports associated with the user
+        await Report.deleteMany({ userID: userID });
 
-        let requests = await RequestService.readRequests();
-        requests = requests.filter(request => request.userID !== userID);
-        await RequestService.writeRequests(requests);
+        // Delete all group join requests associated with the user
+        await Request.deleteMany({ userID: userID });
 
-        let channelRequests = await ChannelRequestService.readRequests();
-        channelRequests = channelRequests.filter(request => request.userID !== userID);
-        await ChannelRequestService.writeRequests(channelRequests);
+        // Delete all channel join requests associated with the user
+        await ChannelRequest.deleteMany({ userID: userID });
 
-        let users = await UserService.readUsers();
-        users = users.filter(user => user.userID !== userID);
-        await UserService.writeUsers(users);
+        // Delete the user from the User collection
+        const deletedUser = await User.findByIdAndDelete(userID);
+        if (!deletedUser) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
 
         res.json({ success: true, message: `User ${userID} and associated data removed successfully` });
     } catch (err) {
         console.error('Error deleting user:', err);
-        res.sendStatus(500);
+        res.status(500).json({ success: false, message: 'An error occurred' });
     }
 });
 
