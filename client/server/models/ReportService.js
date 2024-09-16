@@ -1,28 +1,26 @@
-const fs = require('fs');
-const path = require('path');
 const Report = require('../models/Report');
-const reportFilePath = path.join(__dirname, '..', 'data', 'reports.json');
 
 class ReportService {
-    // method used to read all reports and return an array of report instances
-    static readReports() {
-        return new Promise((resolve, reject) => {
-            fs.readFile(reportFilePath, 'utf8', (err, data) => {
-                if (err) return reject(err);
-                const reports = JSON.parse(data).map(report => new Report(report.reportID, report.userID));
-                resolve(reports);
-            });
-        });
+    // Method to read all reports from MongoDB
+    static async readReports() {
+        try {
+            // Fetch all reports from MongoDB
+            return await Report.find().exec();
+        } catch (err) {
+            throw new Error(`Error reading reports: ${err.message}`);
+        }
     }
 
-    // method used to write an instance of report
-    static writeReports(reports) {
-        return new Promise((resolve, reject) => {
-            fs.writeFile(reportFilePath, JSON.stringify(reports, null, 2), 'utf8', (err) => {
-                if (err) return reject(err);
-                resolve();
-            });
-        });
+    // Method to delete a report by ID
+    static async deleteReport(reportID) {
+        try {
+            // Delete report by its reportID
+            const result = await Report.findByIdAndDelete(reportID).exec();
+            if (!result) throw new Error('Report not found');
+            return result;
+        } catch (err) {
+            throw new Error(`Error deleting report: ${err.message}`);
+        }
     }
 }
 

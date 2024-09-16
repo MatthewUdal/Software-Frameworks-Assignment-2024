@@ -36,6 +36,7 @@ export class ReportsComponent implements OnInit {
   }
 
   ignore(reportID: string): void{
+    console.log(reportID);
     this.http.post('http://localhost:3000/reports/ignore', { reportID })
       .subscribe(response => {
         console.log('User report ' + response + 'ID deleted successfully');

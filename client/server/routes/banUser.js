@@ -1,23 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const GroupService = require('../models/GroupService');
-const ReportService = require('../models/ReportService');
+const Report = require('../models/Report');
 const UserService = require('../models/UserService');
 
-// route to remove a user from a group and add their userID to the blacklist
+// Route to remove a user from a group and add their userID to the blacklist
 router.post('/', async (req, res) => {
     const { userID, groupID } = req.body;
 
     try {
-        let groups = await GroupService.readGroups();
-        let users = await UserService.readUsers();
-
-        const group = groups.find(group => group.groupID === groupID);
+        const group = await GroupService.findGroupByID(groupID);
         if (!group) {
             return res.status(404).json({ success: false, message: 'Group not found' });
         }
 
-        const user = users.find(user => user.userID === userID);
+        const user = await UserService.findUserByID(userID);
         if (!user) {
             return res.status(404).json({ success: false, message: 'User not found' });
         }
@@ -26,20 +23,18 @@ router.post('/', async (req, res) => {
             return res.status(403).json({ success: false, message: 'Cannot ban or report a superAdmin' });
         }
 
-
-        group.memberIDs = group.memberIDs.filter(id => id !== userID);
+        group.memberIDs = group.memberIDs.filter(id => id.toString() !== userID.toString());
         if (!group.blacklistedIDs.includes(userID)) {
             group.blacklistedIDs.push(userID);
         }
 
-        await GroupService.writeGroups(groups);
+        await GroupService.updateGroup(group);
 
-        let reports = await ReportService.readReports();
-        const newReportID = reports.length ? reports[reports.length - 1].reportID + 1 : 1;
-        const newReport = { reportID: newReportID, userID };
+        const newReport = new Report({
+            userID: userID
+        });
 
-        reports.push(newReport);
-        await ReportService.writeReports(reports);
+        await newReport.save();
 
         res.json({ success: true, message: 'User banned and reported successfully' });
 

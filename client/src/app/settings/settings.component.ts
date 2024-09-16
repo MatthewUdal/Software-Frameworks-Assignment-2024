@@ -215,6 +215,7 @@ export class SettingsComponent implements OnInit {
     this.http.post('http://localhost:3000/channels/deleteChannel', {channelID: this.selectedChannelID})
       .subscribe(response => {
         console.log('Channel deleted', response);
+        this.toggleSettings();
         this.router.navigate(['/dashboard']);
       }, error => {
         console.error('Error deleting channel', error);
