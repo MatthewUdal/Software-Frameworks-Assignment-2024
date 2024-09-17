@@ -56,9 +56,10 @@ app.use('/deleteUser', deleteUserRoute);
 const authCheckRoute = require('./routes/authCheck');
 app.use('/authCheck', authCheckRoute);
 
+const chatRoute = require('./routes/chat');
+app.use('/chat', chatRoute);
+
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
 });
 
-
-// mongodb+srv://matthewudal:mqUV9DKJ9B9BTtvq@softwareframeworksdb.6ifhi.mongodb.net/?retryWrites=true&w=majority&appName=SoftwareFrameworksDB
