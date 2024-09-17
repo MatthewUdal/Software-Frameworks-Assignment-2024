@@ -3,9 +3,9 @@ const router = express.Router();
 const Chat = require('../models/chat');
 
 // Route to get the last 5 messages from a channel
-router.get('/getMessages', async (req, res) => {
-  const { channelID } = req.params;
-  
+router.post('/getMessages', async (req, res) => {
+  const { channelID } = req.body; 
+
   try {
     const messages = await Chat.find({ channelID })
       .sort({ _id: -1 }) // Get latest messages

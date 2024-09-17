@@ -1,24 +1,35 @@
 const express = require("express");
 const connectDB = require('./db');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const http = require('http');
+const socketIo = require('socket.io');
+
 const app = express();
 const port = 3000;
 
-const cors = require('cors');
 app.use(cors());
 
-const bodyParser = require('body-parser');
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:4200",
+    methods: ["GET", "POST"],
+  }
+});
+
+
+require('./sockets')(io);
+
+// Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Serve static files
 app.use(express.static(__dirname + './dist/software-frameworks-assignment-2024'));
 
+// Connect to the database
 connectDB();
-
-const http = require('http');
-const server = http.createServer(app);
-
-const initializeSockets = require('./sockets');
-initializeSockets(server);
 
 // Import and set up routes
 const loginRoute = require('./routes/login');
@@ -66,8 +77,7 @@ app.use('/authCheck', authCheckRoute);
 const chatRoute = require('./routes/chat');
 app.use('/chat', chatRoute);
 
-
-
+// Start the server
 server.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
 });
