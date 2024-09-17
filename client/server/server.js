@@ -14,6 +14,13 @@ app.use(express.static(__dirname + './dist/software-frameworks-assignment-2024')
 
 connectDB();
 
+const http = require('http');
+const server = http.createServer(app);
+
+const initializeSockets = require('./sockets');
+initializeSockets(server);
+
+// Import and set up routes
 const loginRoute = require('./routes/login');
 app.use('/login', loginRoute);
 
@@ -59,7 +66,8 @@ app.use('/authCheck', authCheckRoute);
 const chatRoute = require('./routes/chat');
 app.use('/chat', chatRoute);
 
-app.listen(port, () => {
+
+
+server.listen(port, () => {
   console.log(`Server listening on port: ${port}`);
 });
-
