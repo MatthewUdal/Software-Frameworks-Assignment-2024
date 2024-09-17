@@ -12,13 +12,21 @@
         
 
         <!-- Message box -->
-         <div class="message-box">
-            
-         </div>
+        <div class="message-box" #messageBox>
+            <div *ngFor="let message of messages" class="message-item">
+              <strong>{{ message.userID }}</strong>: {{ message.message }}
+            </div>
+        </div>
 
          <!-- Message Input -->
-        <div class="message-input-container">
-            <input type="text" placeholder="Type..." class="message-input">
+         <div class="message-input-container">
+            <input
+                type="text"
+                placeholder="Type..."
+                class="message-input"
+                #messageInput
+                (keydown.enter)="onSend(messageInput)"
+            >
             <div class="attach-button">
                 <img src="../assets/Icons/AttachFile.png" alt="Attach" width="24px">
             </div>

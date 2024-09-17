@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { SettingsService } from '../settings.service';
 import { SettingsComponent } from '../settings/settings.component';
 import { Chat } from '../interfaces/chat.interface';
+import { GetUserService } from '../get-user.service';
 
 
 @Component({
@@ -19,16 +20,19 @@ import { Chat } from '../interfaces/chat.interface';
 export class MessageContainerComponent implements OnInit {
   selectedChannel: Channel | null = null;
   settingsVisible = false;
+  userID!: string | null;
   messages: Chat[] = []; 
 
   constructor(
     private channelService: ChannelService,
     private settingsService: SettingsService,
     private socketService: SocketService,
-    private http: HttpClient
+    private http: HttpClient,
+    private userService: GetUserService
   ) {}
 
   ngOnInit(): void {
+    this.userID = this.userService.getUserID();
     this.channelService.selectedChannel$.subscribe(channel => {
       this.selectedChannel = channel;
       if (channel) {
@@ -45,6 +49,7 @@ export class MessageContainerComponent implements OnInit {
     this.socketService.onNewMessage().subscribe((message: Chat) => {
       if (this.selectedChannel && message.channelID === this.selectedChannel._id) {
         this.messages.push(message);
+        console.log(this.messages);
       }
     });
   }
@@ -56,10 +61,17 @@ export class MessageContainerComponent implements OnInit {
     });
   }
 
+  onSend(messageInput: HTMLInputElement): void {
+    const message = messageInput.value.trim();
+    if (message) {
+      this.sendMessage(message);
+      messageInput.value = '';
+    }
+  }
+
   sendMessage(message: string): void {
-    if (this.selectedChannel) {
-      const userID = 'someUserID'; // Replace with actual userID
-      this.socketService.sendMessage(this.selectedChannel._id, userID, message);
+    if (this.selectedChannel && this.userID) {
+      this.socketService.sendMessage(this.selectedChannel._id, this.userID, message);
     }
   }
 }
