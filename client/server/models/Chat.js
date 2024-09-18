@@ -16,6 +16,10 @@ const chatSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  timestamp: {
+    type: Date,
+    default: Date.now, // Sets the current date and time
+  }
 });
 
 // Create the channel model

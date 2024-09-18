@@ -5,4 +5,5 @@ export interface Chat {
     username: string;
     role: string;
     message: string;
+    timestamp: Date;
 }

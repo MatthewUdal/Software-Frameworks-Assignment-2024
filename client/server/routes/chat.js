@@ -18,7 +18,8 @@ router.post('/getMessages', async (req, res) => {
       userID: message.userID._id,
       username: message.userID.username,
       role: message.userID.role,
-      message: message.message
+      message: message.message,
+      timestamp: message.timestamp
     }));
 
     res.json(mappedMessages.reverse());

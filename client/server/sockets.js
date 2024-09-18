@@ -25,6 +25,7 @@ function initializeSockets(io) {
           username: populatedChat.userID.username,
           role: populatedChat.userID.role,
           message: populatedChat.message,
+          timestamp: newChat.timestamp
         };
 
         io.to(channelID).emit('newMessage', mappedMessage);

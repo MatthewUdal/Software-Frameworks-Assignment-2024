@@ -17,18 +17,21 @@
                 class="message-item" 
                 [ngClass]="{'sent': message.userID === userID, 'received': message.userID !== userID}">
         
-            <!-- Username and Role -->
-            <div class="message-header">
-                <span class="username">{{ message.username }}</span>
-                <span class="role" [ngClass]="{'super-admin': message.role === 'superAdmin', 'group-admin': message.role === 'groupAdmin'}">
+                <div class="message-header" 
+                    [ngClass]="{'sent-header': message.userID === userID, 'received-header': message.userID !== userID}">
+                    <span class="username">{{ message.username }}</span>
+                    <span class="role" [ngClass]="{'super-admin': message.role === 'superAdmin', 'group-admin': message.role === 'groupAdmin'}">
                     ({{ message.role === 'superAdmin' ? 'SA' : (message.role === 'groupAdmin' ? 'GA' : message.role) }})
-                </span>
-            </div>
-        
-            <!-- Message Content -->
-            <div class="message-content">
-                {{ message.message }}
-            </div>
+                    </span>
+                    <span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
+                </div>
+            
+                <!-- Message Content -->
+                <div class="message-container-content">
+                    <div class="message-content" [ngClass]="{'sent-content': message.userID === userID, 'received-content': message.userID !== userID}">
+                        {{ message.message }}
+                    </div>
+                </div>
             </div>
         </div>
 

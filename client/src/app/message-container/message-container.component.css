@@ -97,48 +97,65 @@
 }
 
 .message-box {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
-    overflow-y: auto;
-    padding: 10px;
-}
-  
-.message-item {
-    margin-bottom: 15px;
-    max-width: 60%;
-    padding: 10px;
-    border-radius: 12px;
-    word-wrap: break-word;
-    position: relative;
 }
 
-/* Messages sent by the current user */
-.message-item.sent {
+.message-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.message-container-content {
+    display: flex;
+    width: 100%;
+}
+
+.message-content {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+}
+
+.sent-content {
     background-color: #4A4285;
     color: white;
-    text-align: left;
+    text-align: right;
     margin-left: auto;
     margin-right: 25px;
-    max-width: 650px;
+    max-width: 650px; 
 }
 
-/* Messages received from others */
-.message-item.received {
+.received-content {
     background-color: #262626;
     color: white;
     text-align: left;
     margin-left: 25px;
-    margin-right: auto;
     max-width: 650px;
 }
 
-/* Username and role styling */
 .message-header {
     font-weight: bold;
     margin-bottom: 5px;
 }
 
+.sent-header {
+    text-align: right;
+    margin-right: 25px;
+}
+
+.received-header {
+    text-align: left;
+    margin-left: 25px;
+}
+
 .username {
-    color: #ffffff; /* White for the username */
+    color: #ffffff;
 }
 
 .role {
@@ -147,24 +164,15 @@
 }
 
 .super-admin {
-    color: #AC2222; /* Red for super-admin */
+    color: #AC2222;
 }
 
 .group-admin {
-    color: #03DAC6; /* Green for group-admin */
+    color: #03DAC6;
 }
 
-/* Message content */
-.message-content {
-    font-size: 14px;
-    line-height: 1.4;
-}
-
-/* Adjust for the message sent by the current user */
-.message-item.sent .message-content {
-    background-color: #4A4285;
-}
-
-.message-item.received .message-content {
-    background-color: #262626;
+.message-header .timestamp {
+    font-size: 0.75em;
+    color: gray;
+    margin-left: 10px;
 }
