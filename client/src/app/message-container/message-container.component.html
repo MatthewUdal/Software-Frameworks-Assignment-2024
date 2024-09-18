@@ -13,8 +13,22 @@
 
         <!-- Message box -->
         <div class="message-box" #messageBox>
-            <div *ngFor="let message of messages" class="message-item">
-              <strong>{{ message.userID }}</strong>: {{ message.message }}
+            <div *ngFor="let message of messages" 
+                class="message-item" 
+                [ngClass]="{'sent': message.userID === userID, 'received': message.userID !== userID}">
+        
+            <!-- Username and Role -->
+            <div class="message-header">
+                <span class="username">{{ message.username }}</span>
+                <span class="role" [ngClass]="{'super-admin': message.role === 'superAdmin', 'group-admin': message.role === 'groupAdmin'}">
+                    ({{ message.role === 'superAdmin' ? 'SA' : (message.role === 'groupAdmin' ? 'GA' : message.role) }})
+                </span>
+            </div>
+        
+            <!-- Message Content -->
+            <div class="message-content">
+                {{ message.message }}
+            </div>
             </div>
         </div>
 

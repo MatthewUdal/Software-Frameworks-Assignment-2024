@@ -11,9 +11,23 @@ function initializeSockets(io) {
 
     socket.on('sendMessage', async ({ channelID, userID, message }) => {
       try {
+
         const newChat = new Chat({ channelID, userID, message });
         await newChat.save();
-        io.to(channelID).emit('newMessage', newChat);
+
+        const populatedChat = await Chat.findById(newChat._id)
+          .populate('userID', 'username role');
+
+        const mappedMessage = {
+          chatID: populatedChat._id,
+          channelID: populatedChat.channelID,
+          userID: populatedChat.userID._id,
+          username: populatedChat.userID.username,
+          role: populatedChat.userID.role,
+          message: populatedChat.message,
+        };
+
+        io.to(channelID).emit('newMessage', mappedMessage);
       } catch (error) {
         console.error('Error saving message:', error);
       }
