@@ -16,7 +16,7 @@
             <div *ngFor="let message of messages" 
                 class="message-item" 
                 [ngClass]="{'sent': message.userID === userID, 'received': message.userID !== userID}">
-        
+            
                 <div class="message-header" 
                     [ngClass]="{'sent-header': message.userID === userID, 'received-header': message.userID !== userID}">
                     <span class="username">{{ message.username }}</span>
@@ -36,7 +36,7 @@
         </div>
 
          <!-- Message Input -->
-         <div class="message-input-container">
+         <div class="message-input-container" #inputContainer>
             <input
                 type="text"
                 placeholder="Type..."

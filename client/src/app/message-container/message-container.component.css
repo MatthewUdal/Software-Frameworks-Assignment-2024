@@ -3,6 +3,7 @@
     position: relative;
 }
 
+
 .noSelection{
     background-color: #191919;
     color: #353535;
@@ -49,16 +50,25 @@
     flex-direction: column;
 }
 
-.message-box{
+.message-box {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
+    overflow-y: auto;
+    max-height: 775px;
+
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari */
+    }
 }
 
 .message-input-container {
     position: relative;
     display: flex;
     align-items: center;
-    padding: 50px;
+    padding: 0px 50px 50px 50px;
     flex-shrink: 0;
+    bottom: 0;
 }
 
 .message-input {
@@ -75,8 +85,7 @@
 .attach-button {
     position: absolute;
     right: 75px;
-    top: 50%;
-    transform: translateY(-50%);
+    
 }
 
 .attach-button img {
@@ -96,16 +105,11 @@
     z-index: 100;
 }
 
-.message-box {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
 
 .message-item {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 }
 
 .message-container-content {
