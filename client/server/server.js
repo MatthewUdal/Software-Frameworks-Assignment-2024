@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
+const path = require('path');     
 
 const app = express();
 const port = 3000;
@@ -26,7 +27,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Serve static files
-app.use(express.static(__dirname + './dist/software-frameworks-assignment-2024'));
+app.use(express.static(path.join(__dirname, 'dist', 'software-frameworks-assignment-2024')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Connect to the database
 connectDB();
@@ -76,6 +78,8 @@ app.use('/authCheck', authCheckRoute);
 
 const chatRoute = require('./routes/chat');
 app.use('/chat', chatRoute);
+
+
 
 // Start the server
 server.listen(port, () => {

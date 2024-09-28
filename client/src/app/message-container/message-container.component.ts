@@ -56,7 +56,9 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    this.scrollToBottom();
+    if (this.selectedChannel !== null){
+      this.scrollToBottom();
+    }
   }
 
   loadPreviousMessages(channelID: string): void {
@@ -74,6 +76,30 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  uploadImage(imageFile: File) {
+    if (!imageFile.type.startsWith('image/')) {
+      console.error('The selected file is not an image.');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('image', imageFile);
+  
+    this.http.post<{ imageUrl: string }>('http://localhost:3000/chat/uploadImage', formData).subscribe(res => {
+      const fullImageUrl = `http://localhost:3000${res.imageUrl}`;
+      this.sendMessage(fullImageUrl);
+      this.scrollToBottom();
+    })
+  }
+
+  handleFileUpload(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+        const imageFile = input.files[0];
+        this.uploadImage(imageFile);
+    }
+  }
+
+
   sendMessage(message: string): void {
     if (this.selectedChannel && this.userID) {
       this.socketService.sendMessage(this.selectedChannel._id, this.userID, message);
@@ -90,4 +116,10 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
       console.error('Error while scrolling to the bottom:', err);
     }
   }
+
+
+  isImage(message: string): boolean {
+    return /\.(jpeg|jpg|gif|png|svg)$/.test(message);
+  }
+
 }

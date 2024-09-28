@@ -22,7 +22,7 @@ const chatSchema = new mongoose.Schema({
   }
 });
 
-// Create the channel model
-const Chat = mongoose.model('Chat', chatSchema);
+// Create the chat model, ensuring it is only created once
+const Chat = mongoose.models.Chat || mongoose.model('Chat', chatSchema);
 
 module.exports = Chat;

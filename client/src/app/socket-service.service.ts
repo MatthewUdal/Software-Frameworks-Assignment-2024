@@ -19,4 +19,6 @@ export class SocketService {
   onNewMessage(): Observable<any> {
     return this.socket.fromEvent('newMessage');
   }
+
+  
 }

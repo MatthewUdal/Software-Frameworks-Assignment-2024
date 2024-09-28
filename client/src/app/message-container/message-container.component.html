@@ -12,28 +12,33 @@
         
 
         <!-- Message box -->
-        <div class="message-box" #messageBox>
-            <div *ngFor="let message of messages" 
-                class="message-item" 
-                [ngClass]="{'sent': message.userID === userID, 'received': message.userID !== userID}">
-            
-                <div class="message-header" 
-                    [ngClass]="{'sent-header': message.userID === userID, 'received-header': message.userID !== userID}">
-                    <span class="username">{{ message.username }}</span>
-                    <span class="role" [ngClass]="{'super-admin': message.role === 'superAdmin', 'group-admin': message.role === 'groupAdmin'}">
-                    ({{ message.role === 'superAdmin' ? 'SA' : (message.role === 'groupAdmin' ? 'GA' : message.role) }})
-                    </span>
-                    <span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
-                </div>
-            
-                <!-- Message Content -->
-                <div class="message-container-content">
-                    <div class="message-content" [ngClass]="{'sent-content': message.userID === userID, 'received-content': message.userID !== userID}">
-                        {{ message.message }}
-                    </div>
-                </div>
+<div class="message-box" #messageBox>
+    <div *ngFor="let message of messages" 
+         class="message-item" 
+         [ngClass]="{'sent': message.userID === userID, 'received': message.userID !== userID}">
+        
+        <div class="message-header" 
+             [ngClass]="{'sent-header': message.userID === userID, 'received-header': message.userID !== userID}">
+            <span class="username">{{ message.username }}</span>
+            <span class="role" [ngClass]="{'super-admin': message.role === 'superAdmin', 'group-admin': message.role === 'groupAdmin'}">
+                ({{ message.role === 'superAdmin' ? 'SA' : (message.role === 'groupAdmin' ? 'GA' : message.role) }})
+            </span>
+            <span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
+        </div>
+        
+        <!-- Message Content -->
+        <div class="message-container-content">
+            <div class="message-content" [ngClass]="{'sent-content': message.userID === userID, 'received-content': message.userID !== userID}">
+                <ng-container *ngIf="isImage(message.message); else textMessage">
+                    <img [src]="message.message" alt="Image" class="chat-image">
+                </ng-container>
+                <ng-template #textMessage>
+                    {{ message.message }}
+                </ng-template>
             </div>
         </div>
+    </div>
+</div>
 
          <!-- Message Input -->
          <div class="message-input-container" #inputContainer>
@@ -44,8 +49,9 @@
                 #messageInput
                 (keydown.enter)="onSend(messageInput)"
             >
-            <div class="attach-button">
+            <div class="attach-button" (click)="fileInput.click()">
                 <img src="../assets/Icons/AttachFile.png" alt="Attach" width="24px">
+                <input type="file" #fileInput accept="image/*" (change)="handleFileUpload($event)" style="display: none;">
             </div>
         </div>
 
