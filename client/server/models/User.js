@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     default: 'user',
+  },
+  profilePicture: {
+    type: String, // Field for storing the URL/path to the profile picture
+    default: 'http://localhost:3000/profilePictures/default.png',
   }
 });
 

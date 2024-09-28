@@ -69,6 +69,19 @@ class UserService {
             throw new Error(`Error creating user: ${err.message}`);
         }
     }
+
+    static async updateUserProfilePicture(userID, imageUrl) {
+        try {
+            const updatedUser = await User.findByIdAndUpdate(
+                userID,
+                { profilePicture: imageUrl },
+                { new: true } // Returns the updated document
+            );
+            return updatedUser;
+        } catch (err) {
+            throw new Error(`Error updating user profile picture: ${err.message}`);
+        }
+    }
 }
 
 module.exports = UserService;

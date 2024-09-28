@@ -120,3 +120,7 @@
     margin-bottom: 15px;
     align-self: center;
 }
+
+.profile-upload:hover{
+    cursor: pointer;
+}

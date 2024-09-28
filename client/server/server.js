@@ -29,6 +29,7 @@ app.use(bodyParser.json());
 // Serve static files
 app.use(express.static(path.join(__dirname, 'dist', 'software-frameworks-assignment-2024')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/profilePictures', express.static(path.join(__dirname, 'profilePictures')));
 
 // Connect to the database
 connectDB();
@@ -78,6 +79,9 @@ app.use('/authCheck', authCheckRoute);
 
 const chatRoute = require('./routes/chat');
 app.use('/chat', chatRoute);
+
+const handleUserRoute = require('./routes/handleUser');
+app.use('/handleUser', handleUserRoute);
 
 
 

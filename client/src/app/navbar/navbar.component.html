@@ -24,7 +24,10 @@
             <ul class="navbar-nav me-auto"></ul>
             <div class="d-flex align-items-center">
                 <span class="text-white me-3 fs-5">{{ username }}</span>
-                <img src="https://via.placeholder.com/30" class="rounded-circle" alt="Avatar">
+                <div class="profile-upload" (click)="fileInput.click()"> 
+                    <img [src]="profilePic"  class="rounded-circle" alt="Avatar">
+                    <input type="file" #fileInput accept="image/*" (change)="handleFileUpload($event)" style="display: none;">
+                </div>
             </div>
         </div>
     </div>
