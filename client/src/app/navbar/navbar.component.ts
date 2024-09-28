@@ -106,7 +106,19 @@ export class NavbarComponent implements OnInit {
     }
 
     this.http.post<{ imageUrl: string }>('http://localhost:3000/handleUser/updateProfile', formData).subscribe(res => {
+      if (res.imageUrl) {
+        // Update the profile picture in session storage and in the component
+        const user = sessionStorage.getItem('user');
+        if (user) {
+          const parsedUser = JSON.parse(user);
+          parsedUser.profilePicture = res.imageUrl;
+          sessionStorage.setItem('user', JSON.stringify(parsedUser));
+
+          // Update the profile picture in the component to reflect changes immediately
+          this.profilePic = res.imageUrl;
+        }
         console.log('Image uploaded:', res);
+      }
     }, error => {
         console.error('Error uploading image:', error);
     });

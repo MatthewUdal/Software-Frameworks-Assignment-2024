@@ -28,7 +28,7 @@ router.post('/updateProfile', upload.single('image'), async (req, res) => {
     try {
         // Update user profile picture in the database
         const updatedUser = await UserService.updateUserProfilePicture(userId, imageUrl);
-        res.json({ message: 'Profile picture updated successfully.', user: updatedUser });
+        res.json({ message: 'Profile picture updated successfully.', imageUrl: imageUrl });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
