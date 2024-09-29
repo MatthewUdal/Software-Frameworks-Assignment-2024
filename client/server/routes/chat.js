@@ -11,7 +11,7 @@ router.post('/getMessages', async (req, res) => {
     const messages = await Chat.find({ channelID })
       .sort({ _id: -1 })
       .limit(5)
-      .populate('userID', 'username role');
+      .populate('userID', 'username role profilePicture');
     
     // Map the messages to include username and role
     const mappedMessages = messages.map((message) => ({
@@ -20,6 +20,7 @@ router.post('/getMessages', async (req, res) => {
       userID: message.userID._id,
       username: message.userID.username,
       role: message.userID.role,
+      profilePicture: message.userID.profilePicture,
       message: message.message,
       timestamp: message.timestamp
     }));

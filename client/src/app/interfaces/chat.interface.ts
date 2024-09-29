@@ -4,6 +4,7 @@ export interface Chat {
     userID: string;
     username: string;
     role: string;
+    profilePicture: string;
     message: string;
     timestamp: Date;
 }

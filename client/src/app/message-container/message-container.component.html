@@ -17,8 +17,9 @@
                 class="message-item" 
                 [ngClass]="{'sent': message.userID === userID, 'received': message.userID !== userID}">
                 
-                <div class="message-header" 
+                <div class="message-header"
                     [ngClass]="{'sent-header': message.userID === userID, 'received-header': message.userID !== userID}">
+                    <img [src]="message.profilePicture || 'http://localhost:3000/profilePictures/default.png'" class="rounded-circle">
                     <span class="username">{{ message.username }}</span>
                     <span class="role" [ngClass]="{'super-admin': message.role === 'superAdmin', 'group-admin': message.role === 'groupAdmin'}">
                         ({{ message.role === 'superAdmin' ? 'SA' : (message.role === 'groupAdmin' ? 'GA' : message.role) }})

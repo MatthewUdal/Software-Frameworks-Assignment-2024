@@ -1,4 +1,4 @@
-const Chat = require('./models/chat');
+const Chat = require('./models/Chat');
 
 function initializeSockets(io) {
   io.on('connection', (socket) => {
@@ -16,7 +16,7 @@ function initializeSockets(io) {
         await newChat.save();
 
         const populatedChat = await Chat.findById(newChat._id)
-          .populate('userID', 'username role');
+          .populate('userID', 'username role profilePicture');
 
         const mappedMessage = {
           chatID: populatedChat._id,
@@ -24,6 +24,7 @@ function initializeSockets(io) {
           userID: populatedChat.userID._id,
           username: populatedChat.userID.username,
           role: populatedChat.userID.role,
+          profilePicture: populatedChat.userID.profilePicture,
           message: populatedChat.message,
           timestamp: newChat.timestamp
         };
