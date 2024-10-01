@@ -16,30 +16,41 @@
             <div *ngFor="let message of messages" 
                 class="message-item" 
                 [ngClass]="{'sent': message.userID === userID, 'received': message.userID !== userID}">
-                
-                <div class="message-header"
-                    [ngClass]="{'sent-header': message.userID === userID, 'received-header': message.userID !== userID}">
-                    <img [src]="message.profilePicture || 'http://localhost:3000/profilePictures/default.png'" class="rounded-circle">
-                    <span class="username">{{ message.username }}</span>
-                    <span class="role" [ngClass]="{'super-admin': message.role === 'superAdmin', 'group-admin': message.role === 'groupAdmin'}">
-                        ({{ message.role === 'superAdmin' ? 'SA' : (message.role === 'groupAdmin' ? 'GA' : message.role) }})
-                    </span>
-                    <span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
-                </div>
-                
-                <!-- Message Content -->
-                <div class="message-container-content">
-                    <div class="message-content" [ngClass]="{'sent-content': message.userID === userID, 'received-content': message.userID !== userID}">
-                        <ng-container *ngIf="isImage(message.message); else textMessage">
-                            <img [src]="message.message" alt="Image" class="chat-image">
-                        </ng-container>
-                        <ng-template #textMessage>
-                            {{ message.message }}
-                        </ng-template>
+
+                <div *ngIf="message.role === 'system'; else userMessage">
+                    <!-- System Message Content -->
+                    <div class="system-message d-flex justify-content-center align-item-center">
+                        <span>{{ message.message }}</span>
                     </div>
                 </div>
+
+                <ng-template #userMessage>
+                    <!-- User Message Content -->
+                    <div class="message-header"
+                        [ngClass]="{'sent-header': message.userID === userID, 'received-header': message.userID !== userID}">
+                        <img [src]="message.profilePicture || 'http://localhost:3000/profilePictures/default.png'" class="rounded-circle">
+                        <span class="username">{{ message.username }}</span>
+                        <span class="role" [ngClass]="{'super-admin': message.role === 'superAdmin', 'group-admin': message.role === 'groupAdmin'}">
+                            ({{ message.role === 'superAdmin' ? 'SA' : (message.role === 'groupAdmin' ? 'GA' : message.role) }})
+                        </span>
+                        <span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
+                    </div>
+
+                    <!-- Message Content -->
+                    <div class="message-container-content">
+                        <div class="message-content" [ngClass]="{'sent-content': message.userID === userID, 'received-content': message.userID !== userID}">
+                            <ng-container *ngIf="isImage(message.message); else textMessage">
+                                <img [src]="message.message" alt="Image" class="chat-image">
+                            </ng-container>
+                            <ng-template #textMessage>
+                                {{ message.message }}
+                            </ng-template>
+                        </div>
+                    </div>
+                </ng-template>
             </div>
         </div>
+
 
          <!-- Message Input -->
          <div class="message-input-container" #inputContainer>

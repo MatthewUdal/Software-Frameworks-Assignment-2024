@@ -21,6 +21,10 @@
     background-color: #ccc;
 }
 
+.rounded-circle{
+    object-fit: cover;
+}
+
 .py-custom{
     padding-top: 10px;
     padding-bottom: 10px;
