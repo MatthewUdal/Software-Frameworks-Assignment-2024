@@ -7,7 +7,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { routes } from './app.routes';
 
 export const socketConfig: SocketIoConfig = {
-  url: 'wss://s5394035.elf.ict.griffith.edu.au:8443/proxy/8888/socket.io',
+  url: 'https://s5394035.elf.ict.griffith.edu.au:3000',
   options: {}
 };
 

@@ -12,9 +12,10 @@ export class SocketService extends Socket {
     super(socketConfig);
   }
 
-  joinChannel(channelID: string): void {
-    this.emit('joinChannel', { channelID });
+  joinChannel(channelID: string, userID: string, username: string): void {
+    this.emit('joinChannel', { channelID, userID, username });
   }
+  
 
   sendMessage(channelID: string, userID: string, message: string): void {
     this.emit('sendMessage', { channelID, userID, message });

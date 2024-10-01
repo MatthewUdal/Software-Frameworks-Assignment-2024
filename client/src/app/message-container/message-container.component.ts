@@ -34,12 +34,21 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.userID = this.userService.getUserID();
+    const username = this.userService.getUsername();
+
+    if (!this.userID || !username) {
+      console.error('User ID or Username is null. Cannot join channel.');
+      return;
+    }
+
+    // Subscribe to changes in selected channel
     this.channelService.selectedChannel$.subscribe(channel => {
       this.selectedChannel = channel;
       if (channel) {
-        this.socketService.joinChannel(channel._id);
-        this.loadPreviousMessages(channel._id);
-        console.log(this.messages);
+        // Load previous messages first before joining the channel
+        this.loadPreviousMessages(channel._id).then(() => {
+          this.socketService.joinChannel(channel._id, this.userID!, username);
+        });
       }
     });    
 
@@ -61,10 +70,21 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  loadPreviousMessages(channelID: string): void {
-    this.http.post<Chat[]>('/api/chat/getMessages', { channelID } ).subscribe(msg => {
-      this.messages = msg;
-      console.log(this.messages);
+  // Modify the loadPreviousMessages to return a promise that resolves when messages are loaded
+  loadPreviousMessages(channelID: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.post<Chat[]>('https://s5394035.elf.ict.griffith.edu.au:3000/chat/getMessages', { channelID })
+        .subscribe({
+          next: (msg) => {
+            this.messages = msg;
+            console.log(this.messages);
+            resolve();  // Resolve the promise after messages are loaded
+          },
+          error: (err) => {
+            console.error('Failed to load previous messages:', err);
+            reject(err);  // Reject the promise if an error occurs
+          }
+        });
     });
   }
 
@@ -84,8 +104,8 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
     const formData = new FormData();
     formData.append('image', imageFile);
   
-    this.http.post<{ imageUrl: string }>('/api/chat/uploadImage', formData).subscribe(res => {
-      const fullImageUrl = `/api${res.imageUrl}`;
+    this.http.post<{ imageUrl: string }>('https://s5394035.elf.ict.griffith.edu.au:3000/chat/uploadImage', formData).subscribe(res => {
+      const fullImageUrl = `https://s5394035.elf.ict.griffith.edu.au:3000${res.imageUrl}`;
       this.sendMessage(fullImageUrl);
       this.scrollToBottom();
     })
@@ -99,7 +119,6 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
     }
   }
 
-
   sendMessage(message: string): void {
     if (this.selectedChannel && this.userID) {
       this.socketService.sendMessage(this.selectedChannel._id, this.userID, message);
@@ -110,13 +129,11 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
   private scrollToBottom(): void {
     try {
       const messageBoxElement = this.messageBox.nativeElement;
-
       messageBoxElement.scrollTop = messageBoxElement.scrollHeight;
     } catch (err) {
       console.error('Error while scrolling to the bottom:', err);
     }
   }
-
 
   isImage(message: string): boolean {
     return /\.(jpeg|jpg|gif|png|svg)$/.test(message);

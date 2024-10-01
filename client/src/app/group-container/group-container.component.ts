@@ -64,7 +64,7 @@ export class GroupContainerComponent implements OnInit {
       })
     };
 
-    this.http.post<Group[]>('/api/groups', { userID }, httpOptions).subscribe(groups => {
+    this.http.post<Group[]>('https://s5394035.elf.ict.griffith.edu.au:3000/groups', { userID }, httpOptions).subscribe(groups => {
       this.groups = groups;
       this.viewableGroups = [...this.groups]; 
     }, error => {
@@ -73,14 +73,14 @@ export class GroupContainerComponent implements OnInit {
   }
 
   loadChannels(userID: string): void {    
-    this.http.post<Channel[]>('/api/channels/myChannels', { userID } ).subscribe(channels => {
+    this.http.post<Channel[]>('https://s5394035.elf.ict.griffith.edu.au:3000/channels/myChannels', { userID } ).subscribe(channels => {
       this.channels = channels;
       console.log(channels);
     });
   }
 
   loadAllChannels(): void {    
-    this.http.get<Channel[]>('/api/channels/').subscribe(channels => {
+    this.http.get<Channel[]>('https://s5394035.elf.ict.griffith.edu.au:3000/channels/').subscribe(channels => {
       this.channels = channels;
     });
   }

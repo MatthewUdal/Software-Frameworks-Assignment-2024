@@ -27,7 +27,7 @@ export class SignupComponent {
       alert('Please fill in all required fields.');
       return;
     }
-    this.httpClient.post('/api/signup', { username: this.username, email: this.email, password: this.password }, httpOptions)
+    this.httpClient.post('https://s5394035.elf.ict.griffith.edu.au:3000/signup', { username: this.username, email: this.email, password: this.password }, httpOptions)
       .subscribe((response: any) => {
         if (response.success) {
           sessionStorage.setItem('user', JSON.stringify(response.user));

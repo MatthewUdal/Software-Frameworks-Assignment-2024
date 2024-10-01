@@ -69,7 +69,7 @@ export class NavbarComponent implements OnInit {
   }
 
   deleteUser(): void{
-    this.http.post('/api/deleteUser', { userID: this.userID })
+    this.http.post('https://s5394035.elf.ict.griffith.edu.au:3000/deleteUser', { userID: this.userID })
     .subscribe(response => {
       this.router.navigate(['/login']);
       console.log(response);
@@ -105,7 +105,7 @@ export class NavbarComponent implements OnInit {
         return;
     }
 
-    this.http.post<{ imageUrl: string }>('/api/handleUser/updateProfile', formData).subscribe(res => {
+    this.http.post<{ imageUrl: string }>('https://s5394035.elf.ict.griffith.edu.au:3000/handleUser/updateProfile', formData).subscribe(res => {
       if (res.imageUrl) {
         // Update the profile picture in session storage and in the component
         const user = sessionStorage.getItem('user');

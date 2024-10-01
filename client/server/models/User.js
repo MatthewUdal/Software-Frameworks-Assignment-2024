@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   },
   profilePicture: {
     type: String, // Field for storing the URL/path to the profile picture
-    default: '/api/profilePictures/default.png',
+    default: 'https://s5394035.elf.ict.griffith.edu.au:3000/profilePictures/default.png',
   }
 });
 

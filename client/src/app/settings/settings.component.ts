@@ -50,7 +50,7 @@ export class SettingsComponent implements OnInit {
 
 
   getPerms() {
-    this.http.post<{ success: boolean }>('/api/perms', { groupID: this.groupID, userID: this.userID })
+    this.http.post<{ success: boolean }>('https://s5394035.elf.ict.griffith.edu.au:3000/perms', { groupID: this.groupID, userID: this.userID })
       .subscribe(
         (response) => {
           if (response.success) {
@@ -72,7 +72,7 @@ export class SettingsComponent implements OnInit {
   }
 
   leaveGroup(): void{
-    this.http.post('/api/groups/leaveGroup', { groupID: this.groupID, userID: this.userID })
+    this.http.post('https://s5394035.elf.ict.griffith.edu.au:3000/groups/leaveGroup', { groupID: this.groupID, userID: this.userID })
       .subscribe(response => {
         console.log('Left the group successfully', response);
         this.router.navigate(['/dashboard']);
@@ -89,7 +89,7 @@ export class SettingsComponent implements OnInit {
 
   loadRequests(): void {
     console.log('Loading requests for group:', this.groupID);
-    this.http.post<{ requestID: string, userID: string, username: string }[]>('/api/requests/getRequests', { groupID: this.groupID })
+    this.http.post<{ requestID: string, userID: string, username: string }[]>('https://s5394035.elf.ict.griffith.edu.au:3000/requests/getRequests', { groupID: this.groupID })
       .subscribe(
         (response) => {
           this.userRequests = response;
@@ -102,7 +102,7 @@ export class SettingsComponent implements OnInit {
   }
 
   approveRequest(userID: string, requestID: string): void {
-    this.http.post<{ success: boolean }>('/api/requests/approveRequest', { userID, requestID, groupID: this.groupID })
+    this.http.post<{ success: boolean }>('https://s5394035.elf.ict.griffith.edu.au:3000/requests/approveRequest', { userID, requestID, groupID: this.groupID })
       .subscribe(
         (response) => {
           if (response.success) {
@@ -119,7 +119,7 @@ export class SettingsComponent implements OnInit {
   }
 
   removeRequest(requestID: string): void {
-    this.http.post<{ success: boolean, message: string }>('/api/requests/declineRequest', { requestID })
+    this.http.post<{ success: boolean, message: string }>('https://s5394035.elf.ict.griffith.edu.au:3000/requests/declineRequest', { requestID })
       .subscribe(
         response => {
           if (response.success) {
@@ -137,7 +137,7 @@ export class SettingsComponent implements OnInit {
 
   loadChannelRequests(): void {
     console.log('Loading channels requests for group:', this.groupID);
-    this.http.post<{ channelRequestID: string, channelID: string, channelName: string, userID: string, username: string }[]>('/api/channelRequests/getRequests', { groupID: this.groupID })
+    this.http.post<{ channelRequestID: string, channelID: string, channelName: string, userID: string, username: string }[]>('https://s5394035.elf.ict.griffith.edu.au:3000/channelRequests/getRequests', { groupID: this.groupID })
       .subscribe(
         (response) => {
           this.channelRequests = response;
@@ -150,7 +150,7 @@ export class SettingsComponent implements OnInit {
   }
 
   approveChannelRequest(userID: string, channelRequestID: string, channelID: string): void {
-    this.http.post<{ success: boolean }>('/api/channelRequests/approveRequest', { userID, channelRequestID, channelID })
+    this.http.post<{ success: boolean }>('https://s5394035.elf.ict.griffith.edu.au:3000/channelRequests/approveRequest', { userID, channelRequestID, channelID })
       .subscribe(
         (response) => {
           if (response.success) {
@@ -167,7 +167,7 @@ export class SettingsComponent implements OnInit {
   }
 
   removeChannelRequest(channelRequestID: string): void {
-    this.http.post<{ success: boolean, message: string }>('/api/channelRequests/declineRequest', { channelRequestID })
+    this.http.post<{ success: boolean, message: string }>('https://s5394035.elf.ict.griffith.edu.au:3000/channelRequests/declineRequest', { channelRequestID })
       .subscribe(
         response => {
           if (response.success) {
@@ -191,7 +191,7 @@ export class SettingsComponent implements OnInit {
       userID: this.userID
     };
 
-    this.http.post('/api/channels/addChannel', channelData)
+    this.http.post('https://s5394035.elf.ict.griffith.edu.au:3000/channels/addChannel', channelData)
       .subscribe(response => {
         console.log('Channel added successfully:', response);
       }, error => {
@@ -201,7 +201,7 @@ export class SettingsComponent implements OnInit {
 
   loadChannels(): void {
     console.log('loading channels')
-    this.http.get<Channel[]>('/api/channels').subscribe(channels => {
+    this.http.get<Channel[]>('https://s5394035.elf.ict.griffith.edu.au:3000/channels').subscribe(channels => {
       this.channels = channels;
       this.allGroupChannels = this.channels.filter(channel => channel.groupID === this.groupID);
     });
@@ -212,7 +212,7 @@ export class SettingsComponent implements OnInit {
   }
 
   deleteChannel(): void {
-    this.http.post('/api/channels/deleteChannel', {channelID: this.selectedChannelID})
+    this.http.post('https://s5394035.elf.ict.griffith.edu.au:3000/channels/deleteChannel', {channelID: this.selectedChannelID})
       .subscribe(response => {
         console.log('Channel deleted', response);
         this.toggleSettings();
@@ -223,7 +223,7 @@ export class SettingsComponent implements OnInit {
   }
 
   deleteGroup(): void {
-    this.http.post('/api/groups/deleteGroup', { groupID: this.groupID })
+    this.http.post('https://s5394035.elf.ict.griffith.edu.au:3000/groups/deleteGroup', { groupID: this.groupID })
       .subscribe(response => {
         console.log('group deleted', response);
         this.toggleSettings();
@@ -234,7 +234,7 @@ export class SettingsComponent implements OnInit {
   }
 
   loadMembers(): void {
-    this.http.post<{ _id: string, username: string, role: string }[]>('/api/groups/getMembers', { groupID: this.groupID })
+    this.http.post<{ _id: string, username: string, role: string }[]>('https://s5394035.elf.ict.griffith.edu.au:3000/groups/getMembers', { groupID: this.groupID })
       .subscribe(
         (response) => {
           this.groupMembers = response;
@@ -282,7 +282,7 @@ export class SettingsComponent implements OnInit {
 
 
   kickUser(userID: string): void {
-    this.http.post<{ success: boolean, message: string }>('/api/groups/kickUser', { groupID: this.groupID, userID })
+    this.http.post<{ success: boolean, message: string }>('https://s5394035.elf.ict.griffith.edu.au:3000/groups/kickUser', { groupID: this.groupID, userID })
       .subscribe(
         response => {
           if (response.success) {
@@ -299,7 +299,7 @@ export class SettingsComponent implements OnInit {
   }
 
   promoteUser(userID: string, newRole: string): void {
-    this.http.post<{ success: boolean, message: string }>('/api/promoteUser', { userID, newRole, groupID: this.groupID })
+    this.http.post<{ success: boolean, message: string }>('https://s5394035.elf.ict.griffith.edu.au:3000/promoteUser', { userID, newRole, groupID: this.groupID })
       .subscribe(response => {
           if (response.success) {
             console.log('User role updated successfully:', response.message);
@@ -316,7 +316,7 @@ export class SettingsComponent implements OnInit {
   
     
   banUser(userID: string){
-    this.http.post<{ success: boolean, message: string }>('/api/banUser', { userID, groupID: this.groupID })
+    this.http.post<{ success: boolean, message: string }>('https://s5394035.elf.ict.griffith.edu.au:3000/banUser', { userID, groupID: this.groupID })
     .subscribe(response => {
         if (response.success) {
           console.log(response.message);
