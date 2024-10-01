@@ -2,25 +2,43 @@ const express = require("express");
 const connectDB = require('./db');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const http = require('http');
+const https = require('https');
 const socketIo = require('socket.io');
-const path = require('path');     
+const path = require('path');
+const fs = require('fs');
+const PeerServer = require('peer');
+
+const sslOptions = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
+
 
 const app = express();
-const port = 3000;
+const port = 8888;
+const port2 = 3001;
 
-app.use(cors());
-
-const server = http.createServer(app);
+const server = https.createServer(sslOptions, app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:4200",
-    methods: ["GET", "POST"],
+    origin: "*",
   }
 });
 
+sockets = require('./sockets');
 
-require('./sockets')(io);
+sockets(io);
+
+
+app.use(cors());
+app.use(express.json());
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -86,6 +104,6 @@ app.use('/handleUser', handleUserRoute);
 
 
 // Start the server
-server.listen(port, () => {
-  console.log(`Server listening on port: ${port}`);
+server.listen(port, '0.0.0.0', () => {
+  console.log(`Server listening on port: 8888`);
 });

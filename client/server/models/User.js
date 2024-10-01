@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   },
   profilePicture: {
     type: String, // Field for storing the URL/path to the profile picture
-    default: 'http://localhost:3000/profilePictures/default.png',
+    default: '/api/profilePictures/default.png',
   }
 });
 

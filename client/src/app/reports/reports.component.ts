@@ -24,7 +24,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getReportedUsers(): void {
-    this.http.get<Report[]>('http://localhost:3000/reports').subscribe(
+    this.http.get<Report[]>('/api/reports').subscribe(
       (reports) => {
         this.reportedUsers = reports;
         console.log('Reported Users:', this.reportedUsers);
@@ -36,7 +36,7 @@ export class ReportsComponent implements OnInit {
   }
 
   ignore(reportID: string): void{
-    this.http.post('http://localhost:3000/reports/ignore', { reportID })
+    this.http.post('/api/reports/ignore', { reportID })
       .subscribe(response => {
         console.log('User report ' + response + 'ID deleted successfully');
         this.getReportedUsers()
@@ -46,7 +46,7 @@ export class ReportsComponent implements OnInit {
   }
 
   deleteUser(userID: string): void{
-    this.http.post('http://localhost:3000/deleteUser', { userID })
+    this.http.post('/api/deleteUser', { userID })
     .subscribe(response => {
       console.log(response);
       this.getReportedUsers()

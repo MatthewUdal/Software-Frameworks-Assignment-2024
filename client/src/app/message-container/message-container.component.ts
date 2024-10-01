@@ -62,7 +62,7 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
   }
 
   loadPreviousMessages(channelID: string): void {
-    this.http.post<Chat[]>('http://localhost:3000/chat/getMessages', { channelID } ).subscribe(msg => {
+    this.http.post<Chat[]>('/api/chat/getMessages', { channelID } ).subscribe(msg => {
       this.messages = msg;
       console.log(this.messages);
     });
@@ -84,8 +84,8 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
     const formData = new FormData();
     formData.append('image', imageFile);
   
-    this.http.post<{ imageUrl: string }>('http://localhost:3000/chat/uploadImage', formData).subscribe(res => {
-      const fullImageUrl = `http://localhost:3000${res.imageUrl}`;
+    this.http.post<{ imageUrl: string }>('/api/chat/uploadImage', formData).subscribe(res => {
+      const fullImageUrl = `/api${res.imageUrl}`;
       this.sendMessage(fullImageUrl);
       this.scrollToBottom();
     })

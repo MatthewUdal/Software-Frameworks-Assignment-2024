@@ -6,10 +6,11 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { provideClientHydration } from '@angular/platform-browser';
 import { routes } from './app.routes';
 
-const socketConfig: SocketIoConfig = {
-  url: 'http://localhost:3000',
+export const socketConfig: SocketIoConfig = {
+  url: 'wss://s5394035.elf.ict.griffith.edu.au:8443/proxy/8888/socket.io',
   options: {}
 };
+
 
 export const appConfig: ApplicationConfig = {
   providers: [

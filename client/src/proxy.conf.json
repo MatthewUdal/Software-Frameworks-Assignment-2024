@@ -1,0 +1,21 @@
+{
+  "/api": {
+    "target": "https://s5394035.elf.ict.griffith.edu.au:8443/proxy/8888/",
+    "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/socket.io": {
+    "target": "https://s5394035.elf.ict.griffith.edu.au:8443/proxy/8888/",
+    "secure": false,
+    "pathRewrite": {
+      "^/socket.io": "/socket.io"
+    },
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "ws": true 
+  }
+}

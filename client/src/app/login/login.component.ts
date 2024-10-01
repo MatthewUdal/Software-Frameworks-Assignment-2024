@@ -26,7 +26,7 @@ export class LoginComponent {
       return;
     }
 
-    this.httpClient.post('http://localhost:3000/login', { email: this.email, password: this.password }, httpOptions).subscribe((response: any) => {
+    this.httpClient.post('/api/login', { email: this.email, password: this.password }).subscribe((response: any) => {
       if (response.success) {
         sessionStorage.setItem('user', JSON.stringify(response.user));
         this.router.navigate(['/dashboard']);

@@ -23,7 +23,7 @@ router.post('/updateProfile', upload.single('image'), async (req, res) => {
     }
 
     const userId = req.body.userID;
-    const imageUrl = `http://localhost:3000/profilePictures/${req.file.filename}`;
+    const imageUrl = `/api/profilePictures/${req.file.filename}`;
 
     try {
         // Update user profile picture in the database

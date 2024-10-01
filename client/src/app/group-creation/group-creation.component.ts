@@ -24,7 +24,7 @@ export class GroupCreationComponent implements OnInit {
   }
 
   createGroup(): void{
-    this.http.post('http://localhost:3000/groups/createGroup', { userID: this.userID, groupName: this.groupName })
+    this.http.post('/api/groups/createGroup', { userID: this.userID, groupName: this.groupName })
       .subscribe(response => {
         console.log('Created Group Successfully', response);
         this.router.navigate(['/homepage']);

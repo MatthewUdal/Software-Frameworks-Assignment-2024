@@ -1,24 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
+import { socketConfig } from './app.config';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SocketService {
-  constructor(private socket: Socket) {}
+export class SocketService extends Socket {
+
+  constructor() {
+    super(socketConfig);
+  }
 
   joinChannel(channelID: string): void {
-    this.socket.emit('joinChannel', { channelID });
+    this.emit('joinChannel', { channelID });
   }
 
   sendMessage(channelID: string, userID: string, message: string): void {
-    this.socket.emit('sendMessage', { channelID, userID, message });
+    this.emit('sendMessage', { channelID, userID, message });
   }
 
   onNewMessage(): Observable<any> {
-    return this.socket.fromEvent('newMessage');
+    return this.fromEvent('newMessage');
   }
-
-  
 }

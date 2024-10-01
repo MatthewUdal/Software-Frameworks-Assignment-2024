@@ -13,9 +13,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "externalDependencies": [""],
             "outputPath": "dist/software-frameworks-assignment-2024",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "browser": "src/main.ts", 
             "polyfills": [
               "zone.js"
             ],
@@ -61,6 +62,11 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "src/proxy.conf.json",
+            "host": "s5394035.elf.ict.griffith.edu.au",  
+            "port": 8000
+          },
           "configurations": {
             "production": {
               "buildTarget": "Software-Frameworks-Assignment-2024:build:production"
@@ -97,5 +103,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
