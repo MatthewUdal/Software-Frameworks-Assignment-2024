@@ -32,7 +32,7 @@ sockets(io);
 
 // video call system
 const { videoCall } = require('./peerServer');
-const peerServer = videoCall(server, PORT1, sslOptions);
+const peerServer = videoCall(PORT1, sslOptions);
 app.use('/videocall', peerServer);
 console.log('Starting SSL PeerServer at: ' + PORT1);
 

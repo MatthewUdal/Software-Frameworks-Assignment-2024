@@ -8,6 +8,7 @@ import { SettingsService } from '../settings.service';
 import { SettingsComponent } from '../settings/settings.component';
 import { Chat } from '../interfaces/chat.interface';
 import { GetUserService } from '../get-user.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
     private settingsService: SettingsService,
     private socketService: SocketService,
     private http: HttpClient,
-    private userService: GetUserService
+    private userService: GetUserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -134,6 +136,12 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
       console.error('Error while scrolling to the bottom:', err);
     }
   }
+  
+  startCall(){
+    this.router.navigate(['/videocall']);
+    console.log('going to call');
+  } 
+
 
   isImage(message: string): boolean {
     return /\.(jpeg|jpg|gif|png|svg)$/.test(message);

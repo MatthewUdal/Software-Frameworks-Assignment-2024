@@ -64,7 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "host": "s5394035.elf.ict.griffith.edu.au",  
-            "port": 8000
+            "port": 3002,
+            "ssl": true,
+            "sslKey": "server/key.pem",
+            "sslCert": "server/cert.pem"
           },
           "configurations": {
             "production": {

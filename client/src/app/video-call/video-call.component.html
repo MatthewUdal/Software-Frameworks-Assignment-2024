@@ -1,0 +1,14 @@
+<div class="video-container">
+    <h3>Channel: {{ channelID }} - Video Call</h3>
+    <div class="video-wrapper">
+      <!-- Local video -->
+      <video id="local-video" autoplay muted class="local-video"></video>
+  
+      <!-- Remote videos for each connected peer -->
+      <div class="remote-video-container" *ngFor="let remotePeer of remotePeers">
+        <video [id]="'remote-video-' + remotePeer" autoplay class="remote-video"></video>
+        <p>{{ remotePeer }}</p>
+      </div>
+    </div>
+  </div>
+  

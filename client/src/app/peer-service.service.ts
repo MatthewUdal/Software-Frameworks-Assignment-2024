@@ -6,46 +6,55 @@ import Peer, { DataConnection, MediaConnection } from 'peerjs';
 })
 export class PeerServiceService {
   private peer: Peer | null = null;
-  private mediaConnection: MediaConnection | null = null;
+  private connections: Map<string, MediaConnection> = new Map(); // Store connections with peers
+  private peerID: string = '';
   private PORT1 = 3001;
 
   constructor() { }
 
   // Initialize the PeerJS client and connect to the server
-  initPeer(userId: string) {
-    this.peer = new Peer(userId, {
+  initPeer(userId: string, channelID: string) {
+    this.peer = new Peer(`${channelID}-${userId}`, {
       host: 'http://s5394035.elf.ict.griffith.edu.au',
       port: this.PORT1,
       path: '/videocall',
-      secure: true
+      secure: true,
+    });
+    this.peerID = `${channelID}-${userId}`;
+
+    this.peer.on('call', (call: MediaConnection) => {
+      call.answer();
+      this.connections.set(call.peer, call); 
+
+      call.on('stream', (remoteStream) => {
+        this.handleRemoteStream(call.peer, remoteStream);
+      });
     });
 
     return this.peer;
   }
 
-  // Answer an incoming call
-  answerCall(stream: MediaStream) {
-    if (!this.peer) return;
-    this.peer.on('call', (call: MediaConnection) => {
-      call.answer(stream);
-      this.mediaConnection = call;
+  // create the channel call
+  callPeer(remotePeerID: string, stream: MediaStream) {
+    if (!this.peer || this.connections.has(remotePeerID)) return;
 
-      call.on('stream', (remoteStream) => {
-        this.handleRemoteStream(remoteStream);
-      });
+    const call = this.peer.call(remotePeerID, stream);
+    this.connections.set(remotePeerID, call);
+
+    call.on('stream', (remoteStream) => {
+      this.handleRemoteStream(remotePeerID, remoteStream);
     });
   }
 
-  // Close the call
+  // end the call
   closeCall() {
-    if (this.mediaConnection) {
-      this.mediaConnection.close();
-    }
+    this.connections.forEach((connection) => connection.close());
+    this.connections.clear();
   }
 
-  // Handle incoming remote stream
-  handleRemoteStream(remoteStream: MediaStream) {
-    const videoElement = document.getElementById('remote-video') as HTMLVideoElement;
+  // function for camera/screen share
+  handleRemoteStream(remotePeerID: string, remoteStream: MediaStream) {
+    const videoElement = document.getElementById(`remote-video-${remotePeerID}`) as HTMLVideoElement;
     if (videoElement) {
       videoElement.srcObject = remoteStream;
       videoElement.play();

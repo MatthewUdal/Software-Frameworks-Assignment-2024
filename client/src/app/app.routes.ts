@@ -9,6 +9,7 @@ import { ExploreComponent } from './explore/explore.component';
 import { GroupCreationComponent } from './group-creation/group-creation.component';
 import { ChannelExploreComponent } from './channel-explore/channel-explore.component';
 import { ReportsComponent } from './reports/reports.component';
+import { VideoCallComponent } from './video-call/video-call.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch:'full' },
@@ -19,5 +20,6 @@ export const routes: Routes = [
     { path:'explore', component:ExploreComponent, canActivate: [authGuard] },
     { path:'channel-explore', component:ChannelExploreComponent, canActivate: [authGuard] },
     { path:'group-creation', component:GroupCreationComponent, canActivate: [authGuard] },
+    { path:'videocall', component:VideoCallComponent, canActivate: [authGuard] },
     { path:'reports', component:ReportsComponent, canActivate: [authGuard, superAdminGuard] },
 ];

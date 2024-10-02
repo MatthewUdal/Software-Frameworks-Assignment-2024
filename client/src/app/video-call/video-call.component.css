@@ -1,0 +1,30 @@
+.video-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .video-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .local-video {
+    width: 200px;
+    height: 150px;
+    background-color: black;
+    border: 2px solid #3a3a3a;
+  }
+  
+  .remote-video-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .remote-video {
+    width: 200px;
+    height: 150px;
+    background-color: black;
+  }
+  
