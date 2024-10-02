@@ -23,5 +23,32 @@ export class PeerServiceService {
     return this.peer;
   }
 
+  // Answer an incoming call
+  answerCall(stream: MediaStream) {
+    if (!this.peer) return;
+    this.peer.on('call', (call: MediaConnection) => {
+      call.answer(stream);
+      this.mediaConnection = call;
 
+      call.on('stream', (remoteStream) => {
+        this.handleRemoteStream(remoteStream);
+      });
+    });
+  }
+
+  // Close the call
+  closeCall() {
+    if (this.mediaConnection) {
+      this.mediaConnection.close();
+    }
+  }
+
+  // Handle incoming remote stream
+  handleRemoteStream(remoteStream: MediaStream) {
+    const videoElement = document.getElementById('remote-video') as HTMLVideoElement;
+    if (videoElement) {
+      videoElement.srcObject = remoteStream;
+      videoElement.play();
+    }
+  }
 }
