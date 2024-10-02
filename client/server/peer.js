@@ -10,4 +10,4 @@ function videoCallServer(server, PORT1, sslOptions) {
       return videoCallServer;
 }
 
-module.exports = { videoCall };
+module.exports = { videoCallServer };
