@@ -2,13 +2,17 @@
   <!-- Container for local video and remote video elements -->
   <div class="video-wrapper">
     <!-- Local video element (user's own video feed) -->
-    <video #localVideo autoplay muted></video>
+    <video #localVideo autoplay muted playsinline></video>
 
   <div class="remote-videos-wrapper" #remoteVideosContainer>
     <!-- Remote video elements will be dynamically added here by the component -->
   </div>
 
   <button (click)="endCall()">End Call</button>
+   <!-- Mute/Unmute Button -->
+   <button (click)="toggleMute()">
+    {{ isMuted ? 'Unmute' : 'Mute' }}
+  </button>
   
   <p>Your Peer ID: {{ peerId }}</p>
 </div>

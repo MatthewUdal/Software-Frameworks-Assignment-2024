@@ -18,6 +18,7 @@ export class VideoCallComponent implements OnInit {
   @ViewChild('remoteVideosContainer', { static: false }) remoteVideosContainer!: ElementRef<HTMLDivElement>;
 
   public peerId: string | undefined;
+  public isMuted: boolean = false;
   private connections: MediaConnection[] = [];
   private videoElementsMap = new Map<string, HTMLVideoElement>(); 
 
@@ -62,6 +63,7 @@ export class VideoCallComponent implements OnInit {
       // Only set the video element source here after it's available
       if (this.localVideo && this.localVideo.nativeElement) {
         this.localVideo.nativeElement.srcObject = localStream;
+        this.localVideo.nativeElement.muted = true;
       }
 
       this.peerService.setLocalStream(localStream);
@@ -151,6 +153,17 @@ export class VideoCallComponent implements OnInit {
       this.videoElementsMap.clear();
       
       this.router.navigate(['/homepage']);
+    }
+  }
+
+  toggleMute(): void {
+    const localStream = this.peerService.getLocalStream();
+    if (localStream) {
+      this.isMuted = !this.isMuted;
+      localStream.getAudioTracks().forEach(track => {
+        track.enabled = !this.isMuted; // Enable/disable audio track
+      });
+      console.log(`Audio is now ${this.isMuted ? 'muted' : 'unmuted'}.`);
     }
   }
 }
