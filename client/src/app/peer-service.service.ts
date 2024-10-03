@@ -11,6 +11,7 @@ export class PeerServiceService {
   public peerId: string | undefined;
   private currentCall!: MediaConnection;
   private localStream!: MediaStream;
+  private screenStream!: MediaStream | null;
   private streamPeerMap: Map<string, MediaStream> = new Map();
 
   constructor(private socketService: SocketService) {}
@@ -119,5 +120,23 @@ export class PeerServiceService {
 
   getLocalStream(): MediaStream {
     return this.localStream;
+  }
+
+  // Set the screen stream
+  setScreenStream(screenStream: MediaStream): void {
+    this.screenStream = screenStream;
+  }
+
+  getScreenStream(): MediaStream | null {
+    return this.screenStream;
+  }
+
+  // Stop the screen stream
+  stopScreenStream(): void {
+    if (this.screenStream) {
+      this.screenStream.getTracks().forEach(track => track.stop());
+      this.screenStream = null;
+      console.log('Screen stream stopped.');
+    }
   }
 }

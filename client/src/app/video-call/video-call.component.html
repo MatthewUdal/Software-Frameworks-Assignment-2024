@@ -6,12 +6,17 @@
 
   <div class="remote-videos-wrapper" #remoteVideosContainer>
     <!-- Remote video elements will be dynamically added here by the component -->
+    <video #screenVideo style="display: none;"></video>
   </div>
 
   <button (click)="endCall()">End Call</button>
    <!-- Mute/Unmute Button -->
    <button (click)="toggleMute()">
     {{ isMuted ? 'Unmute' : 'Mute' }}
+  </button>
+  
+  <button (click)="toggleScreenShare()">
+    {{ isScreenSharing ? 'Stop Screen Sharing' : 'Start Screen Sharing' }}
   </button>
   
   <p>Your Peer ID: {{ peerId }}</p>

@@ -16,9 +16,11 @@ import { ChannelService } from '../channel.service';
 export class VideoCallComponent implements OnInit {
   @ViewChild('localVideo') localVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('remoteVideosContainer', { static: false }) remoteVideosContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('screenVideo') screenVideo!: ElementRef<HTMLVideoElement>;
 
   public peerId: string | undefined;
   public isMuted: boolean = false;
+  public isScreenSharing: boolean = false;
   private connections: MediaConnection[] = [];
   private videoElementsMap = new Map<string, HTMLVideoElement>(); 
 
@@ -164,6 +166,70 @@ export class VideoCallComponent implements OnInit {
         track.enabled = !this.isMuted; // Enable/disable audio track
       });
       console.log(`Audio is now ${this.isMuted ? 'muted' : 'unmuted'}.`);
+    }
+  }
+
+  // Toggle screen sharing on and off
+  async toggleScreenShare(): Promise<void> {
+    if (!this.isScreenSharing) {
+      try {
+        const screenStream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+        });
+        
+        this.isScreenSharing = true;
+        this.peerService.setScreenStream(screenStream);
+
+        // Create a new video element for the screen sharing stream
+        if (this.screenVideo && this.screenVideo.nativeElement) {
+          this.screenVideo.nativeElement.srcObject = screenStream;
+          this.screenVideo.nativeElement.autoplay = true;
+          this.screenVideo.nativeElement.style.width = '300px';
+          this.screenVideo.nativeElement.style.margin = '5px';
+
+          // Append the screen video element to the remote videos container
+          this.remoteVideosContainer.nativeElement.appendChild(this.screenVideo.nativeElement);
+        }
+
+        // Add the screen stream to the existing calls
+        this.connections.forEach((call) => {
+          const sender = call.peerConnection.getSenders().find(s => s.track?.kind === 'video');
+          if (sender) {
+            sender.replaceTrack(screenStream.getVideoTracks()[0]);
+          }
+        });
+
+        console.log('Screen sharing started.');
+      } catch (error) {
+        console.error('Failed to start screen sharing', error);
+      }
+    } else {
+      this.stopScreenShare();
+    }
+  }
+
+  // Stop screen sharing and revert to the camera stream
+  stopScreenShare(): void {
+    if (this.isScreenSharing) {
+      this.isScreenSharing = false;
+      this.peerService.stopScreenStream();
+
+      // Remove the screen video element
+      if (this.screenVideo && this.screenVideo.nativeElement) {
+        this.screenVideo.nativeElement.srcObject = null;
+        this.remoteVideosContainer.nativeElement.removeChild(this.screenVideo.nativeElement);
+      }
+
+      // Revert back to the local camera stream in existing calls
+      const localStream = this.peerService.getLocalStream();
+      this.connections.forEach((call) => {
+        const sender = call.peerConnection.getSenders().find(s => s.track?.kind === 'video');
+        if (sender) {
+          sender.replaceTrack(localStream.getVideoTracks()[0]);
+        }
+      });
+
+      console.log('Screen sharing stopped.');
     }
   }
 }
