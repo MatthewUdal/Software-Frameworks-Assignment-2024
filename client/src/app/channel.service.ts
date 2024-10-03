@@ -12,4 +12,8 @@ export class ChannelService {
   selectChannel(channel: Channel): void {
     this.selectedChannelSource.next(channel);
   }
+
+  getCurrentChannel(){
+    return sessionStorage.getItem('cc');
+  }
 }

@@ -52,6 +52,7 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
         // Load previous messages first before joining the channel
         this.loadPreviousMessages(channel._id).then(() => {
           this.socketService.joinChannel(channel._id, this.userID!, username);
+          sessionStorage.setItem('cc', channel._id);
         });
       }
     });    

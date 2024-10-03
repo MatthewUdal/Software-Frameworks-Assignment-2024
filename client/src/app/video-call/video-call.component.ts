@@ -4,6 +4,7 @@ import { SocketService } from '../socket-service.service';
 import { CommonModule } from '@angular/common';
 import Peer, { MediaConnection } from 'peerjs';
 import { Router } from '@angular/router';
+import { ChannelService } from '../channel.service';
 
 @Component({
   selector: 'app-video-call',
@@ -21,10 +22,11 @@ export class VideoCallComponent implements OnInit {
   private videoElementsMap = new Map<string, HTMLVideoElement>(); 
 
 
-  constructor(private peerService: PeerServiceService, private socketService: SocketService, private router: Router) {}
+  constructor(private peerService: PeerServiceService, private socketService: SocketService, private router: Router, private channelService: ChannelService) {}
 
   ngOnInit(): void {
-    const roomId = 'example-room-id'; 
+    const roomId = this.channelService.getCurrentChannel() || '';
+    console.log(roomId)
 
     // Ensure the local stream is set before anything else
     this.startCall().then(() => {
