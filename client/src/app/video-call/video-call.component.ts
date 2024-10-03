@@ -110,8 +110,9 @@ export class VideoCallComponent implements OnInit {
       remoteVideo.srcObject = remoteStream;
       remoteVideo.autoplay = true;
       remoteVideo.playsInline = true;
-      remoteVideo.style.width = '300px'; 
+      remoteVideo.style.width = '400px'; 
       remoteVideo.style.margin = '5px';
+      remoteVideo.style.border = '2px solid #03DAC6';
 
       this.videoElementsMap.set(remotePeerId, remoteVideo);
 
@@ -184,8 +185,9 @@ export class VideoCallComponent implements OnInit {
         if (this.screenVideo && this.screenVideo.nativeElement) {
           this.screenVideo.nativeElement.srcObject = screenStream;
           this.screenVideo.nativeElement.autoplay = true;
-          this.screenVideo.nativeElement.style.width = '300px';
+          this.screenVideo.nativeElement.style.width = '400px';
           this.screenVideo.nativeElement.style.margin = '5px';
+          this.screenVideo.nativeElement.style.border = '2px solid #03DAC6';
 
           // Append the screen video element to the remote videos container
           this.remoteVideosContainer.nativeElement.appendChild(this.screenVideo.nativeElement);

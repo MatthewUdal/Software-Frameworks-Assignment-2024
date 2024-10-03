@@ -1,23 +1,37 @@
 <div class="video-call-container">
-  <!-- Container for local video and remote video elements -->
-  <div class="video-wrapper">
-    <!-- Local video element (user's own video feed) -->
-    <video #localVideo autoplay muted playsinline></video>
-
+  <!-- Remote videos container -->
   <div class="remote-videos-wrapper" #remoteVideosContainer>
-    <!-- Remote video elements will be dynamically added here by the component -->
     <video #screenVideo style="display: none;"></video>
   </div>
 
-  <button (click)="endCall()">End Call</button>
-   <!-- Mute/Unmute Button -->
-   <button (click)="toggleMute()">
-    {{ isMuted ? 'Unmute' : 'Mute' }}
-  </button>
-  
-  <button (click)="toggleScreenShare()">
-    {{ isScreenSharing ? 'Stop Screen Sharing' : 'Start Screen Sharing' }}
-  </button>
-  
-  <p>Your Peer ID: {{ peerId }}</p>
+  <!-- Local video container -->
+  <div class="local-video-wrapper">
+    <video #localVideo class="local-video" autoplay muted playsinline></video>
+  </div>
+
+  <!-- Buttons container -->
+  <div class="buttons-container">
+    <div class="top-buttons">
+      <!-- Mute/Unmute Button -->
+      <button 
+        class="mute-button" 
+        [ngClass]="{ 'active': !isMuted }"
+        (click)="toggleMute()">
+        <img [src]="isMuted ? '../assets/Icons/mutedMic.png' : '../assets/Icons/microphone.png'" class="muteBtn">
+      </button>
+      
+      <!-- Screen Share Button -->
+      <button 
+        class="screen-share-button" 
+        [ngClass]="{ 'active': isScreenSharing }"
+        (click)="toggleScreenShare()">
+        <img src="../assets/Icons/monitor.png" class="screenShareBtn">
+      </button>
+    </div>
+
+    <!-- End Call Button -->
+    <button class="end-call-button" (click)="endCall()">
+      <img src="../assets/Icons/endCall.png" class="endCallBtn">
+    </button>
+  </div>
 </div>
