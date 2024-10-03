@@ -15,9 +15,9 @@ function initializeSockets(io) {
         // Emit a message to notify others in the previous channel that the user has left
         const leaveMessage = `${currentUsername} has left the channel.`;
         io.to(currentChannelID).emit('newMessage', {
-          chatID: null, // null for system messages
+          chatID: null,
           channelID: currentChannelID,
-          userID: null, // null for system messages
+          userID: null, 
           username: 'System',
           role: 'system',
           profilePicture: '',
@@ -36,9 +36,9 @@ function initializeSockets(io) {
       // Emit a message to notify others in the new channel that a user has joined
       const joinMessage = `${username} has joined the channel.`;
       io.to(channelID).emit('newMessage', {
-        chatID: null, // null for system messages
+        chatID: null, 
         channelID,
-        userID: null, // null for system messages
+        userID: null, 
         username: 'System',
         role: 'system',
         profilePicture: '',
@@ -73,14 +73,22 @@ function initializeSockets(io) {
       }
     });
 
+    socket.on('join-room', (roomId, userId) => {
+      console.log(`User ${userId} joined room: ${roomId}`);
+      socket.join(roomId);
+  
+      // Notify others in the room of the new user
+      socket.to(roomId).emit('user-connected', userId);
+    });
+
     socket.on('disconnect', () => {
       // user dc from site and therefore the channel
       if (currentChannelID && currentUsername) {
         const leaveMessage = `${currentUsername} has left the channel.`;
         io.to(currentChannelID).emit('newMessage', {
-          chatID: null, // null for system messages
+          chatID: null, 
           channelID: currentChannelID,
-          userID: null, // null for system messages
+          userID: null, 
           username: 'System',
           role: 'system',
           profilePicture: '',

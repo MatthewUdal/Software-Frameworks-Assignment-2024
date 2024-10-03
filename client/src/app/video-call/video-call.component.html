@@ -1,14 +1,14 @@
-<div class="video-container">
-    <h3>Channel: {{ channelID }} - Video Call</h3>
-    <div class="video-wrapper">
-      <!-- Local video -->
-      <video id="local-video" autoplay muted class="local-video"></video>
-  
-      <!-- Remote videos for each connected peer -->
-      <div class="remote-video-container" *ngFor="let remotePeer of remotePeers">
-        <video [id]="'remote-video-' + remotePeer" autoplay class="remote-video"></video>
-        <p>{{ remotePeer }}</p>
-      </div>
-    </div>
+<div class="video-call-container">
+  <!-- Container for local video and remote video elements -->
+  <div class="video-wrapper">
+    <!-- Local video element (user's own video feed) -->
+    <video #localVideo autoplay muted></video>
+
+  <div class="remote-videos-wrapper" #remoteVideosContainer>
+    <!-- Remote video elements will be dynamically added here by the component -->
   </div>
+
+  <button (click)="endCall()">End Call</button>
   
+  <p>Your Peer ID: {{ peerId }}</p>
+</div>

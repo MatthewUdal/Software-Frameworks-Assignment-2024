@@ -29,7 +29,7 @@ export class ChannelExploreComponent implements OnInit {
   }
 
   getJoinableChannels(userID: string): void {
-    this.http.post<Channel[]>('/api/channelExplore', { userID, groupID: this.groupID }).subscribe(channels => {
+    this.http.post<Channel[]>('https://s5394035.elf.ict.griffith.edu.au:3000/channelExplore', { userID, groupID: this.groupID }).subscribe(channels => {
       this.joinableChannels = channels
 
 
@@ -46,7 +46,7 @@ export class ChannelExploreComponent implements OnInit {
       return;
     }
   
-    this.http.post('/api/channelExplore/join', { userID, channelID, groupID: this.groupID }).subscribe(
+    this.http.post('https://s5394035.elf.ict.griffith.edu.au:3000/channelExplore/join', { userID, channelID, groupID: this.groupID }).subscribe(
       (response: any) => { 
         if (response && response.channelName) {
           alert(`Successfully requested to join ${response.channelName}`);

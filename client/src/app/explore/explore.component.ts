@@ -34,7 +34,7 @@ export class ExploreComponent implements OnInit{
       })
     };
 
-    this.http.post<Group[]>('/api/explore', { userID }, httpOptions).subscribe(groups => {
+    this.http.post<Group[]>('https://s5394035.elf.ict.griffith.edu.au:3000/explore', { userID }, httpOptions).subscribe(groups => {
       this.joinableGroups = groups
 
 
@@ -57,7 +57,7 @@ export class ExploreComponent implements OnInit{
       })
     };
   
-    this.http.post('/api/explore/join', { userID, groupID }, httpOptions).subscribe(
+    this.http.post('https://s5394035.elf.ict.griffith.edu.au:3000/explore/join', { userID, groupID }, httpOptions).subscribe(
       (response: any) => { 
         if (response && response.groupName) {
           alert(`Successfully requested to join ${response.groupName}`);

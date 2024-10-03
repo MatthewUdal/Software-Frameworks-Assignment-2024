@@ -1,63 +1,123 @@
 import { Injectable } from '@angular/core';
-import Peer, { DataConnection, MediaConnection } from 'peerjs';
+import Peer, { MediaConnection } from 'peerjs';
+import { io, Socket } from 'socket.io-client';
+import { SocketService } from './socket-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeerServiceService {
-  private peer: Peer | null = null;
-  private connections: Map<string, MediaConnection> = new Map(); // Store connections with peers
-  private peerID: string = '';
-  private PORT1 = 3001;
+  private peer!: Peer;
+  public peerId: string | undefined;
+  private currentCall!: MediaConnection;
+  private localStream!: MediaStream;
+  private streamPeerMap: Map<string, MediaStream> = new Map();
 
-  constructor() { }
+  constructor(private socketService: SocketService) {}
 
-  // Initialize the PeerJS client and connect to the server
-  initPeer(userId: string, channelID: string) {
-    this.peer = new Peer(`${channelID}-${userId}`, {
-      host: 'http://s5394035.elf.ict.griffith.edu.au',
-      port: this.PORT1,
-      path: '/videocall',
-      secure: true,
-    });
-    this.peerID = `${channelID}-${userId}`;
+  // Initialize PeerJS instance
+  initPeer(roomId: string): string | undefined {
+    this.peer = new Peer();
 
-    this.peer.on('call', (call: MediaConnection) => {
-      call.answer();
-      this.connections.set(call.peer, call); 
+    this.peer.on('open', (id: string) => {
+      console.log(`Peer connection established with ID: ${id}`);
+      this.peerId = id;
 
-      call.on('stream', (remoteStream) => {
-        this.handleRemoteStream(call.peer, remoteStream);
-      });
+      // Emit a 'join-room' event through the existing socket
+      this.socketService.getSocket().emit('join-room', roomId, id);
     });
 
+    return this.peerId;
+  }
+
+  // Store the stream with the associated peer ID
+  setStreamForPeer(peerId: string, stream: MediaStream): void {
+    this.streamPeerMap.set(peerId, stream);
+  }
+
+  getStreamByPeerId(peerId: string): MediaStream | undefined {
+    return this.streamPeerMap.get(peerId);
+  }
+
+  // Remove the stream when a peer leaves
+  removeStreamForPeer(peerId: string): void {
+    this.streamPeerMap.delete(peerId);
+  }
+  
+  onPeerOpen(callback: (id: string) => void): void {
+    this.peer.on('open', callback);
+  }
+
+  // Get Peer instance
+  getPeer(): Peer {
     return this.peer;
   }
 
-  // create the channel call
-  callPeer(remotePeerID: string, stream: MediaStream) {
-    if (!this.peer || this.connections.has(remotePeerID)) return;
-
-    const call = this.peer.call(remotePeerID, stream);
-    this.connections.set(remotePeerID, call);
-
-    call.on('stream', (remoteStream) => {
-      this.handleRemoteStream(remotePeerID, remoteStream);
+  // Notify when new users join the room
+  onUserConnected(callback: (userId: string) => void): void {
+    this.socketService.getSocket().on('user-connected', (userId: string) => {
+      callback(userId);
     });
   }
 
-  // end the call
-  closeCall() {
-    this.connections.forEach((connection) => connection.close());
-    this.connections.clear();
+  // Notify when users leave the room
+  onUserDisconnected(callback: (userId: string) => void): void {
+    this.socketService.getSocket().on('user-disconnected', (userId: string) => {
+      callback(userId);
+    });
   }
 
-  // function for camera/screen share
-  handleRemoteStream(remotePeerID: string, remoteStream: MediaStream) {
-    const videoElement = document.getElementById(`remote-video-${remotePeerID}`) as HTMLVideoElement;
-    if (videoElement) {
-      videoElement.srcObject = remoteStream;
-      videoElement.play();
+
+  // Make a call to the given remote peer ID
+  callPeer(remotePeerId: string, localStream: MediaStream): MediaConnection {
+    const call = this.peer.call(remotePeerId, localStream);
+    this.currentCall = call;
+    return call;
+  }
+
+  // Answer an incoming call with the given stream
+  answerCall(call: MediaConnection, localStream: MediaStream): void {
+    this.currentCall = call;
+    call.answer(localStream);
+  }
+
+  // Handle incoming calls
+  onIncomingCall(callback: (call: MediaConnection) => void): void {
+    this.peer.on('call', (call: MediaConnection) => {
+      callback(call);
+    });
+  }
+
+  // Close the current call
+  endCall(): void {
+    if (this.currentCall) {
+      this.currentCall.close();
+      console.log('Call ended.');
     }
+  }
+
+  // Stop the local media stream and release the resources
+  stopLocalStream(): void {
+    if (this.localStream) {
+      this.localStream.getTracks().forEach(track => track.stop());
+      console.log('Local stream stopped.');
+    }
+  }
+
+  // Disconnect from the peer server and close the peer connections
+  disconnectPeer(): void {
+    if (this.peer) {
+      this.peer.destroy();
+      console.log('Peer connection closed.');
+    }
+  }
+
+  // Save and provide access to the local stream
+  setLocalStream(stream: MediaStream): void {
+    this.localStream = stream;
+  }
+
+  getLocalStream(): MediaStream {
+    return this.localStream;
   }
 }

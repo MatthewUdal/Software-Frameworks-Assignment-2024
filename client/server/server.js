@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
+const { Server } = require("socket.io");
 
 
 const sslOptions = {
@@ -20,7 +21,7 @@ const PORT1 = 3001;
 
 
 const server = https.createServer(sslOptions, app);
-const io = require('socket.io')(server, {
+const io = new Server(server, {
   cors: {
     origin: '*'
   }
@@ -34,7 +35,7 @@ sockets(io);
 const { videoCall } = require('./peerServer');
 const peerServer = videoCall(PORT1, sslOptions);
 app.use('/videocall', peerServer);
-console.log('Starting SSL PeerServer at: ' + PORT1);
+console.log('Starting SSL PeerServer at: /videocall');// + PORT1);
 
 
 app.use(cors());

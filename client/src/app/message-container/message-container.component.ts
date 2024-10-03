@@ -9,6 +9,7 @@ import { SettingsComponent } from '../settings/settings.component';
 import { Chat } from '../interfaces/chat.interface';
 import { GetUserService } from '../get-user.service';
 import { Router } from '@angular/router';
+// import { PeerServiceService } from '../peer-service.service';
 
 
 @Component({
@@ -31,7 +32,8 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
     private socketService: SocketService,
     private http: HttpClient,
     private userService: GetUserService,
-    private router: Router
+    private router: Router,
+    // private peerService: PeerServiceService
   ) {}
 
   ngOnInit(): void {
@@ -137,7 +139,8 @@ export class MessageContainerComponent implements OnInit, AfterViewChecked {
     }
   }
   
-  startCall(){
+  startChannelCall(){
+    // this.peerService.startCall();
     this.router.navigate(['/videocall']);
     console.log('going to call');
   } 
