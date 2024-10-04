@@ -99,31 +99,48 @@ Under the server route was also folders that contained the uploads of profile pi
 - **RoleService:** The role service is a short quick hand to grab the user’s data from session storage, parse it to JSON and return the users role. This is useful for a few components that check permissions.
 - **ChannelService:** The channel service is used to connect the group-container component to the message-container component by using an observer to check for updates on the group-container. One selection of a channel in the group-container, it will trigger the observer and send the selected channelID to the messageComponent that then loads the corresponding data.
 - **SettingsService:** The settings service, similar to the channel service, is used to communicate between components, this service in particular uses an observer to communicate when the settings component is toggle on or off.
+- **SocketService:** The socket service handles emitting messages and recieving the repsective data from the backend, this is done for both the messaging system and the peer js video call system. Its primary functions are the sendMessage(), joinChannel(), joinroom().
+- **PeerService:** The peer service handles a lot more of the video specific connection. This includes dealing with creating a call, answer the call and creating the respective peer connections through peer ids. Further, it handles returning video and screen streams.
 
 **Server-Side Services**
 
-- **UserService:** The user service has three functions, these are:
-  - readUsers, which returns all users in the users.json file as an instance of the User class.
-  - writeUsers, which takes in an instance or array of instances and writes them into the users.json data file.
-  - createUser, which takes in 3 values, and intern will create an instance of user, then use the writeUser function to add the user to the users.json file.
-- **GroupService:** the group service has two main functions, these are:
-  - readGroups, which returns all the groups in the groups.json file as an instance of the Group class.
-  - writeGroups, which takes a instance or array of instances of the Group class and writes them to the groups.json data file.
-- **ChannelService:** the channel service has once two main functions, these are:
-  - readChannels, which returns all channels in the channels.json file as an instance of the Channel class.
-  - writeChannels, which takes in an instance or array of instances of the Channel class and writes them to the channels.json data file.
-- **RequestService:** the request service has three main functions, these are:
-  - readRequests, which returns all the requests in the requests.json file as an instance of the Request class.
-  - writeRequests, which takes in an instance or array of instances of the Requests class and writes them to the requests.json data file.
-  - deleteRequest, which takes in a requestID, finds the corresponding request, splices it out, and uses the writeRequests to update the requests.json data file.
+- **UserService:** The user service has six functions, these are:
+  - readUser(), returns all users from mongoDB
+  - findUser(), returns a user based on a email and password combo
+  - findUserByID(), returns a user based on a userID
+  - userExists(), returns a user if there exists an account containing a email or username
+  - createUser(), adds a new user to the mongoDB
+  - updateUserProfilePicture(), uploads/updates a profile picture to a users document
+- **GroupService:** the group service has eight main functions, these are:
+  - getAllGroups(), returns all groups in mongoDB
+  - getGroupsByUserID(), returns all groups a user is in
+  - createGroup(), creates a new group in the databse with a name and default member/admin
+  - findGroupByID(), returns a specific group model based on a groupID
+  - deleteGroup(), delete a group based on its id
+  - addMember(), add a users id to a groups member list
+  - removeMember(), remove a users id from a groups member list
+  - getMembers(), return all members in a specific group
+- **ChannelService:** the channel service has six main functions, these are:
+  - getAllChannels(), returns an array of a channels
+  - getUserChannels(), gets all channels a user is in
+  - getChanelById(), returns a single channel from an id
+  - getChannelsByGroupID(), returns all channels that have a specific groupID
+  - addChannel(), adds a new channel to a group
+  - deleteChannel(), removes a channel from a specific group
+- **RequestService:** the request service has five main functions, these are:
+  - getRequestsByUserID(), returns all requests made by a user
+  - findRequest(), find a specific request from a user made to a group
+  - createRequest(), creates a new request to a group
+  - deleteRequest(), removes a request to a group
+  - deleteRequestsByGroupID(), deletes all requests for a specific group
 - **ChannelRequestsService:** the channelRequest service has four main functions, these are:
-  - readRequests, which returns all the channel requests in the channelRequests.json file as an instance of the channelRequest class.
-  - writeRequests, which takes in an instance or array of instances of the channelRequests class and writes them to the channelRequests.json data file.
-  - createRequest, which takes in a userID, channelID and groupID, creates a channelRequest instance, and saves it to the channelRequests.json data file.
-  - deleteRequest, which takes in a channelRequestID, finds the channelRequest, splices it out of the data file, and write the channelRequest array back to the channelRequest.json data file.
+  - readRequests(), returns all channelRequests
+  - createRequest(), creates a new channel request for a speciifc channel in a group
+  - deleteRequest(), deletes a channel request
+  - deleteChannelRequestsByChannelID(), used to delete all channel requests for a channel
 - **ReportService:** the report service has two main functions, these are:
-  - readReports, which returns all the report objects in the reports.json data file as an instance of the Report class.
-  - writeReports, which takes a instance or array of instances of the Report class and writes them to the report.json data file.
+  - readReports(), returns all reports
+  - deleteReport(), deletes a single specific report
 
 **Routes**
 
@@ -134,6 +151,7 @@ Under the server route was also folders that contained the uploads of profile pi
   - **explore:** /explore, uses the exploreComponent and navbarComponent
   - **channel-explore:** /channel-explore, uses the channelExploreComponent and navbarComponent
   - **group-creation:** /group-creation, uses the groupCreationComponent and the navbarComponent
+  - **video-call:** /video-call, uses the videoCallComponent
 - **superAdminGuard route - (**checks for super admin role**)**
   - **reports:** /reports, uses the reportComponent and the navbarComponent
 
@@ -152,14 +170,20 @@ Under the server route was also folders that contained the uploads of profile pi
 
 **Files**
 
-- **server.js:** The server.js file is the main file in the backend, it holds all the routes and their directories. Further it handles the cors and ports.
+- **server.js:** The server.js file is the main file in the backend, it holds all the routes and their directories. Further it handles the cors and ports (3000).
+- **socket.js:** The socket.js file is a backend server file that handles data and connection of websocekts through socket.io.
+- **peer.js:** This is a relatively small file that simply handles creating the peer backend server on port 3001.
+- **db.js:** The db.js file handles creating the connection to the projects mongo database using an atlas connection URL and the enivroment key.
 - **routes folder:** The routes folder contains all the different backend routes that are called in the angular component frontend.
 - **models folder:** The models folder contains all the data classes and services needed in the different backend routes.
-- **Data folder:** The data folder is responsible for holding all the json data files that contain the storage of local data without a database.
+- **Data folder:** The data folder is responsible for holding all the json data files that contain the storage of local data without a database. **(Deprecated in Phase 2)**
+- **Uploads folder:** The upload folder is used to hold images sent in the message system.
+- **ProfilePicture folder:** The profilePicture folder is used to hold the images of uploaded profile pictures.
 
 **Global Variables**
 
-- **FileRoutes:** throughout the backend routes and services, there are copious amounts of global file route variables that are used within the functions read/write directories. This is used to not manually type out each directory every time, alongside making it easier to change the directories or names of said files if need be, without needing to changes every instance of it throughout every file.
+- **upload:** The upload variable was a global path directory used in a couple routes when handling sending images in the chat system.
+- **profilePicture:** The profile variable once again is a global path directory used when uploading the users profile picture, and once again used when accessing it through the mongo database.
 
 **Server-Side Routes**
 
