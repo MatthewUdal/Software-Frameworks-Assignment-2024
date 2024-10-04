@@ -1,4 +1,4 @@
-**Software Frameworks Assignment Phase 1 - ChatSphere**
+**Software Frameworks Assignment Phase 2 - ChatSphere**
 
 **Git Repository Organisation**
 
@@ -13,6 +13,18 @@ client/
     ├── Models/
 
     ├── routes/
+    
+    ├── uplodas/
+
+    ├── profilePictures/
+
+    ├── db.js 
+
+    ├── server.js
+
+    ├── socket.js
+
+    ├── peer.js
 
   └── src/
 
@@ -21,6 +33,8 @@ client/
     │ └── { Angular components }
 
     │ └── { Interfaces }
+    
+    │ └── { Services }
 
     └── assets/
 
@@ -37,8 +51,9 @@ client/
 
 **Server/Frontend Structure**
 
-- **Server Code:** The server code was located in the root directory (same level as the src). This server folder contained the main server.js file, alongside all the backend routes, models, services and data.json files.
-- **Frontend Code:** The angular frontend had fell under the src>app directory, where all the components, services and interfaces were located and utilised. Further any images or icons were located under the assets folder.
+- **Server Code:** The server code was located in the root directory (same level as the src). This server folder contained the main server.js file, alongside all the backend routes, models, and services. In addition this also contains the db.js file for connecting the the database, alongside the socket and peer js files for handling messages and calls respectively.
+Under the server route was also folders that contained the uploads of profile pictures and chat image uploads.
+- **Frontend Code:** The angular frontend falls under the src>app directory, where all the components, services and interfaces were located and utilised. Further any images or icons were located under the assets folder.
 
 **Data Structures**
 
@@ -47,15 +62,17 @@ client/
 - **Groups:** The Group interface was one of the more utilised frontend interfaces, this consisted of the (GroupID: Number, memberIDs: number\[\], name: string, adminIDs: number\[\], and blacklistedIDs: number\[\]).
 - **Channels:** Similar to the Group interface, the Channel interface was a common return type in the frontend typescript files. This data structure consisted of (ChannelID: number, GroupID: number, name: string, members: number\[\]).
 - **Reports** The reports data structure was generated near the end of the project to help with managing the reporting of the user, the idea is this might be updated in the future to include some form of attachment of a report reason, and possible messages the user may have sent to be reported. Their data structure is as follows: (reportID: number, userID: number, name: string).
+- **Chats** The chats data structure was created in phase 2 of the assignment to serve as a frontend-friendly management of the chat data. As such it follows a similar data strucute to the chat model in the backend, however all relative data to a message is mapped from the foreign keys into the chat model e.g. grabs username, role, profile picture from the userID and maps it to frontend chat model as to not store redudant data. This interface follows as such: (chatID: string, channelID: string, userID: string, username: string, role: string, profilePicture: string, message: string, timestamp: date)
 
 **Server-Side Models**
 
-- **User.js:** Used for manipulating the user data file; (userID: int, username : str, email: str, password: str, role: str)
-- **Groups.js:** Used for manipulating the groups data file; (groupID: int, memberIDs: array, name: str, adminIDs: array, blacklistedIDs: array)
-- **Channels.js:** Used for manipulating the channels data file; (channelID: int, groupID: int, name: str, members: array)
-- **Report.js:** Used for manipulating the reports data file; (reportID, userID)
-- **Requests.js:** Used for manipulating the requests data file; (requestID: int, groupID: int, userID: int)
-- **ChannelRequests.js:** Used for manipulating the channelRequests data file; (channelRequestID: int, groupID: int, channelID: int, userID: int)
+- **User.js:** Used for describing the user database file; (userID: str, username : str, email: str, password: str, role: str, profilePicture: str)
+- **Groups.js:** Used for describing the group database file; (groupID: str, memberIDs: array, name: str, adminIDs: array, blacklistedIDs: array)
+- **Channels.js:** Used for describing the channel database file; (channelID: str, groupID: str, name: str, members: array)
+- **Report.js:** Used for describing the report database file;  (reportID: str, userID: str)
+- **Requests.js:** Used for describing the requests database file;  (requestID: str, groupID: str, userID: str)
+- **ChannelRequests.js:** Used for describing the channelRequests database file; (channelRequestID: str, groupID: str, channelID: str, userID: str)
+- **Chat.js:** Used for describing the chat database file; (chatID: str, channelID: str, userID: str, message: str, timestamp: str)
 
 **Angular Architecture**
 
@@ -69,10 +86,11 @@ client/
 - **HomepageComponent:** The homepage component can be seen as the main page of the site, it itself has no code or functions, but rather serves as a template to hold the GroupContainerComponent, NavbarComponent, and MessageContainerComponent.
 - **GroupContainerComponent:** This component handles the displaying and selection of groups and channels. It uses numerous services for handling the updating of pages across different components; this is done through observers. The group component’s main function is to load groups and channels and allow for selection. Further, it has the ability to open the SettingsComponent.
 - **GroupCreationComponent:** This component is used to create a new group. It has an input for a name, this name is passed to the backend and then is handled to create a new group with the current userID as an admin.
-- **MessageContainerComponent:** This component currently has very little functionality as it is simply just the UI of what will become the messaging system, in this component will display message history, and other data relating to uploading of images, and calling other users.
+- **MessageContainerComponent:** The message component handles all images and messages sent by users in a channel. This entails using socket.io to emit messages to other users in real time which is achieved by having a socket service that can emit the messages, and a backend socket.js which will handle these emits and return back the appropriate chat message data.
 - **ChannelExploreComponent:** The channel explore component is very similar to the group explore component, having an identical UI. However, this component handles the displaying and joining of channels, passing the userID and relative data to the backend, awaiting a successful response of joining before updating the page.
 - **ReportsComponent:** This component handles the rendering of all reported users, it displays all user in the reports.json file, from here a super admin and only super admin, can decide to ignore the report or delete the user from the platform, where all instances of the userID are removed and the reports page is updated.
 - **SettingsComponent:** The settings component is by far the largest component as it was designed to be a dynamic overlay for the message container. It has 24 functions, numerous making calls to the backend to do various different things. Some quick examples are creating channels, leaving the group, viewing group members, accepting/declining join requests and many other critical features of the site. The dynamic updating of the html is made achievable through an ngIf statement and a function that virtually ‘changes the route’ by having a currentView variable that decides which ‘page’ to render.
+- **VideoCallComponent:** The video call component was created to handle and display both the local and remote video feed of users when creating or joining a channel call. This functions using a peer service and sockets that broadcast join messages to other uses, which in turn tells the peerjs to call each other and auto pickup. From here their video feed is added to an array and loaded onto the screen.
 
 **Services**
 
@@ -183,8 +201,10 @@ client/
 
 - **User Validation:** the validation of a user occurs numerous times throughout the site, whether it be through the auth guard, login, signup or even role checks – this is a key backend communication that allows certain features to be restricted to authorised individuals. An example of data change on something like a login or signup is the users data (without password) being saved into the browsers session storage for frontend usage later.
 - **Group Handling:** Groups have numerous different backend routes and functions that deal with the handling of data both frontend and backend. An example of this is joining groups, creating groups, checking group members, ban users and much more. These all utilise the backend groups.json file by splicing, updating or deleting json objects, which in turn, updates the frontend.
+- **Socket Handling:** The backend of sockets is handled in one file (socket.js) but can include the peerjs file as well. The main use for this is logging the connections of the backend and frontend with a wss route. A user will connect to a socket when they join a channel, from here a unique socketID is generated and this is used when handling message output from the frontend. A peerID is also used using websockets again for handling video calls and identiying what peers to call and display.
 
 **Component Updates**
 
-- **Channel visualisation:** the message-container is an example of a component that reacts to certain updates in other components alongside the session storage and backend response. When a group and channel combination are selected, the active group the user is in is saved to session storage, from here the backend is called to get member lists, channel names and other appropriate data. In phase 2 of the assignment this will be greatly developed to also return data like message history and other useful information.
+- **Channel visualisation:** the message-container is an example of a component that reacts to certain updates in other components alongside the session storage and backend response. When a group and channel combination are selected, the active group the user is in is saved to session storage, from here the backend is called to get member lists, channel names and other appropriate data. 
 - **Request Status Update:** Another example of front-end component updating is the requests, as with numerous interactions to the request backend, the front end will update. This can be seen in a user requesting to join a group, where the page will update, and the requested group will be removed from the list. Further, something like accepting a user into a group or channel will also cause an update to the settings component to correctly display the up-to-date requests.
+- **Chat Message Updates:** The message-container is also responsible for displaying a live feed of chat messages from users and join/leave messaged automated from the backend. This is done using the socket service which emits phrases on the /socket.io route which is then read by all other users in a timely manner. From here the component will read this data and dynamically display it using the chat interface structure.
