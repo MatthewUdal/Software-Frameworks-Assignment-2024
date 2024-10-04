@@ -218,6 +218,9 @@ Under the server route was also folders that contained the uploads of profile pi
 | /reports/ignore | POST | reportID | { reportID: int } | Deletes the report from reports.json |
 | /deleteUser | POST | userID | { success: boolean, message: string } | Deletes all copies of the userID and any objects that have the userID as a PK |
 | /banUser | POST | userID, groupID | { success: boolean, message: string } | Removes the user from the group and adds their userID to the blacklist |
+| chat/getMessages | POST | channelID | { mappedMessages: array } | Get the last 5 messages from a channel |
+| chat/uploadImage | POST | image.file | { imageUrl: string } | uploads an image to the uploads folder, then returns its saved location |
+| handleUser/updateProfile | POST | image.file, userID | { message: string, imageUrl: string } | Uploads a image file to the profilePicture folder and returns its saved location |
 
 **Client-Server Interaction**
 
