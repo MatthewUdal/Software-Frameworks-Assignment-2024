@@ -7,40 +7,39 @@ const path = require('path');
 const fs = require('fs');
 const { Server } = require("socket.io");
 
-
 const sslOptions = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem')
 };
 
-
 const app = express();
 
-const PORT0 = 3000;
-const PORT1 = 3001;
+const PORT0 = 3000; // HTTPS port for the Express server
+const PORT1 = 3001; // PeerServer port for video calls
 
-
+// Create HTTPS server with SSL options
 const server = https.createServer(sslOptions, app);
+
+// Set up Socket.IO on the HTTPS server
 const io = new Server(server, {
   cors: {
     origin: '*'
   }
 });
 
-// chat system
-sockets = require('./sockets');
+// Initialize the chat system
+const sockets = require('./sockets');
 sockets(io);
 
-// video call system
+// Initialize the video call system
 const { videoCall } = require('./peerServer');
 const peerServer = videoCall(PORT1, sslOptions);
 app.use('/videocall', peerServer);
-console.log('Starting SSL PeerServer at: /videocall');// + PORT1);
 
+console.log('Starting SSL PeerServer at: /videocall');
 
 app.use(cors());
 app.use(express.json());
-
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -103,9 +102,10 @@ app.use('/chat', chatRoute);
 const handleUserRoute = require('./routes/handleUser');
 app.use('/handleUser', handleUserRoute);
 
-
+// Export app and server separately for testing and actual server usage
+module.exports = { app, server };
 
 // Start the server
 server.listen(PORT0, () => {
-  console.log(`Server listening on port: 3000`);
+  console.log(`Server listening on port: ${PORT0}`);
 });

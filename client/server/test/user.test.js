@@ -1,17 +1,17 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('./server');
 const { expect } = chai;
+const { app } = require('../server');
 
 chai.use(chaiHttp);
 
 describe('Route and Function tests involving the user', () => {
   // Test case for a valid userID
-  it('POST /verifyUser - returns success when userID is valid', (done) => {
-    const validUserID = '60d21b4667d0d8992e610c85';
+  it('POST /authCheck/verifyUser - returns success when userID is valid', (done) => {
+    const validUserID = '66e2b63bad1d7ba9286b0517';
 
-    chai.request(server)
-      .post('/verifyUser')
+    chai.request(app)
+      .post('/authCheck/verifyUser')
       .send({ userID: validUserID })
       .end((err, res) => {
         if (err) {
@@ -27,9 +27,9 @@ describe('Route and Function tests involving the user', () => {
   });
 
   // Test case for a missing userID
-  it('POST /verifyUser - returns an error when userID is missing', (done) => {
-    chai.request(server)
-      .post('/verifyUser')
+  it('POST /authCheck/verifyUser - returns an error when userID is missing', (done) => {
+    chai.request(app)
+      .post('/authCheck/verifyUser')
       .send({}) 
       .end((err, res) => {
         if (err) {
@@ -45,11 +45,11 @@ describe('Route and Function tests involving the user', () => {
   });
 
   // Test case for an invalid userID (userID not found)
-  it('POST /verifyUser - returns an error when userID is not found', (done) => {
+  it('POST /authCheck/verifyUser - returns an error when userID is not found', (done) => {
     const nonExistentUserID = '60d21b4667d0d8992e610c84'; 
 
-    chai.request(server)
-      .post('/verifyUser')
+    chai.request(app)
+      .post('/authCheck/verifyUser')
       .send({ userID: nonExistentUserID })
       .end((err, res) => {
         if (err) {
