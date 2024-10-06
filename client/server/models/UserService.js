@@ -25,10 +25,15 @@ class UserService {
     // auth check userID
     static async findUserByID(userID) {
         try {
-            const user = await User.findOne({ _id: userID });
-            return user;
+          const user = await User.findOne({ _id: userID });
+      
+          if (!user) {
+            return null;
+          }
+      
+          return user;
         } catch (err) {
-            throw new Error('Error finding user by ID');
+          throw new Error('Error finding user by ID');
         }
     }
 
