@@ -72,8 +72,14 @@ class ChannelService {
     // Delete a channel
     static async deleteChannel(channelID) {
         try {
-            await Channel.findByIdAndDelete(channelID).exec();
-            return { message: 'Channel deleted successfully' };
+            const result = await Channel.deleteOne({ _id: channelID });
+
+            // Check if any channel was deleted
+            if (result.deletedCount === 0) {
+                throw new Error('Channel not found');
+            }
+
+            return result;
         } catch (err) {
             throw new Error(`Error deleting channel: ${err.message}`);
         }
