@@ -7,6 +7,10 @@ const path = require('path');
 router.post('/getMessages', async (req, res) => {
   const { channelID } = req.body;
 
+  if (!channelID){
+    return res.status(400).json({ success: false, message: 'ChannelID is required' });
+  }
+
   try {
     const messages = await Chat.find({ channelID })
       .sort({ _id: -1 })

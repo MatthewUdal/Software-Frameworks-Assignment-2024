@@ -91,6 +91,31 @@ describe('Channel Routes', () => {
     });
   });
 
+  describe('POST /getMessages', () => {
+    it('should fetch the last 5 messages from the specified channel', (done) => {
+      chai.request(app)
+        .post('/chat/getMessages')
+        .send({ channelID: testChannelID })
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('array');
+          done();
+        });
+    });
+
+    it('should return a 400 error if channelID is missing', (done) => {
+      chai.request(app)
+        .post('/chat/getMessages')
+        .send({})
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.have.property('success', false);
+          expect(res.body).to.have.property('message', 'ChannelID is required');
+          done();
+        });
+    });
+  });
+
   describe('POST /deleteChannel', () => {
     it('should delete a channel from the group', (done) => {
       chai.request(app)
