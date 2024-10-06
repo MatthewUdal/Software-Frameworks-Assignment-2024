@@ -1,6 +1,6 @@
 const Chat = require('./models/Chat');
 
-function initializeSockets(io) {
+function initialiseSockets(io) {
   io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
@@ -101,4 +101,4 @@ function initializeSockets(io) {
   });
 }
 
-module.exports = initializeSockets;
+module.exports = initialiseSockets;
