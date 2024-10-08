@@ -110,7 +110,8 @@ export class VideoCallComponent implements OnInit {
       remoteVideo.srcObject = remoteStream;
       remoteVideo.autoplay = true;
       remoteVideo.playsInline = true;
-      remoteVideo.style.width = '400px'; 
+      remoteVideo.style.width = '640px'; 
+      remoteVideo.style.height = '360px'; 
       remoteVideo.style.margin = '5px';
       remoteVideo.style.border = '2px solid #03DAC6';
 
